@@ -26,20 +26,50 @@ export default function Footer() {
               Classic & contemporary apparel — crafted with care. Follow us for drops & offers.
             </p>
 
-            <div className="flex items-center gap-3">
-              {/* CHANGE 4: Social icons now use the hover/secondary color for background, and dark icon color */}
-              <a aria-label="Facebook" href="#" className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors">
-                <Icon className="w-5 h-5 text-[#111111]"><path d="M18 2h-3a4 4 0 00-4 4v3H8v3h3v6h3v-6h2.3l.7-3H14V6a1 1 0 011-1h3V2z" /></Icon>
-              </a>
+<div className="flex items-center gap-3">
+  {/* Facebook */}
+  <a
+    aria-label="Facebook"
+    href="https://m.facebook.com/venus2009garments/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors"
+  >
+    <Icon className="w-5 h-5 text-[#111111]">
+      <path d="M18 2h-3a4 4 0 00-4 4v3H8v3h3v6h3v-6h2.3l.7-3H14V6a1 1 0 011-1h3V2z" />
+    </Icon>
+  </a>
 
-              <a aria-label="Instagram" href="#" className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors">
-                <Icon className="w-5 h-5 text-[#111111]"><rect x="3" y="3" width="18" height="18" rx="5" ry="5" /><path d="M16 11.37a4 4 0 11-4.94-4.94 4 4 0 014.94 4.94z" /><path d="M17.5 6.5h.01" /></Icon>
-              </a>
+  {/* Instagram */}
+  <a
+    aria-label="Instagram"
+    href="https://www.instagram.com/venusgarments.in?igsh=Mm9zd2tiMG85Z2xk"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors"
+  >
+    <Icon className="w-5 h-5 text-[#111111]">
+      <rect x="3" y="3" width="18" height="18" rx="5" ry="5" />
+      <path d="M16 11.37a4 4 0 11-4.94-4.94 4 4 0 014.94 4.94z" />
+      <path d="M17.5 6.5h.01" />
+    </Icon>
+  </a>
 
-              <a aria-label="X" href="#" className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors">
-                <Icon className="w-5 h-5 text-[#111111]"><path d="M18 6L6 18" /><path d="M6 6l12 12" /></Icon>
-              </a>
-            </div>
+  {/* YouTube */}
+  <a
+    aria-label="YouTube"
+    href="https://m.youtube.com/@Venusgarments?fbclid=PAT01DUAOX2vtleHRuA2FlbQIxMABzcnRjBmFwcF9pZA81NjcwNjczNDMzNTI0MjcAAaf2IyP_e8vwpQt_rvEiHF78af2RhK2n5WGpOiE-Ab3hDQF5D0VWQ6gJZ6KQ-A_aem_wH6wxTc83xrYgwNN-kYCLQ"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors"
+  >
+    <Icon className="w-6 h-6 text-[#111111]">
+      <path d="M10 15l5.19-3L10 9v6z" />
+      <path d="M21.8 8.001a2.74 2.74 0 0 0-1.93-1.94C17.91 5.5 12 5.5 12 5.5s-5.91 0-7.87.56A2.74 2.74 0 0 0 2.2 8.001 28.63 28.63 0 0 0 1.5 12a28.63 28.63 0 0 0 .7 3.999 2.74 2.74 0 0 0 1.93 1.94C6.09 18.5 12 18.5 12 18.5s5.91 0 7.87-.56a2.74 2.74 0 0 0 1.93-1.94A28.63 28.63 0 0 0 22.5 12a28.63 28.63 0 0 0-.7-3.999z" />
+    </Icon>
+  </a>
+</div>
+
           </div>
 
           {/* Shop */}
