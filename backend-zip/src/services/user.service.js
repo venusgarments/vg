@@ -1,14 +1,14 @@
-// services/user.service.js
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcryptjs");
-const mongoose = require("mongoose");
 const User = require('../models/user.model.js');
 const jwtProvider = require("../config/jwtProvider");
 const Otp = require("../models/otpSchema.js");
 const transporter = require("../config/transporter.js");
 require("dotenv").config();
 
-/* ----------------- helper sendEmail (unchanged) ----------------- */
+/**
+ * Helper: send OTP email via Nodemailer
+ */
 const sendEmail = async (email, otp) => {
   try {
     await transporter.sendMail({
@@ -37,7 +37,6 @@ const sendEmail = async (email, otp) => {
   }
 };
 
-/* ----------------- user functions ----------------- */
 const createUser = async (userData) => {
   try {
     let { firstName, lastName, email, password, role } = userData;
@@ -61,38 +60,27 @@ const createUser = async (userData) => {
   }
 };
 
-/**
- * Safer findUserById: validates id and returns null if not found.
- * This avoids throwing from deeper layers and lets middleware decide
- * how to respond (401 / 404).
- */
 const findUserById = async (userId) => {
   try {
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      console.warn("findUserById called with invalid id:", userId);
-      return null;
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new Error(`User not found with id: ${userId}`);
     }
-    // return plain object without password
-    const user = await User.findById(userId).select('-password').lean();
-    return user; // will be null if not found
+    return user;
   } catch (error) {
     console.log("error :------- ", error.message);
-    // do not throw raw DB errors up — return null to be handled by caller
-    return null;
+    throw new Error(error.message);
   }
 };
 
-/**
- * getUserByEmail: returns user (throws when not found) — kept behavior
- * consistent with existing callers that may rely on exceptions.
- * You can change this to return null if you prefer defensive style everywhere.
- */
 const getUserByEmail = async (email) => {
   try {
     const user = await User.findOne({ email });
+
     if (!user) {
       throw new Error(`User not found with email: ${email}`);
     }
+
     return user;
   } catch (error) {
     console.log("error - ", error.message);
@@ -100,24 +88,18 @@ const getUserByEmail = async (email) => {
   }
 };
 
-/**
- * getUserProfileByToken: safer flow — decode token, validate id,
- * fetch user with populated addresses and without password.
- */
 const getUserProfileByToken = async (token) => {
   try {
     const userId = jwtProvider.getUserIdFromToken(token);
-    if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
-      throw new Error("Invalid token payload");
-    }
 
-    // fetch fresh user with populated addresses, excluding password
-    const user = await User.findById(userId).select('-password').populate('addresses').lean();
+    console.log("user id ", userId);
+
+    const user = (await findUserById(userId)).populate("addresses");
+    user.password = null;
 
     if (!user) {
       throw new Error(`User does not exist with id: ${userId}`);
     }
-
     return user;
   } catch (error) {
     console.log("error ----- ", error.message);
@@ -144,7 +126,6 @@ const getAllUsers = async ({ pageNumber = 1, pageSize = 10 }) => {
   };
 };
 
-/* ----------------- OTP helpers (unchanged) ----------------- */
 const generateOtp = () => {
   const firstDigit = Math.floor(Math.random() * 9) + 1;
   const remaining = Math.floor(Math.random() * 10000).toString().padStart(4, "0");
@@ -160,10 +141,12 @@ const verifyEmailService = async (email) => {
   const existingOtp = await Otp.findOne({ email });
   const now = new Date();
 
+  // 1. Block sending if blockedUntil is in future
   if (existingOtp && existingOtp.blockedUntil && now < existingOtp.blockedUntil) {
     throw new Error("Too many attempts. Try again after 1 hour.");
   }
 
+  // 2. Restrict max 3 attempts in short window
   if (existingOtp && existingOtp.createdAt) {
     const minutesSinceLast = (now - existingOtp.createdAt) / 1000 / 60;
     if (existingOtp.attempts >= 3 && minutesSinceLast < 1) {
@@ -187,6 +170,7 @@ const verifyEmailService = async (email) => {
     { upsert: true }
   );
 
+  // ✅ Send OTP using Nodemailer transporter
   await sendEmail(email, otpStr);
 
   return { message: "OTP sent successfully", email };
@@ -233,6 +217,7 @@ const sendResetOtpService = async (email) => {
     { upsert: true }
   );
 
+  // ✅ Reuse same email helper for reset OTP
   await sendEmail(email, otpStr);
 
   return { message: "Reset OTP sent successfully", email };

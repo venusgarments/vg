@@ -122,7 +122,7 @@ const Home = () => {
   return (
     <>
       {/* HERO SECTION */}
-      <div className="pt-16 relative w-full h-[380px] sm:h-[450px] md:h-[550px] lg:h-[650px] xl:h-[750px] overflow-hidden">
+      <div className="pt-26 relative w-full h-[380px] sm:h-[450px] md:h-[550px] lg:h-[650px] xl:h-[750px] overflow-hidden">
         {HomeCarouselData.map((item, index) => (
           <div
             key={item.id}
@@ -136,7 +136,7 @@ const Home = () => {
               src={item.image}
               alt={item.title}
               loading="lazy"
-              className="w-full h-full object-cover object-center"
+              className="w-full h-full "
             />
             <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
           </div>
