@@ -65,7 +65,7 @@ const Collection = () => {
     <div className="min-h-screen py-12" style={{ backgroundColor: "#FFF9E8" }}>
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         {/* Header */}
-        <div className="text-center mb-12">
+        <div className="text-center mb-12" data-aos="fade-down">
           <h1 className="text-4xl md:text-5xl font-bold text-[#111111] mb-4">
             Our Collections
           </h1>
@@ -82,6 +82,8 @@ const Collection = () => {
               key={collection.id}
               className="group relative bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 cursor-pointer border border-[#CBE600]/20"
               onClick={() => navigate(collection.path)} // UPDATED
+              data-aos="fade-up"
+              data-aos-delay={collection.id * 100}
             >
               {/* Image */}
               <div className="relative h-64 overflow-hidden">
@@ -90,7 +92,7 @@ const Collection = () => {
                   alt={collection.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </div>
 
               {/* Content */}
@@ -115,7 +117,10 @@ const Collection = () => {
         </div>
 
         {/* CTA Section */}
-        <div className="mt-16 bg-[#DFF200] rounded-lg p-8 md:p-12 text-center">
+        <div
+          className="mt-16 bg-[#DFF200] rounded-lg p-8 md:p-12 text-center"
+          data-aos="zoom-in"
+        >
           <h2 className="text-3xl md:text-4xl font-bold text-[#111111] mb-4">
             Can't Find What You're Looking For?
           </h2>

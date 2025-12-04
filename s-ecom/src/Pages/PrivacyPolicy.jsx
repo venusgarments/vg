@@ -179,7 +179,7 @@ const PrivacyPolicy = () => {
                 className="font-semibold hover:underline"
                 style={{ color: "#CBE600" }}
               >
-                venusgarments@gmail.com
+                venusgarments2009@gmail.com
               </a>
             </p>
           </div>

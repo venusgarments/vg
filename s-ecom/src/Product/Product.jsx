@@ -592,7 +592,9 @@ const ProductPage = () => {
 
   // derive selected category (route OR query)
   const selectedCategory =
-    (param && (param.lavelThree || param.lavelTwo)) || searchParams.get("category") || null;
+    (param && (param.lavelThree || param.lavelTwo)) ||
+    searchParams.get("category") ||
+    null;
 
   // sync filtersUI with query params so UI checkboxes persist
   useEffect(() => {
@@ -719,7 +721,8 @@ const ProductPage = () => {
     for (let i = 1; i <= 5; i += 1) {
       if (i <= rounded)
         stars.push(<Star key={i} className="w-3.5 h-3.5 text-yellow-400" />);
-      else stars.push(<StarOff key={i} className="w-3.5 h-3.5 text-gray-300" />);
+      else
+        stars.push(<StarOff key={i} className="w-3.5 h-3.5 text-gray-300" />);
     }
     return <div className="flex items-center gap-0.5">{stars}</div>;
   };
@@ -740,7 +743,9 @@ const ProductPage = () => {
       case "price_high":
         return list.sort((a, b) => (b.price || 0) - (a.price || 0));
       case "newest":
-        return list.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        return list.sort(
+          (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+        );
       case "best-selling":
         return list.sort((a, b) => (b.soldCount || 0) - (a.soldCount || 0));
       default:
@@ -750,10 +755,15 @@ const ProductPage = () => {
 
   // utility to compute count of products matching option (normalizes underscore/dash)
   const countForOption = (optionValue, productField = "availability") => {
-    const normalize = (s) => (String(s || "").toLowerCase().replace(/_/g, "-"));
+    const normalize = (s) =>
+      String(s || "")
+        .toLowerCase()
+        .replace(/_/g, "-");
     const target = normalize(optionValue);
     return products.filter((p) => {
-      const v = normalize(p[productField] || p[productField.replace(/-/g, "_")] || "");
+      const v = normalize(
+        p[productField] || p[productField.replace(/-/g, "_")] || ""
+      );
       return v === target;
     }).length;
   };
@@ -790,8 +800,11 @@ const ProductPage = () => {
           {/* Sidebar */}
           <aside
             className={`fixed lg:static top-0 left-0 h-full lg:h-auto w-80 max-w-[85vw] lg:w-64 xl:w-72 z-50 lg:z-auto transition-transform duration-300 lg:transition-none ${
-              showFilters ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+              showFilters
+                ? "translate-x-0"
+                : "-translate-x-full lg:translate-x-0"
             }`}
+            data-aos="fade-right"
           >
             <div className="bg-white rounded-none lg:rounded-xl shadow-lg p-4 sm:p-5 md:p-6 lg:p-5 xl:p-6 lg:sticky lg:top-24 h-full lg:h-auto overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
@@ -825,7 +838,9 @@ const ProductPage = () => {
                     onClick={() => toggleSection(section.id)}
                     className="flex items-center justify-between w-full mb-4 text-left"
                   >
-                    <h3 className="font-semibold text-[#222426]">{section.name}</h3>
+                    <h3 className="font-semibold text-[#222426]">
+                      {section.name}
+                    </h3>
                     <ChevronDown
                       className={`w-5 h-5 text-gray-400 transform transition-transform ${
                         openSections[section.id] ? "rotate-180" : "rotate-0"
@@ -833,12 +848,18 @@ const ProductPage = () => {
                     />
                   </button>
 
-                  <div className={`${openSections[section.id] ? "block" : "hidden"}`}>
+                  <div
+                    className={`${
+                      openSections[section.id] ? "block" : "hidden"
+                    }`}
+                  >
                     {/* special case: color -> render swatches */}
                     {section.id === "color" ? (
                       <div className="flex flex-wrap gap-3">
                         {section.options.map((opt) => {
-                          const selected = (filtersUI.color || []).includes(opt.value);
+                          const selected = (filtersUI.color || []).includes(
+                            opt.value
+                          );
                           const isGradient =
                             typeof opt.colorCode === "string" &&
                             opt.colorCode.startsWith("linear-gradient");
@@ -849,10 +870,14 @@ const ProductPage = () => {
                           return (
                             <button
                               key={opt.value}
-                              onClick={() => updateMultiFilter("color", opt.value)}
+                              onClick={() =>
+                                updateMultiFilter("color", opt.value)
+                              }
                               title={opt.label}
                               className={`w-10 h-10 rounded-full border-2 ${
-                                selected ? "border-[#8A6F4F] scale-110" : "border-gray-200"
+                                selected
+                                  ? "border-[#8A6F4F] scale-110"
+                                  : "border-gray-200"
                               } transform transition-all`}
                               style={bgStyle}
                               aria-pressed={selected}
@@ -870,11 +895,17 @@ const ProductPage = () => {
                           >
                             <input
                               type="checkbox"
-                              checked={(filtersUI[section.id] || []).includes(opt.value)}
-                              onChange={() => updateMultiFilter(section.id, opt.value)}
+                              checked={(filtersUI[section.id] || []).includes(
+                                opt.value
+                              )}
+                              onChange={() =>
+                                updateMultiFilter(section.id, opt.value)
+                              }
                               className="w-4 h-4 rounded border-gray-300 text-[#CBE600] focus:ring-[#CBE600]"
                             />
-                            <span className="text-sm text-gray-700 capitalize">{opt.label}</span>
+                            <span className="text-sm text-gray-700 capitalize">
+                              {opt.label}
+                            </span>
                             {section.id === "availability" && (
                               <span className="text-xs text-gray-400 ml-auto">
                                 {countForOption(opt.value)}
@@ -898,7 +929,9 @@ const ProductPage = () => {
                     onClick={() => toggleSection(section.id)}
                     className="flex items-center justify-between w-full mb-4 text-left"
                   >
-                    <h3 className="font-semibold text-[#222426]">{section.name}</h3>
+                    <h3 className="font-semibold text-[#222426]">
+                      {section.name}
+                    </h3>
                     <ChevronDown
                       className={`w-5 h-5 text-gray-400 transform transition-transform ${
                         openSections[section.id] ? "rotate-180" : "rotate-0"
@@ -906,22 +939,34 @@ const ProductPage = () => {
                     />
                   </button>
 
-                  <div className={`${openSections[section.id] ? "block" : "hidden"}`}>
+                  <div
+                    className={`${
+                      openSections[section.id] ? "block" : "hidden"
+                    }`}
+                  >
                     {section.options.map((opt) => (
-                      <label key={opt.value} className="flex items-center gap-3 cursor-pointer group mb-2">
+                      <label
+                        key={opt.value}
+                        className="flex items-center gap-3 cursor-pointer group mb-2"
+                      >
                         <input
                           type="checkbox"
-                          checked={(filtersUI[section.id] || []).includes(opt.value)}
-                          onChange={() => updateMultiFilter(section.id, opt.value)}
+                          checked={(filtersUI[section.id] || []).includes(
+                            opt.value
+                          )}
+                          onChange={() =>
+                            updateMultiFilter(section.id, opt.value)
+                          }
                           className="w-4 h-4 rounded border-gray-300 text-[#CBE600] focus:ring-[#CBE600]"
                         />
-                        <span className="text-sm text-gray-700">{opt.label}</span>
+                        <span className="text-sm text-gray-700">
+                          {opt.label}
+                        </span>
                       </label>
                     ))}
                   </div>
                 </div>
               ))}
-
             </div>
           </aside>
 
@@ -940,7 +985,9 @@ const ProductPage = () => {
               <div className="flex items-center gap-3 sm:gap-4 w-full sm:w-auto">
                 <div className="flex items-center gap-2">
                   <SlidersHorizontal className="w-4 h-4 sm:w-5 sm:h-5 text-[#8A6F4F]" />
-                  <span className="text-xs sm:text-sm font-medium text-[#222426]">Sort by:</span>
+                  <span className="text-xs sm:text-sm font-medium text-[#222426]">
+                    Sort by:
+                  </span>
                 </div>
                 <select
                   value={sortValue || sortBy}
@@ -956,7 +1003,10 @@ const ProductPage = () => {
               </div>
 
               <div className="text-xs sm:text-sm text-gray-600 w-full sm:w-auto text-center sm:text-left">
-                <span className="font-semibold text-[#8A6F4F]">{filteredProducts.length}</span> products
+                <span className="font-semibold text-[#8A6F4F]">
+                  {filteredProducts.length}
+                </span>{" "}
+                products
               </div>
             </div>
 
@@ -982,11 +1032,15 @@ const ProductPage = () => {
                   0;
 
                 const reviewsCountRaw =
-                  (typeof product.reviews === "number" ? product.reviews : undefined) ??
+                  (typeof product.reviews === "number"
+                    ? product.reviews
+                    : undefined) ??
                   product.reviewCount ??
                   product.reviewsCount ??
                   product.totalReviews ??
-                  (Array.isArray(product.reviews) ? product.reviews.length : undefined) ??
+                  (Array.isArray(product.reviews)
+                    ? product.reviews.length
+                    : undefined) ??
                   product.ratingSummary?.totalRatings ??
                   product.ratings?.total ??
                   0;
@@ -1014,29 +1068,44 @@ const ProductPage = () => {
                 const priceNum = parseNumber(currentPriceRaw);
                 const originalNum = parseNumber(originalPriceRaw);
                 const isDiscounted = originalNum > 0 && originalNum > priceNum;
-                const discountAmount = isDiscounted ? originalNum - priceNum : 0;
-                const discountPercent = isDiscounted ? Math.round(((originalNum - priceNum) / originalNum) * 100) : 0;
+                const discountAmount = isDiscounted
+                  ? originalNum - priceNum
+                  : 0;
+                const discountPercent = isDiscounted
+                  ? Math.round(((originalNum - priceNum) / originalNum) * 100)
+                  : 0;
 
                 // format for display
-                const fmt = (n) => `₹${(Number(n) || 0).toLocaleString("en-IN")}`;
+                const fmt = (n) =>
+                  `₹${(Number(n) || 0).toLocaleString("en-IN")}`;
 
                 return (
                   <article
                     key={product._id || product.id}
-                    onClick={() => navigate(`/product/${product?._id || product.id}`)}
+                    onClick={() =>
+                      navigate(`/product/${product?._id || product.id}`)
+                    }
                     className="group bg-white rounded-lg sm:rounded-xl overflow-hidden shadow-lg border-2 border-transparent hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl sm:hover:-translate-y-2 flex flex-col h-full cursor-pointer"
+                    data-aos="fade-up"
                   >
                     <div className="relative overflow-hidden bg-gray-100 aspect-square">
                       <img
-                        src={product.image || (product.imageUrl && product.imageUrl[0])}
+                        src={
+                          product.image ||
+                          (product.imageUrl && product.imageUrl[0])
+                        }
                         alt={product.title || product.name}
                         className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       />
                       <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
                       {/* Low stock indicator */}
-                      {String(product.availability || "").toLowerCase().includes("low") && (
-                        <span className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">Low Stock</span>
+                      {String(product.availability || "")
+                        .toLowerCase()
+                        .includes("low") && (
+                        <span className="absolute top-4 left-4 px-3 py-1 bg-red-500 text-white text-xs font-semibold rounded-full">
+                          Low Stock
+                        </span>
                       )}
 
                       {/* Discount percent badge (new) */}
@@ -1056,20 +1125,30 @@ const ProductPage = () => {
                         {renderStars(ratingNumber)}
                         {reviewsNumber > 0 ? (
                           <span className="text-[10px] sm:text-xs text-gray-500">
-                            {reviewsNumber === 1 ? "1 review" : `${reviewsNumber} reviews`}
+                            {reviewsNumber === 1
+                              ? "1 review"
+                              : `${reviewsNumber} reviews`}
                           </span>
                         ) : (
-                          <span className="text-xs text-gray-400">No review</span>
+                          <span className="text-xs text-gray-400">
+                            No review
+                          </span>
                         )}
                       </div>
 
                       {/* Price block — uses your requested layout */}
                       <div className="flex flex-wrap items-baseline gap-2 sm:gap-4 pb-4 sm:pb-6 border-b border-gray-200">
-                        <span className="text-3xl sm:text-4xl font-bold text-[#8A6F4F]">{fmt(priceNum)}</span>
+                        <span className="text-3xl sm:text-4xl font-bold text-[#8A6F4F]">
+                          {fmt(priceNum)}
+                        </span>
                         {isDiscounted && (
                           <>
-                            <span className="text-xl sm:text-2xl text-gray-400 line-through">{fmt(originalNum)}</span>
-                            <span className="px-2 sm:px-3 py-1 bg-red-100 text-red-600 text-xs sm:text-sm font-semibold rounded-full">Save {fmt(discountAmount)}</span>
+                            <span className="text-xl sm:text-2xl text-gray-400 line-through">
+                              {fmt(originalNum)}
+                            </span>
+                            <span className="px-2 sm:px-3 py-1 bg-red-100 text-red-600 text-xs sm:text-sm font-semibold rounded-full">
+                              Save {fmt(discountAmount)}
+                            </span>
                           </>
                         )}
                       </div>
@@ -1082,7 +1161,11 @@ const ProductPage = () => {
                               className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full border-2 border-gray-300 hover:border-[#CBE600] transition-all cursor-pointer"
                               style={{
                                 backgroundColor:
-                                  shade === "Pearl" ? "#FFC0CB" : shade === "Gold" ? "#FFD700" : "#CD7F32",
+                                  shade === "Pearl"
+                                    ? "#FFC0CB"
+                                    : shade === "Gold"
+                                    ? "#FFD700"
+                                    : "#CD7F32",
                               }}
                               title={shade}
                             />
@@ -1099,16 +1182,24 @@ const ProductPage = () => {
               })}
 
               {/* If no products AND not loading */}
-              {filteredProducts.length === 0 && !loading && (
-                selectedCategory ? (
+              {filteredProducts.length === 0 &&
+                !loading &&
+                (selectedCategory ? (
                   <div className="col-span-full flex flex-col items-center justify-center gap-6 py-20 text-center">
                     <div className="flex items-center justify-center w-20 h-20 rounded-full bg-[#F3F7EE]">
                       <Info className="w-10 h-10 text-[#8A6F4F]" />
                     </div>
-                    <h2 className="text-2xl font-semibold text-[#222426]">We're expanding this category</h2>
+                    <h2 className="text-2xl font-semibold text-[#222426]">
+                      We're expanding this category
+                    </h2>
                     <p className="text-gray-600 max-w-xl">
-                      We don't have products in <span className="font-medium text-[#8A6F4F]">{selectedCategory}</span> yet — but we're working on it.
-                      New items will be added soon. In the meantime, you can browse similar products or request a notification when this category is live.
+                      We don't have products in{" "}
+                      <span className="font-medium text-[#8A6F4F]">
+                        {selectedCategory}
+                      </span>{" "}
+                      yet — but we're working on it. New items will be added
+                      soon. In the meantime, you can browse similar products or
+                      request a notification when this category is live.
                     </p>
                     <div className="flex gap-3">
                       <button
@@ -1120,7 +1211,9 @@ const ProductPage = () => {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          alert(`We'll notify you when products for "${selectedCategory}" are available.`);
+                          alert(
+                            `We'll notify you when products for "${selectedCategory}" are available.`
+                          );
                         }}
                         className="px-5 py-2 bg-white text-[#8A6F4F] border border-[#8A6F4F] rounded-md hover:bg-[#F8FFF2] transition"
                       >
@@ -1129,23 +1222,36 @@ const ProductPage = () => {
                     </div>
                   </div>
                 ) : (
-                  <div className="col-span-full text-center py-16 text-gray-500">No products match the selected filters.</div>
-                )
-              )}
+                  <div className="col-span-full text-center py-16 text-gray-500">
+                    No products match the selected filters.
+                  </div>
+                ))}
             </div>
 
             {/* Pagination */}
             <div className="mt-6 flex items-center justify-center gap-3">
               <button
-                onClick={(e) => handlePaginationChange(e, Math.max(1, Number(currentPage) - 1))}
+                onClick={(e) =>
+                  handlePaginationChange(
+                    e,
+                    Math.max(1, Number(currentPage) - 1)
+                  )
+                }
                 disabled={Number(currentPage) <= 1}
                 className="px-3 py-1 border rounded disabled:opacity-50"
               >
                 Prev
               </button>
-              <span className="text-sm">Page {currentPage} of {totalPages}</span>
+              <span className="text-sm">
+                Page {currentPage} of {totalPages}
+              </span>
               <button
-                onClick={(e) => handlePaginationChange(e, Math.min(totalPages, Number(currentPage) + 1))}
+                onClick={(e) =>
+                  handlePaginationChange(
+                    e,
+                    Math.min(totalPages, Number(currentPage) + 1)
+                  )
+                }
                 disabled={Number(currentPage) >= Number(totalPages)}
                 className="px-3 py-1 border rounded disabled:opacity-50"
               >
