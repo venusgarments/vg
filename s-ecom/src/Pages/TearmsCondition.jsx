@@ -239,9 +239,9 @@ const TearmsCondition = () => {
                 className="font-semibold hover:underline"
                 style={{ color: "#CBE600" }}
               >
-                venusgarments@gmail.com
+                venusgarments2009@gmail.com
               </a>{" "}
-              or call <strong>+91 98925 50941</strong>
+              or call <strong>+91 750 077 3292</strong>
             </p>
           </div>
         </div>
