@@ -24,6 +24,7 @@ import Bestseller from "./Bestseller";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
+import ScrollToTop from "./ScrollTop";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +40,7 @@ function App() {
   }, [dispatch]);
   return (
     <>
+    <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/login" element={<Home />}></Route>
