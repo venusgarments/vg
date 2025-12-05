@@ -470,7 +470,7 @@ className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-
           value={formData.thirdLevelCategory}
           onChange={handleInputChange}
           disabled={!thirdLevelOptions.length}
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-300 focus:outline-none disabled:opacity-60"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
         >
           <option value="">Third Level Category</option>
 {thirdLevelOptions.map((t) => {
@@ -487,16 +487,25 @@ className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-
       </div>
 
       {/* Description */}
-      <div className="mb-6">
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleInputChange}
-          placeholder="Description"
-          rows="5"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
-        />
-      </div>
+<div className="mb-6">
+  <textarea
+    name="description"
+    value={formData.description}
+    onChange={handleInputChange}
+    placeholder="Description"
+    rows="5"
+    className="
+      w-full bg-white 
+      text-black 
+      placeholder-gray-500 
+      border border-gray-300 
+      rounded px-4 py-3 
+      focus:outline-none 
+      focus:ring-2 focus:ring-purple-400
+    "
+  />
+</div>
+
 
       {/* Free size */}
       <div className="mb-8">

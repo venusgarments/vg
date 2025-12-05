@@ -25,6 +25,7 @@ import Bestseller from "./Bestseller";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import ScrollToTop from "./ScrollTop";
+import FloatingIcons from "./FloatinIcons";
 
 function App() {
   const dispatch = useDispatch();
@@ -73,6 +74,7 @@ function App() {
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ChatWidget />
+      <FloatingIcons />
       <Footer />
     </>
   );
