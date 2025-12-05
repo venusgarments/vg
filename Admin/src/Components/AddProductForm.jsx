@@ -376,14 +376,14 @@ useEffect(() => {
           value={formData.brand}
           onChange={handleInputChange}
           placeholder="Brand"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <input
           name="title"
           value={formData.title}
           onChange={handleInputChange}
           placeholder="Title"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
@@ -394,7 +394,7 @@ useEffect(() => {
           value={formData.color}
           onChange={handleInputChange}
           placeholder="Color"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <input
           name="quantity"
@@ -402,7 +402,7 @@ useEffect(() => {
           onChange={handleInputChange}
           placeholder="Quantity"
           type="number"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
@@ -414,7 +414,7 @@ useEffect(() => {
           onChange={handleInputChange}
           placeholder="Price"
           type="number"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <input
           name="discountedPrice"
@@ -422,7 +422,7 @@ useEffect(() => {
           onChange={handleInputChange}
           placeholder="Discounted Price"
           type="number"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
         <input
           name="discountPercentage"
@@ -430,7 +430,7 @@ useEffect(() => {
           onChange={handleInputChange}
           placeholder="Discount Percentage"
           type="number"
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-400"
         />
       </div>
 
@@ -440,7 +440,7 @@ useEffect(() => {
           name="topLevelCategory"
           value={formData.topLevelCategory}
           onChange={handleInputChange}
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-300 focus:outline-none"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
         >
           <option value="">Top Level Category</option>
           {Object.keys(categoryHierarchy || {}).map((key) => (
@@ -455,7 +455,7 @@ useEffect(() => {
           value={formData.secondLevelCategory}
           onChange={handleInputChange}
           disabled={!secondLevelOptions.length}
-          className="w-full bg-transparent border border-[#24303e] rounded px-4 py-3 text-gray-300 focus:outline-none disabled:opacity-60"
+className="w-full bg-white text-gray-900 border border-gray-300 rounded px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-400"
         >
           <option value="">Second Level Category</option>
           {secondLevelOptions.map((s) => (

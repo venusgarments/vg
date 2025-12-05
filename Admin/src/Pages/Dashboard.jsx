@@ -1,177 +1,195 @@
-import React from "react";
-import WelcomeCard from "../Components/DashboardComps/WelcomeCard";
-import MonthlyOverview from "../Components/DashboardComps/MonthlyOverview";
-import SalesOverview from "../Components/DashboardComps/SalesOverview";
-import TotalEarnings from "../Components/DashboardComps/TotalEarnings";
-import KeyMetrics from "../Components/DashboardComps/KeyMetrics";
-import NewCustomers from "../Components/DashboardComps/NewCustomers";
-import RecentOrders from "../Components/DashboardComps/RecentOrders";
-import RecentlyAddedProducts from "../Components/DashboardComps/RecentlyAddedProducts";
-import SalesOverTimeChart from "../Components/DashboardComps/SalesOverTimeChart";
+// src/views/Dashboard.jsx
+import React, { useEffect } from "react";
+import AdminPannel from "../Styles/AdminPannelWrapper";
+import Achivement from "../tables/Achivement";
+import MonthlyOverview from "../tables/MonthlyOverView";
+import SalesOverview from "../tables/WeeklyOverview";
+import TotalEarning from "../tables/TotalEarning";
+import { CardStatsVertical, customTheme } from "../them/customeThem";
+import CustomersTable from "../tables/CustomersTable";
+import { ThemeProvider } from "@mui/material/styles";
+import "../Views/Admin.css";
+import "../AdminPannel.css";
+import RecentlyAddeddProducts from "../tables/RecentlyAddeddProducts";
+import SalesOverTime from "../tables/SalesOverTime";
+import RecentOrders from "../tables/RecentOrders";
+import { Card, CardContent, Typography } from "@mui/material";
+import Icon from "@mdi/react";
+import {
+  mdiBriefcaseVariantOutline,
+  mdiHelpCircleOutline,
+  mdiPoll,
+  mdiCurrencyUsd
+} from "@mdi/js";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchDashboardOverview } from "../Redux/Admin/Orders/Action";
+
 
 const Dashboard = () => {
-  // Sample data
-  const weeklyData = [
-    { day: "Sun", sales: 0 },
-    { day: "Mon", sales: 1 },
-    { day: "Tue", sales: 1 },
-    { day: "Wed", sales: 1 },
-    { day: "Thu", sales: 1 },
-    { day: "Fri", sales: 1 },
-    { day: "Sat", sales: 1 },
-  ];
+  const dispatch = useDispatch();
+  const { overview, loading, error } = useSelector((state) => state.adminsOrder || {});
 
-  const salesComparison = {
-    percentage: "NaN%",
-    text: "Sales have increased by +NaN% compared to the previous period.",
-  };
-
-  const monthlyStats = {
-    sales: 4,
-    customers: 10,
-    products: 28,
-    revenue: 19340,
-  };
-
-  const keyMetrics = {
-    totalProfit: 14340,
-    profitChange: 42,
-    refunds: 0,
-    refundsChange: -15,
-    newOrders: 0,
-    ordersChange: 12,
-    salesQueries: 0,
-  };
-
-  const newCustomers = [
-    { email: "afreenidreesi13@gmail.com" },
-    { email: "Leyapersonal123@gmail.com" },
-    { email: "gouravs7ingh.081@gmail.com" },
-    { email: "balakrishnan82y@gmail.com" },
-    { email: "vishalyadav020202@gmail.com" },
-  ];
-
-  const recentOrders = [
-    { title: "", price: 898, orderId: "ORD-1", status: "PENDING" },
-    { title: "", price: 0, orderId: "ORD-2", status: "PENDING" },
-    { title: "", price: 1498, orderId: "ORD-3", status: "PENDING" },
-    { title: "", price: 6938, orderId: "ORD-4", status: "PENDING" },
-    { title: "", price: 1498, orderId: "ORD-5", status: "PENDING" },
-    { title: "", price: 249, orderId: "ORD-6", status: "PENDING" },
-    { title: "", price: 249, orderId: "ORD-7", status: "PENDING" },
-    { title: "", price: 249, orderId: "ORD-8", status: "PENDING" },
-    { title: "", price: 9170, orderId: "ORD-9", status: "DELIVERED" },
-  ];
-
-  const recentProducts = [
-    {
-      title: "Women Asymmetric Pink Dress",
-      brand: "MADAME",
-      category: "dress",
-      price: 1299,
-      quantity: 100,
-      image: null,
-    },
-    {
-      title: "Women Maxi Blue Dress",
-      brand: "Daevish",
-      category: "dress",
-      price: 341,
-      quantity: 100,
-      image: null,
-    },
-    {
-      title: "Women A-line Purple Dress",
-      brand: "ZWERLON",
-      category: "dress",
-      price: 499,
-      quantity: 100,
-      image: null,
-    },
-    {
-      title: "Women Fit and Flare Black Dress",
-      brand: "Purshottam Wala",
-      category: "dress",
-      price: 359,
-      quantity: 100,
-      image: null,
-    },
-    {
-      title: "Women Fit and Flare Blue Dress",
-      brand: "Purshottam Wala",
-      category: "dress",
-      price: 359,
-      quantity: 100,
-      image: null,
-    },
-  ];
-
-  const salesOverTimeData = [
-    { month: "Jan", sales: 35000 },
-    { month: "Feb", sales: 55000 },
-    { month: "Mar", sales: 45000 },
-    { month: "Apr", sales: 75000 },
-    { month: "May", sales: 60000 },
-    { month: "Jun", sales: 40000 },
-    { month: "Jul", sales: 65000 },
-  ];
-
-  const salesPerformance = {
-    percentage: 45,
-  };
+  useEffect(() => {
+    dispatch(fetchDashboardOverview());
+  }, [dispatch]);
 
   return (
-    <div className="min-h-screen bg-[#0f1120] p-6">
-      <div className="max-w-[1600px] mx-auto">
-        {/* Top Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <WelcomeCard
-            storeName="Fluteon"
-            earnings="19,340"
-            growthPercentage={48.5}
+    <div className="bg-gray-50 min-h-screen">
+      <ThemeProvider theme={customTheme}>
+        <AdminPannel>
+          <div className="container mx-auto px-3 sm:px-4 py-4 max-w-[1600px] ">
+            {/* Row 1 - Achievement & Monthly Overview */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4 ">
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                  <div className="p-4">
+                    <Achivement sales={overview?.totalRevenue} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-2">
+                <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                  <div className="p-4">
+                    <MonthlyOverview overview={overview} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 2 - Sales Overview, Total Earning & Key Metrics */}
+<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+
+  {/* ─── Sales Overview ─────────────────────────────── */}
+  <div className="h-full">
+    <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+      <div className="p-4 h-full">
+        <SalesOverview overview={overview} />
+      </div>
+    </div>
+  </div>
+
+  {/* ─── Total Earnings ─────────────────────────────── */}
+  <div className="h-full">
+    <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 
+                    transition-all duration-300 hover:scale-[1.01] h-full">
+      <div className="p-4 h-full">
+        <TotalEarning
+          amount={overview?.totalRevenue}
+          lastYearAmount={overview?.lastYearRevenue}
+          topCategories={overview?.topCategories || []}
+        />
+      </div>
+    </div>
+  </div>
+
+  {/* ─── Key Metrics ─────────────────────────────── */}
+  <div className="md:col-span-2 lg:col-span-1 h-full">
+    <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 
+                    transition-all duration-300 hover:scale-[1.01] h-full">
+      <div className="p-4 h-full flex flex-col">
+
+        <h2 className="text-lg font-semibold mb-3 text-gray-800">
+          Key Metrics
+        </h2>
+
+        <div className="grid grid-cols-2 gap-3">
+
+          <CardStatsVertical
+            stats={`$${overview?.totalProfit || 0}`}
+            icon={<Icon path={mdiPoll} size={0.85} />}
+            color="success"
+            trendNumber="+42%"
+            title="Total Profit"
+            subtitle="Weekly Profit"
           />
-          <MonthlyOverview growth={48.5} stats={monthlyStats} />
-        </div>
 
-        {/* Second Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
-          <div className="lg:col-span-1">
-            <SalesOverview
-              weeklyData={weeklyData}
-              comparison={salesComparison}
-            />
-          </div>
-          <div className="lg:col-span-1">
-            <TotalEarnings
-              amount={19340}
-              growthPercentage={12}
-              comparedToLastYear="Compared to last year"
-            />
-          </div>
-          <div className="lg:col-span-1">
-            <KeyMetrics metrics={keyMetrics} />
-          </div>
-        </div>
+          <CardStatsVertical
+            stats={`$${overview?.totalRefund || 0}`}
+            title="Refunds"
+            trend="negative"
+            color="secondary"
+            trendNumber="-15%"
+            subtitle="Past Month"
+            icon={<Icon path={mdiCurrencyUsd} size={0.85} />}
+          />
 
-        {/* Third Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-          <NewCustomers customers={newCustomers} />
-          <RecentOrders orders={recentOrders} />
-        </div>
+          <CardStatsVertical
+            stats={`${overview?.weeklyOrderCount || 0}`}
+            trend="positive"
+            trendNumber="+12%"
+            title="New Orders"
+            subtitle="Weekly Orders"
+            icon={<Icon path={mdiBriefcaseVariantOutline} size={0.85} />}
+          />
 
-        {/* Fourth Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <RecentlyAddedProducts products={recentProducts} />
-          </div>
-          <div className="lg:col-span-1">
-            <SalesOverTimeChart
-              data={salesOverTimeData}
-              performance={salesPerformance}
-            />
-          </div>
+          <CardStatsVertical
+            stats={`${overview?.totalQueries || 0}`}
+            color="warning"
+            trend="neutral"
+            trendNumber="--"
+            subtitle="Last Week"
+            title="Sales Queries"
+            icon={<Icon path={mdiHelpCircleOutline} size={0.85} />}
+          />
+
         </div>
       </div>
+    </div>
+  </div>
+
+</div>
+
+
+            {/* Row 3 - Customers & Recent Orders */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                  <div className="p-4">
+                    <CustomersTable customers={overview?.recentUsers || []} />
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-2">
+                <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                  <div className="p-4">
+                    <RecentOrders orders={overview?.recentOrders || []} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Row 4 - Recent Products & Sales Over Time */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
+              <div className="lg:col-span-2">
+                <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                  <div className="p-4">
+                    <RecentlyAddeddProducts />
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-1">
+                <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                  <div className="p-4">
+                    <SalesOverTime />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Full width table */}
+            <div className="w-full">
+              <div className="bg-white rounded-xl shadow-md hover:shadow-xl border border-gray-200 transition-all duration-300 hover:scale-[1.01] h-full">
+                <div className="p-4">
+                  <CustomersTable />
+                </div>
+              </div>
+            </div>
+          </div>
+        </AdminPannel>
+      </ThemeProvider>
     </div>
   );
 };
