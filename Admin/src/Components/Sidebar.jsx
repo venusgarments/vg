@@ -1,5 +1,13 @@
 import React from "react";
-import { LayoutDashboard, Package, Users, Plus } from "lucide-react";
+import {
+  LayoutDashboard,
+  Package,
+  Users,
+  Plus,
+  FileText,
+  ShoppingBag,
+  Ticket,
+} from "lucide-react";
 import { NavLink } from "react-router-dom";
 
 const Sidebar = () => {
@@ -11,9 +19,14 @@ const Sidebar = () => {
     },
     { label: "Products", icon: <Package size={20} />, path: "/products" },
     { label: "Customers", icon: <Users size={20} />, path: "/customers" },
+    { label: "Blogs", icon: <FileText size={20} />, path: "/blogs" },
     { label: "Add Product", icon: <Plus size={20} />, path: "/add-product" },
-    {label: "Orders" , path:"/orders"},
-    {label:"Create Coupon", path:"/create-coupon"} 
+    { label: "Orders", icon: <ShoppingBag size={20} />, path: "/orders" },
+    {
+      label: "Create Coupon",
+      icon: <Ticket size={20} />,
+      path: "/create-coupon",
+    },
   ];
 
   return (

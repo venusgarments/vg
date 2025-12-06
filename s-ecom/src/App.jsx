@@ -21,6 +21,7 @@ import { loadUserFromToken } from "./redux/Auth/action";
 import { useDispatch } from "react-redux";
 import Collection from "./Collection";
 import Bestseller from "./Bestseller";
+import Blog from "./Pages/Blog";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -41,7 +42,7 @@ function App() {
   }, [dispatch]);
   return (
     <>
-    <ScrollToTop />
+      <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/login" element={<Home />}></Route>
@@ -71,6 +72,7 @@ function App() {
         <Route path="/about-us" element={<About />}></Route>
         <Route path="/collection" element={<Collection />}></Route>
         <Route path="/bestseller" element={<Bestseller />}></Route>
+        <Route path="/blog" element={<Blog />}></Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ChatWidget />

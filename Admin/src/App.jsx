@@ -4,10 +4,11 @@ import AdminLayout from "./Layout/AdminLayout";
 import Dashboard from "./Pages/Dashboard";
 import Products from "./Pages/Products";
 import Customers from "./Pages/Customers";
+import Blogs from "./Pages/Blogs";
 import AdminAddProduct from "./Pages/AdminAddProduct";
 import UpdateProduct from "./Pages/UpdateProduct";
 import OrdersTable from "./Orders/OrdersTable";
-import Coupan from "./Coupan/Coupan"
+import Coupan from "./Coupan/Coupan";
 
 const App = () => {
   return (
@@ -20,10 +21,11 @@ const App = () => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/products" element={<Products />} />
         <Route path="/customers" element={<Customers />} />
+        <Route path="/blogs" element={<Blogs />} />
         <Route path="/add-product" element={<AdminAddProduct />} />
         <Route path="/admin/update-product" element={<UpdateProduct />} />
-          <Route path="orders" element={<OrdersTable />} />
-          <Route path="create-coupon" element={<Coupan />} />
+        <Route path="orders" element={<OrdersTable />} />
+        <Route path="create-coupon" element={<Coupan />} />
       </Route>
     </Routes>
   );

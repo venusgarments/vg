@@ -316,7 +316,8 @@ const navigation = [
           {
             id: "half-ziper",
             name: "Half Zipper",
-            path: "/men/zipper/half-zipper",          },
+            path: "/men/zipper/half-zipper",
+          },
           {
             id: "full-zipper",
             name: "Full Zipper",
@@ -340,10 +341,10 @@ const navigation = [
             path: "/men/jacket/cotnise-jacket",
           },
           {
-            id:"denim-jacket",
-            name:"Denim Jacket",
-            path:"/men/jacket/cotnise-jacket"
-          }
+            id: "denim-jacket",
+            name: "Denim Jacket",
+            path: "/men/jacket/cotnise-jacket",
+          },
         ],
       },
       {
@@ -362,7 +363,7 @@ const navigation = [
           },
         ],
       },
-                  {
+      {
         id: "jeans",
         title: "Jeans",
         subHeadings: [
@@ -376,14 +377,14 @@ const navigation = [
             name: "Fleece",
             path: "/men/jeans/fleece",
           },
-                    {
+          {
             id: "without-fleece",
             name: "Without Fleece",
             path: "/men/jeans/without-fleece",
           },
         ],
       },
-            {
+      {
         id: "lower",
         title: "Lower",
         subHeadings: [
@@ -397,33 +398,33 @@ const navigation = [
             name: "Fleece",
             path: "/men/lower/fleece",
           },
-                    {
+          {
             id: "straight-fit",
             name: "Straight Fit",
             path: "/men/lower/straight-fit",
           },
-                            {
+          {
             id: "narrow-fit",
             name: "Narrow Fit",
             path: "/men/lower/narrow-fit",
           },
-                                     {
+          {
             id: "lower-style-pant",
             name: "Lower Style Pant",
             path: "/men/lower/lower-style-pant",
           },
-                                               {
+          {
             id: "denim",
             name: "Denim",
             path: "/men/lower/denim",
-          },                                     {
+          },
+          {
             id: "cargo",
             name: "Cargo",
             path: "/men/lower/cargo",
           },
         ],
       },
-
     ],
   },
 
@@ -447,6 +448,14 @@ const navigation = [
       "https://images.unsplash.com/photo-1503341455253-b2e723bb3dbb?q=80&w=1200",
       "https://images.unsplash.com/photo-1520975912274-2f1b8b1b3f1d?q=80&w=1200",
     ],
+  },
+
+  {
+    id: "blog",
+    title: "Blog",
+    type: "link",
+    path: "/blog",
+    images: [],
   },
 ];
 

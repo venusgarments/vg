@@ -1,61 +1,85 @@
-const express=require("express")
-const cors=require('cors');
+const express = require("express");
+const cors = require("cors");
 
-const app=express();
+const app = express();
 
-app.use(express.json())
-app.use(cors())
+// Middleware
+app.use(express.json());
+app.use(cors());
 
-app.get("/",(req,res)=>{
-    return res.status(200).send({message:"welcome to ecommerce api - node"})
-})
+// Health check
+app.get("/", (req, res) => {
+  return res.status(200).send({ message: "welcome to ecommerce api - node" });
+});
 
-const authRouter=require("./routes/auth.routes.js")
-app.use("/auth",authRouter)
+// =============================================================================
+// ROUTE IMPORTS
+// =============================================================================
 
-const userRouter=require("./routes/user.routes.js");
-app.use("/api/users",userRouter)
+// Auth & User Routes
+const authRouter = require("./routes/auth.routes.js");
+const userRouter = require("./routes/user.routes.js");
+const userQueryRoute = require("./routes/userQueryRoute.js");
 
-const productRouter=require("./routes/product.routes.js");
-app.use("/api/products",productRouter);
+// Product Routes
+const productRouter = require("./routes/product.routes.js");
+const adminProductRouter = require("./routes/product.admin.routes.js");
 
-const adminProductRouter=require("./routes/product.admin.routes.js");
-app.use("/api/admin/products",adminProductRouter);
+// Cart Routes
+const cartRouter = require("./routes/cart.routes.js");
+const cartItemRouter = require("./routes/cartItem.routes.js");
 
-const cartRouter=require("./routes/cart.routes.js")
+// Order & Payment Routes
+const orderRouter = require("./routes/order.routes.js");
+const adminOrderRoutes = require("./routes/adminOrder.routes.js");
+const paymentRouter = require("./routes/payment.routes.js");
+
+// Review & Rating Routes
+const reviewRouter = require("./routes/review.routes.js");
+const ratingRouter = require("./routes/rating.routes.js");
+
+// Blog Routes
+const blogRoutes = require("./routes/blog.routes.js");
+
+// Coupon Routes
+const couponRoutes = require("./routes/coupon.routes.js");
+
+// Chat Routes
+const chatRoutes = require("./routes/chatRoute.js");
+
+// =============================================================================
+// ROUTE REGISTRATION
+// =============================================================================
+
+// Auth & User
+app.use("/auth", authRouter);
+app.use("/api/users", userRouter);
+app.use("/api/user", userQueryRoute);
+
+// Products
+app.use("/api/products", productRouter);
+app.use("/api/admin/products", adminProductRouter);
+
+// Cart
 app.use("/api/cart", cartRouter);
+app.use("/api/cart_items", cartItemRouter);
 
-const cartItemRouter=require("./routes/cartItem.routes.js")
-app.use("/api/cart_items",cartItemRouter);
+// Orders & Payments
+app.use("/api/orders", orderRouter);
+app.use("/api/admin/orders", adminOrderRoutes);
+app.use("/api/payments", paymentRouter);
 
-const orderRouter=require("./routes/order.routes.js");
-app.use("/api/orders",orderRouter);
+// Reviews & Ratings
+app.use("/api/reviews", reviewRouter);
+app.use("/api/ratings", ratingRouter);
 
-const paymentRouter=require("./routes/payment.routes.js");
-app.use('/api/payments',paymentRouter)
+// Blogs
+app.use("/api/blogs", blogRoutes);
 
-const reviewRouter=require("./routes/review.routes.js");
-app.use("/api/reviews",reviewRouter);
-
-const ratingRouter=require("./routes/rating.routes.js");
-app.use("/api/ratings",ratingRouter);
-
-
-const userQueryRoute=require("./routes/userQueryRoute.js");
-
-app.use("/api/user",userQueryRoute);
-
-// for search 
-
-
-// admin routes handler
-const adminOrderRoutes=require("./routes/adminOrder.routes.js");
-app.use("/api/admin/orders",adminOrderRoutes);
-
-const couponRoutes = require("../src/routes/coupon.routes.js")
+// Coupons
 app.use("/api/coupons", couponRoutes);
 
-const chatRoutes = require("../src/routes/chatRoute.js")
-app.use("/api",chatRoutes)
+// Chat
+app.use("/api", chatRoutes);
 
-module.exports={app};
+module.exports = { app };

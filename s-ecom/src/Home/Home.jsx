@@ -2,6 +2,10 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import HomeCarouselData from "./HomeCarouselData";
+import axios from "axios";
+import BlogModal from "../Components/BlogModal";
+
+const API_BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 
 // Data arrays
 const newArrivals = [
@@ -105,6 +109,9 @@ const spottedItems = [
 
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [blogs, setBlogs] = useState([]);
+  const [blogsLoading, setBlogsLoading] = useState(true);
+  const [selectedBlog, setSelectedBlog] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -115,6 +122,42 @@ const Home = () => {
     }, 4000);
     return () => clearInterval(timer);
   }, []);
+
+  // Fetch blogs from API
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get(
+          `${API_BASE_URL}/api/blogs/all?limit=5`
+        );
+        setBlogs(response.data.items || []);
+      } catch (error) {
+        console.error("Error fetching blogs:", error);
+        setBlogs([]);
+      } finally {
+        setBlogsLoading(false);
+      }
+    };
+    fetchBlogs();
+  }, []);
+
+  // Format date helper
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+
+  // Open blog modal
+  const openBlogModal = (blog) => {
+    setSelectedBlog(blog);
+    document.body.style.overflow = "hidden";
+  };
+
+  // Close blog modal
+  const closeBlogModal = () => {
+    setSelectedBlog(null);
+    document.body.style.overflow = "auto";
+  };
 
   const current = HomeCarouselData[currentIndex];
 
@@ -525,363 +568,250 @@ const Home = () => {
 
       {/* Blog Section */}
       <section
-        className="py-20 md:py-28 relative overflow-hidden"
+        className="py-12 sm:py-16 md:py-20 lg:py-28 relative overflow-hidden"
         style={{ backgroundColor: "#F8F6F0" }}
       >
         {/* background blobs */}
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#CBE600]/5 rounded-full blur-3xl" />
-        <div className="absolute bottom-0 left-0 w-72 h-72 bg-[#DFF200]/5 rounded-full blur-3xl" />
+        <div className="absolute top-0 right-0 w-48 sm:w-72 md:w-96 h-48 sm:h-72 md:h-96 bg-[#CBE600]/5 rounded-full blur-3xl" />
+        <div className="absolute bottom-0 left-0 w-40 sm:w-56 md:w-72 h-40 sm:h-56 md:h-72 bg-[#DFF200]/5 rounded-full blur-3xl" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Header */}
-          <div className="text-center mb-16" data-aos="fade-up">
+          <div
+            className="text-center mb-8 sm:mb-12 md:mb-16"
+            data-aos="fade-up"
+          >
             <span
-              className="inline-block px-4 py-1.5 rounded-full text-xs tracking-widest font-medium mb-4"
+              className="inline-block px-3 sm:px-4 py-1 sm:py-1.5 rounded-full text-[10px] sm:text-xs tracking-widest font-medium mb-3 sm:mb-4"
               style={{ backgroundColor: "#CBE600", color: "white" }}
             >
               FASHION INSIGHTS
             </span>
 
             <h2
-              className="text-4xl md:text-5xl tracking-wider font-serif font-light mb-4"
+              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl tracking-wider font-serif font-light mb-3 sm:mb-4"
               style={{ color: "#8A6F4F" }}
             >
               FROM OUR BLOG
             </h2>
 
-            <p className="text-base text-gray-600 max-w-2xl mx-auto font-light">
+            <p className="text-sm sm:text-base text-gray-600 max-w-2xl mx-auto font-light px-2">
               Stay inspired with the latest trends, styling tips, and fashion
               stories
             </p>
           </div>
 
           {/* GRID */}
-          <div
-            className="
-        grid grid-cols-1 
-        md:grid-cols-2 
-        lg:grid-cols-3 
-        gap-8 lg:gap-10 
-        auto-rows-fr
-      "
-          >
-            {/* Featured Blog Post */}
-            <article
-              className="group md:col-span-2 md:row-span-2"
-              data-aos="fade-up"
-            >
-              <Link to="/blog/winter-styling-guide" className="block h-full">
-                <div className="bg-white rounded-xl overflow-hidden shadow-xl border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl h-full flex flex-col">
-                  {/* IMAGE WRAPPER — FULLY RESPONSIVE */}
-                  <div className="relative w-full h-[260px] sm:h-80 md:h-[380px] lg:h-[480px] xl:h-[520px] overflow-hidden grow">
-                    <img
-                      src="https://images.unsplash.com/photo-1490481651871-ab68de25d43d?auto=format&fit=crop&w=1200&q=80"
-                      alt="Winter styling guide"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-                    />
-
-                    <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/30 to-transparent" />
-
-                    <div className="absolute top-4 left-4 sm:top-6 sm:left-6">
-                      <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-[#DFF200] text-[#222426]">
-                        FEATURED
-                      </span>
-                    </div>
-
-                    {/* TEXT CONTENT */}
-                    <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 md:p-10">
-                      <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4 text-white/80 text-xs sm:text-sm">
-                        <time dateTime="2025-01-15">January 15, 2025</time>
-                        <span>•</span>
-                        <span>8 min read</span>
-                      </div>
-
-                      <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-semibold text-white mb-2 sm:mb-3 group-hover:text-[#DFF200] transition-colors duration-300">
-                        The Ultimate Winter Styling Guide for 2025
-                      </h3>
-
-                      <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-4">
-                        Discover how to layer like a pro and stay stylish
-                        throughout the coldest months with our comprehensive
-                        guide to winter fashion.
-                      </p>
-
-                      <div className="inline-flex items-center gap-2 text-[#DFF200] font-semibold group-hover:gap-3 transition-all duration-300">
-                        Read More
-                        <svg
-                          className="w-5 h-5"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M17 8l4 4m0 0l-4 4m4-4H3"
-                          />
-                        </svg>
-                      </div>
-                    </div>
+          {blogsLoading ? (
+            /* Loading Skeleton */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10">
+              {[...Array(3)].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-xl overflow-hidden shadow-lg animate-pulse"
+                >
+                  <div className="h-40 sm:h-48 md:h-60 bg-gray-200" />
+                  <div className="p-4 sm:p-5 md:p-6 space-y-2 sm:space-y-3">
+                    <div className="h-3 sm:h-4 bg-gray-200 rounded w-1/3" />
+                    <div className="h-5 sm:h-6 bg-gray-200 rounded w-3/4" />
+                    <div className="h-3 sm:h-4 bg-gray-200 rounded w-full" />
+                    <div className="h-3 sm:h-4 bg-gray-200 rounded w-2/3" />
                   </div>
                 </div>
-              </Link>
-            </article>
-
-            {/* Blog Post 2 */}
-            <article
-              className="group flex"
-              data-aos="fade-up"
-              data-aos-delay="100"
-            >
-              <Link to="/blog/sustainable-fashion" className="block w-full">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl h-full flex flex-col">
-                  {/* RESPONSIVE IMAGE HEIGHT */}
-                  <div className=" relative w-full h-[200px] sm:h-60 md:h-[260px] lg:h-[300px] overflow-hidden shrink-0 ">
-                    <img
-                      src="https://images.unsplash.com/photo-1523381210434-271e8be1f52b?auto=format&fit=crop&w=800&q=80"
-                      alt="Sustainable fashion"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
-                  </div>
-
-                  {/* CONTENT */}
-                  <div className="p-5 sm:p-6 md:p-7 flex flex-col grow">
-                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 text-gray-500 text-xs sm:text-sm">
-                      <time dateTime="2025-01-10">January 10, 2025</time>
-                      <span>•</span>
-                      <span>5 min read</span>
-                    </div>
-
-                    <h3 className="text-base sm:text-lg font-semibold text-[#222426] mb-2 group-hover:text-[#CBE600] transition-colors duration-300 line-clamp-2">
-                      Sustainable Fashion: Making Conscious Choices
-                    </h3>
-
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 grow">
-                      Learn how to build a sustainable wardrobe without
-                      compromising on style or quality.
-                    </p>
-
-                    <div className="inline-flex items-center gap-2 text-[#8A6F4F] font-medium text-sm group-hover:gap-3 transition-all duration-300 mt-auto">
-                      Read Article
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </article>
-
-            {/* Blog Post 3 */}
-            <article
-              className="group flex"
-              data-aos="fade-up"
-              data-aos-delay="200"
-            >
-              <Link to="/blog/color-trends-2025" className="block w-full">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl h-full flex flex-col">
-                  {/* RESPONSIVE IMAGE HEIGHT */}
+              ))}
+            </div>
+          ) : blogs.length === 0 ? (
+            /* Empty State */
+            <div className="text-center py-12">
+              <div className="w-20 h-20 mx-auto mb-4 bg-[#CBE600]/20 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-10 h-10 text-[#CBE600]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                  />
+                </svg>
+              </div>
+              <h3 className="text-xl font-semibold text-[#222426] mb-2">
+                No blogs yet
+              </h3>
+              <p className="text-gray-500">
+                Check back soon for exciting articles!
+              </p>
+            </div>
+          ) : (
+            /* Blog Grid */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 lg:gap-10 auto-rows-fr">
+              {blogs.map((blog, index) => (
+                <article
+                  key={blog._id}
+                  className={`group flex ${
+                    index === 0 ? "md:col-span-2 md:row-span-2" : ""
+                  }`}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 100}
+                >
                   <div
-                    className="
-          relative w-full 
-          h-[200px]      /* mobile */
-          sm:h-60
-          md:h-[260px]
-          lg:h-[300px]   /* desktop */
-          overflow-hidden shrink-0
-        "
+                    onClick={() => openBlogModal(blog)}
+                    className="block w-full h-full cursor-pointer"
                   >
-                    <img
-                      src="https://images.unsplash.com/photo-1558769132-cb1aea41f9c6?auto=format&fit=crop&w=800&q=80"
-                      alt="Color trends 2025"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
-                  </div>
-
-                  {/* CONTENT */}
-                  <div className="p-5 sm:p-6 md:p-7 flex flex-col grow">
-                    <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3 text-gray-500 text-xs sm:text-sm">
-                      <time dateTime="2025-01-05">January 5, 2025</time>
-                      <span>•</span>
-                      <span>6 min read</span>
-                    </div>
-
-                    <h3 className="text-base sm:text-lg font-semibold text-[#222426] mb-2 group-hover:text-[#CBE600] transition-colors duration-300 line-clamp-2">
-                      Top Color Trends Dominating 2025 Fashion
-                    </h3>
-
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 grow">
-                      From bold neons to earthy neutrals, explore the colors
-                      that are defining this year's fashion landscape.
-                    </p>
-
-                    <div className="inline-flex items-center gap-2 text-[#8A6F4F] font-medium text-sm group-hover:gap-3 transition-all duration-300 mt-auto">
-                      Read Article
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                    <div
+                      className={`bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl h-full flex flex-col ${
+                        index === 0 ? "shadow-xl" : ""
+                      }`}
+                    >
+                      {/* Image */}
+                      <div
+                        className={`relative w-full overflow-hidden shrink-0 ${
+                          index === 0
+                            ? "h-48 sm:h-64 md:h-[380px] lg:h-[480px] xl:h-[520px] grow"
+                            : "h-40 sm:h-48 md:h-60"
+                        }`}
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
+                        {blog.images && blog.images.length > 0 ? (
+                          <img
+                            src={blog.images[0]}
+                            alt={blog.title}
+                            className={`w-full h-full object-cover transition-transform duration-700 ${
+                              index === 0
+                                ? "group-hover:scale-105"
+                                : "group-hover:scale-110"
+                            }`}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-linear-to-br from-[#CBE600]/30 to-[#DFF200]/30 flex items-center justify-center">
+                            <svg
+                              className="w-16 h-16 text-[#CBE600]/50"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={1.5}
+                                d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+                              />
+                            </svg>
+                          </div>
+                        )}
+                        <div
+                          className={`absolute inset-0 bg-linear-to-t ${
+                            index === 0
+                              ? "from-black/70 via-black/30"
+                              : "from-black/50 via-transparent"
+                          } to-transparent`}
                         />
-                      </svg>
+
+                        {/* Featured Badge for first blog */}
+                        {index === 0 && (
+                          <div className="absolute top-4 left-4 sm:top-6 sm:left-6">
+                            <span className="inline-block px-4 py-1.5 rounded-full text-xs font-medium bg-[#DFF200] text-[#222426]">
+                              FEATURED
+                            </span>
+                          </div>
+                        )}
+
+                        {/* Content overlay for featured post */}
+                        {index === 0 && (
+                          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-8 md:p-10">
+                            <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4 text-white/80 text-xs sm:text-sm">
+                              <time>{formatDate(blog.createdAt)}</time>
+                              <span>•</span>
+                              <span>{blog.author}</span>
+                            </div>
+                            <h3 className="text-xl sm:text-2xl md:text-3xl font-serif font-semibold text-white mb-2 sm:mb-3 group-hover:text-[#DFF200] transition-colors duration-300 line-clamp-2">
+                              {blog.title}
+                            </h3>
+                            <p className="text-white/90 text-sm sm:text-base leading-relaxed mb-4 line-clamp-2">
+                              {blog.summary}
+                            </p>
+                            <div className="inline-flex items-center gap-2 text-[#DFF200] font-semibold group-hover:gap-3 transition-all duration-300">
+                              Read More
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M17 8l4 4m0 0l-4 4m4-4H3"
+                                />
+                              </svg>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Content for non-featured posts */}
+                      {index !== 0 && (
+                        <div className="p-6 md:p-7 flex flex-col grow">
+                          <div className="flex items-center gap-3 mb-3 text-gray-500 text-xs">
+                            <time>{formatDate(blog.createdAt)}</time>
+                            <span>•</span>
+                            <span className="text-[#CBE600] font-medium">
+                              {blog.author}
+                            </span>
+                          </div>
+                          <h3 className="text-lg font-semibold text-[#222426] mb-2 group-hover:text-[#CBE600] transition-colors duration-300 line-clamp-2">
+                            {blog.title}
+                          </h3>
+                          <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 grow">
+                            {blog.summary}
+                          </p>
+                          <div className="inline-flex items-center gap-2 text-[#8A6F4F] font-medium text-sm group-hover:gap-3 transition-all duration-300 mt-auto">
+                            Read Article
+                            <svg
+                              className="w-4 h-4"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M9 5l7 7-7 7"
+                              />
+                            </svg>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
-                </div>
-              </Link>
-            </article>
-
-            {/* Blog Post 4 */}
-            <article
-              className="group flex"
-              data-aos="fade-up"
-              data-aos-delay="300"
-            >
-              <Link to="/blog/office-to-evening" className="block w-full">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl h-full flex flex-col">
-                  {/* Image */}
-                  <div className="relative w-full h-60 overflow-hidden shrink-0">
-                    <img
-                      src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?auto=format&fit=crop&w=800&q=80"
-                      alt="Office to evening style"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 md:p-7 flex flex-col grow">
-                    {/* Date + read time */}
-                    <div className="flex items-center gap-3 mb-3 text-gray-500 text-xs">
-                      <time dateTime="2024-12-28">December 28, 2024</time>
-                      <span>•</span>
-                      <span>4 min read</span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-[#222426] mb-2 group-hover:text-[#CBE600] transition-colors duration-300 line-clamp-2">
-                      Office to Evening: Transition Your Look Seamlessly
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 grow">
-                      Master the art of versatile dressing with these simple
-                      styling tricks for day-to-night transformations.
-                    </p>
-
-                    {/* CTA */}
-                    <div className="inline-flex items-center gap-2 text-[#8A6F4F] font-medium text-sm group-hover:gap-3 transition-all duration-300 mt-auto">
-                      Read Article
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </article>
-
-            {/* Blog Post 5 */}
-            <article
-              className="group flex"
-              data-aos="fade-up"
-              data-aos-delay="400"
-            >
-              <Link to="/blog/accessory-essentials" className="block w-full">
-                <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl h-full flex flex-col">
-                  {/* Image */}
-                  <div className="relative w-full h-60 overflow-hidden shrink-0">
-                    <img
-                      src="https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=800&q=80"
-                      alt="Accessory essentials"
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    />
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 md:p-7 flex flex-col grow">
-                    {/* Date + read time */}
-                    <div className="flex items-center gap-3 mb-3 text-gray-500 text-xs">
-                      <time dateTime="2024-12-20">December 20, 2024</time>
-                      <span>•</span>
-                      <span>7 min read</span>
-                    </div>
-
-                    {/* Title */}
-                    <h3 className="text-lg font-semibold text-[#222426] mb-2 group-hover:text-[#CBE600] transition-colors duration-300 line-clamp-2">
-                      10 Accessory Essentials Every Wardrobe Needs
-                    </h3>
-
-                    {/* Description */}
-                    <p className="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4 grow">
-                      Elevate any outfit with these timeless accessories that
-                      never go out of style.
-                    </p>
-
-                    {/* CTA */}
-                    <div className="inline-flex items-center gap-2 text-[#8A6F4F] font-medium text-sm group-hover:gap-3 transition-all duration-300 mt-auto">
-                      Read Article
-                      <svg
-                        className="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M9 5l7 7-7 7"
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-              </Link>
-            </article>
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
 
           {/* View All button */}
-          <div className="mt-16 flex justify-center">
+          <div className="mt-8 sm:mt-12 md:mt-16 flex justify-center">
             <Link
               to="/blog"
-              className="group inline-flex items-center gap-3 px-10 py-4 border-2 border-[#8A6F4F] text-base font-semibold text-[#8A6F4F] uppercase tracking-wide transition-all duration-300 hover:border-[#CBE600] hover:bg-[#CBE600] hover:text-white rounded-full shadow-lg hover:shadow-xl"
+              className="group inline-flex items-center gap-2 sm:gap-3 px-6 sm:px-8 md:px-10 py-3 sm:py-4 border-2 border-[#8A6F4F] text-sm sm:text-base font-semibold text-[#8A6F4F] uppercase tracking-wide transition-all duration-300 hover:border-[#CBE600] hover:bg-[#CBE600] hover:text-white rounded-full shadow-lg hover:shadow-xl"
             >
               <span>View All Articles</span>
-              <HiOutlineArrowNarrowRight className="text-xl transition-transform duration-300 group-hover:translate-x-2" />
+              <HiOutlineArrowNarrowRight className="text-lg sm:text-xl transition-transform duration-300 group-hover:translate-x-2" />
             </Link>
           </div>
         </div>
       </section>
+
+      {/* Blog Detail Modal */}
+      <BlogModal
+        blog={selectedBlog}
+        onClose={closeBlogModal}
+        formatDate={formatDate}
+      />
     </>
   );
 };
