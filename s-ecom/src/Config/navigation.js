@@ -162,13 +162,13 @@ const navigation = [
       },
 
       {
-        id: "night_suits",
-        title: "Night Suits",
+        id: "sleep_wear",
+        title: "Sleep Wear",
         subHeadings: [
           {
-            id: "sleep_wear",
-            name: "Sleep Wear",
-            path: "/women/night-suits/sleep-wear",
+            id: "night_suits",
+            name: "Night Suits",
+            path: "/women/sleep_wear/night_suits",
           },
         ],
       },
@@ -179,7 +179,7 @@ const navigation = [
         subHeadings: [
           {
             id: "woolen",
-            name: "Woolen",
+            name: "Woollen",
             path: "/women/dresses/woolen",
           },
           {
@@ -247,7 +247,7 @@ const navigation = [
         subHeadings: [
           {
             id: "cottonise",
-            name: "Cottonise",
+            name: "Cotrise",
             path: "/women/lower/cottonise",
           },
           {
@@ -337,7 +337,7 @@ const navigation = [
           },
           {
             id: "cotnise-jacket",
-            name: "Cotnise Jacket",
+            name: "Cotrise Jacket",
             path: "/men/jacket/cotnise-jacket",
           },
           {
@@ -390,7 +390,7 @@ const navigation = [
         subHeadings: [
           {
             id: "cotrises",
-            name: "Cotrises",
+            name: "Cotrise",
             path: "/men/lower/cotrises",
           },
           {

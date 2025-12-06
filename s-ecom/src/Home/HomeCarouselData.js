@@ -17,14 +17,14 @@ const HomeCarouselData = [
       { text: "Shop Men", link: "/men" },
     ],
   },
-  {
-    id: 3,
-    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1764508960/third_mvmi71.png",
-    title: "Style That Speaks for You",
-    buttons: [
-      { text: "Shop Now", link: "/products" },
-    ],
-  },
+  // {
+  //   id: 3,
+  //   image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1764508960/third_mvmi71.png",
+  //   title: "Style That Speaks for You",
+  //   buttons: [
+  //     { text: "Shop Now", link: "/products" },
+  //   ],
+  // },
   {
     id: 4,
     image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1764509012/fourth_dhybsz.png",

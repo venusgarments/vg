@@ -85,7 +85,7 @@ const Contact = () => {
                   Venus Garments
                 </p>
                 <p className="text-sm sm:text-base text-gray-600">
-                  49/2, G.F. Cannaught, Place Dehradun (UK)
+                  49/2, G.F. Connaught, Place Dehradun (UK)
                   {/* <br className="hidden sm:block" /> Near Noble Medical, Chembur */}
                   <br className="hidden sm:block" /> Dehradun 248001
                 </p>
@@ -123,7 +123,7 @@ const Contact = () => {
                   Email
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600 break-all">
-                  venusgarments@gmail.com
+                  venusgarments2009@gmail.com
                 </p>
               </div>
             </div>
