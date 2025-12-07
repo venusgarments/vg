@@ -771,12 +771,13 @@ const ProductPage = () => {
   return (
     <div className="min-h-screen bg-[#FFFDF6]">
       {/* Mobile overlay */}
-      <div
-        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-40 lg:hidden transition-opacity duration-300 ${
-          showFilters ? "opacity-100 visible" : "opacity-0 invisible"
-        }`}
-        onClick={() => setShowFilters(false)}
-      />
+      {showFilters && (
+        <div
+          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          style={{ WebkitBackfaceVisibility: "hidden" }}
+          onClick={() => setShowFilters(false)}
+        />
+      )}
 
       {/* Header */}
       <div className="bg-linear-to-r from-[#8A6F4F] to-[#6B5B4A] text-white py-8 sm:py-12 md:py-16 px-4 sm:px-6">
@@ -799,12 +800,11 @@ const ProductPage = () => {
         <div className="flex flex-col lg:flex-row gap-6 lg:gap-8">
           {/* Sidebar */}
           <aside
-            className={`fixed lg:static top-0 left-0 h-full lg:h-auto w-80 max-w-[85vw] lg:w-64 xl:w-72 z-50 lg:z-auto transition-transform duration-300 lg:transition-none ${
+            className={`fixed lg:static top-0 left-0 h-full lg:h-auto w-80 max-w-[85vw] lg:w-64 xl:w-72 z-50 lg:z-auto transition-transform duration-300 lg:transition-none transform-gpu ${
               showFilters
                 ? "translate-x-0"
                 : "-translate-x-full lg:translate-x-0"
             }`}
-            data-aos="fade-right"
           >
             <div className="bg-white rounded-none lg:rounded-xl shadow-lg p-4 sm:p-5 md:p-6 lg:p-5 xl:p-6 lg:sticky lg:top-24 h-full lg:h-auto overflow-y-auto">
               <div className="flex items-center justify-between mb-6">
