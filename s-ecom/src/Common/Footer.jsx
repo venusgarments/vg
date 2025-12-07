@@ -4,14 +4,22 @@ import { Link, useNavigate } from "react-router-dom";
 // --- REVISED: Footer uses Header's color scheme: BG #DFF200, Text #111111 ---
 
 const Icon = ({ children, ...props }) => (
-  <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" xmlns="http://www.w3.org/2000/svg">
+  <svg
+    {...props}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    xmlns="http://www.w3.org/2000/svg"
+  >
     {children}
   </svg>
 );
 
 export default function Footer() {
-
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     // CHANGE 1: Use Header's background and dark text color
     <footer className="bg-[#DFF200] text-[#111111]">
@@ -72,26 +80,24 @@ export default function Footer() {
                 </Icon>
               </a>
               {/* WhatsApp */}
-<a
-  aria-label="WhatsApp"
-  href="https://wa.me/7500773292"  // change number if needed
-  target="_blank"
-  rel="noopener noreferrer"
-  className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors"
->
-  <Icon className="w-6 h-6 text-[#111111]">
-    <path d="M20.52 3.48A11.8 11.8 0 0012 0 11.94 11.94 0 000 12a11.8 11.8 0 003.48 8.52L2 24l3.6-1.44A11.94 11.94 0 0012 24a11.94 11.94 0 0012-12c0-3.2-1.24-6.2-3.48-8.52zM12 22a9.9 9.9 0 01-5.04-1.4l-.36-.2-2.16.84.8-2.12-.24-.4A9.83 9.83 0 012 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.6c-.28-.14-1.64-.8-1.88-.88-.24-.08-.4-.14-.56.14-.16.28-.64.88-.8 1.04-.14.16-.28.18-.52.06-.28-.14-1.18-.44-2.24-1.4-.82-.74-1.4-1.64-1.56-1.92-.16-.28-.02-.42.12-.56.12-.12.28-.32.42-.48.14-.16.18-.28.28-.48.1-.2.06-.36-.02-.5-.08-.14-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.5.06-.76.36-.26.28-1 1-1 2.42s1.02 2.8 1.16 3c.14.2 2 3.2 4.84 4.48.68.3 1.2.48 1.6.62.68.22 1.3.18 1.78.1.54-.08 1.64-.66 1.88-1.3.24-.64.24-1.18.18-1.3-.06-.12-.22-.18-.5-.32z" />
-  </Icon>
-</a>
-
+              <a
+                aria-label="WhatsApp"
+                href="https://wa.me/7500773292" // change number if needed
+                target="_blank"
+                rel="noopener noreferrer"
+                className="p-2 rounded-md border border-[#CBE600] hover:bg-[#CBE600] transition-colors"
+              >
+                <Icon className="w-6 h-6 text-[#111111]">
+                  <path d="M20.52 3.48A11.8 11.8 0 0012 0 11.94 11.94 0 000 12a11.8 11.8 0 003.48 8.52L2 24l3.6-1.44A11.94 11.94 0 0012 24a11.94 11.94 0 0012-12c0-3.2-1.24-6.2-3.48-8.52zM12 22a9.9 9.9 0 01-5.04-1.4l-.36-.2-2.16.84.8-2.12-.24-.4A9.83 9.83 0 012 12c0-5.52 4.48-10 10-10s10 4.48 10 10-4.48 10-10 10zm5.2-7.6c-.28-.14-1.64-.8-1.88-.88-.24-.08-.4-.14-.56.14-.16.28-.64.88-.8 1.04-.14.16-.28.18-.52.06-.28-.14-1.18-.44-2.24-1.4-.82-.74-1.4-1.64-1.56-1.92-.16-.28-.02-.42.12-.56.12-.12.28-.32.42-.48.14-.16.18-.28.28-.48.1-.2.06-.36-.02-.5-.08-.14-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.42h-.48c-.16 0-.5.06-.76.36-.26.28-1 1-1 2.42s1.02 2.8 1.16 3c.14.2 2 3.2 4.84 4.48.68.3 1.2.48 1.6.62.68.22 1.3.18 1.78.1.54-.08 1.64-.66 1.88-1.3.24-.64.24-1.18.18-1.3-.06-.12-.22-.18-.5-.32z" />
+                </Icon>
+              </a>
             </div>
           </div>
 
-          {/* Shop */}
-          <div className="md:col-span-3">
+          {/* Shop - TODO: Uncomment when pages are implemented */}
+          {/* <div className="md:col-span-3">
             <h4 className="text-[#111111] font-semibold mb-3">SHOP</h4>
             <ul className="space-y-2 text-sm text-gray-700">
-              {/* CHANGE 5: Navigation link hover now uses the header's link hover BG color */}
               <li>
                 <Link
                   to="/products"
@@ -125,7 +131,7 @@ export default function Footer() {
                 </Link>
               </li>
             </ul>
-          </div>
+          </div> */}
 
           {/* Company */}
           <div className="md:col-span-3">
@@ -148,7 +154,8 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
-              <li>
+              {/* TODO: Uncomment when pages are implemented */}
+              {/* <li>
                 <Link
                   to="/news"
                   className="py-1 px-2 -mx-2 rounded hover:bg-[#CBE600] transition-colors inline-block"
@@ -163,7 +170,7 @@ export default function Footer() {
                 >
                   Support
                 </Link>
-              </li>
+              </li> */}
             </ul>
           </div>
 
@@ -224,12 +231,13 @@ export default function Footer() {
               >
                 Privacy
               </Link>
-              <Link
+              {/* TODO: Uncomment when page is implemented */}
+              {/* <Link
                 to="/cookies"
                 className="py-1 px-2 -mx-2 rounded text-sm text-[#111111] hover:bg-[#CBE600] transition inline-block"
               >
                 Cookies
-              </Link>
+              </Link> */}
             </div>
           </div>
         </div>
