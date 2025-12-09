@@ -27,17 +27,22 @@ async function deleteProduct(req, res) {
 // Update a product by ID
 async function updateProduct(req, res) {
   try {
-    console.log("params", req.params)
     const productId = req.params.id;
-      console.log("product id incontroller.....",productId)
-    
-    const files = req.files?.images || []; // extract images array
-    const product = await productService.updateProduct(productId, req.body, files);
+    const files = req.files || [];
+
+    const product = await productService.updateProduct(
+      productId,
+      req.body,
+      files
+    );
+
     return res.json(product);
   } catch (err) {
+    console.error("Update Controller Error:", err);
     res.status(500).json({ error: err.message });
   }
 }
+
 
 // Get all products
 // async function getAllProducts(req, res) {

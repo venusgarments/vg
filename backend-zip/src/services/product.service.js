@@ -478,9 +478,55 @@ async function deleteProduct(productId) {
 
 // Update a product by ID
 async function updateProduct(productId, reqData) {
-  const updatedProduct = await Product.findByIdAndUpdate(productId, reqData);
+
+  /* -------------------- ✅ FIX SIZES -------------------- */
+  let sizes = reqData.size || reqData.sizes;
+
+  if (typeof sizes === "string") {
+    sizes = JSON.parse(sizes);
+  }
+
+  const normalizedSizes = Array.isArray(sizes)
+    ? sizes.map(s => ({
+        name: s.name,
+        quantity: Number(s.quantity) || 0,
+      }))
+    : [];
+
+  reqData.sizes = normalizedSizes;
+  reqData.quantity = normalizedSizes.reduce((sum, s) => sum + s.quantity, 0);
+
+  delete reqData.size;
+  delete reqData._id;
+
+  /* -------------------- ✅ ✅ FIX CATEGORY -------------------- */
+  if (reqData.thirdLevelCategory) {
+    const thirdCategory = await Category.findOne({
+      name: reqData.thirdLevelCategory,
+    });
+
+    if (!thirdCategory) {
+      throw new Error("Invalid category selected");
+    }
+
+    reqData.category = thirdCategory._id; 
+  }
+
+  delete reqData.topLevelCategory;
+  delete reqData.secondLevelCategory;
+  delete reqData.thirdLevelCategory;
+
+  /* -------------------- ✅ FINAL UPDATE -------------------- */
+  const updatedProduct = await Product.findByIdAndUpdate(
+    productId,
+    { $set: reqData },
+    { new: true }
+  );
+
   return updatedProduct;
 }
+
+
 
 // Find a product by ID
 async function findProductById(id) {
