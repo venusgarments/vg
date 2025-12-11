@@ -229,7 +229,7 @@ export default function Footer() {
                 to="/privaciy-policy"
                 className="py-1 px-2 -mx-2 rounded text-sm text-[#111111] hover:bg-[#CBE600] transition inline-block"
               >
-                Privacy
+                Policy
               </Link>
               {/* TODO: Uncomment when page is implemented */}
               {/* <Link

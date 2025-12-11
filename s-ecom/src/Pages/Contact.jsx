@@ -105,7 +105,7 @@ const Contact = () => {
                   Phone
                 </h3>
                 <p className="text-sm sm:text-base text-gray-600">
-                  +91 750 077 3292
+                  +91 750 077 3292, +91 821 840 8218
                 </p>
               </div>
             </div>

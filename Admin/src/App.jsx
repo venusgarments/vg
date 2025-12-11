@@ -9,6 +9,7 @@ import AdminAddProduct from "./Pages/AdminAddProduct";
 import UpdateProduct from "./Pages/UpdateProduct";
 import OrdersTable from "./Orders/OrdersTable";
 import Coupan from "./Coupan/Coupan";
+import VideoUpload from "./Components/Video/VideoUpload";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
         <Route path="/admin/update-product" element={<UpdateProduct />} />
         <Route path="orders" element={<OrdersTable />} />
         <Route path="create-coupon" element={<Coupan />} />
+        <Route path = "/upload-video" element={<VideoUpload />} />
       </Route>
     </Routes>
   );

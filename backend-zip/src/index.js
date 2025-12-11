@@ -48,6 +48,9 @@ const couponRoutes = require("./routes/coupon.routes.js");
 // Chat Routes
 const chatRoutes = require("./routes/chatRoute.js");
 
+// video
+const videoRoutes = require("./routes/video.routes.js")
+
 // =============================================================================
 // ROUTE REGISTRATION
 // =============================================================================
@@ -82,5 +85,9 @@ app.use("/api/coupons", couponRoutes);
 
 // Chat
 app.use("/api", chatRoutes);
+
+// video
+app.use("/api",videoRoutes)
+
 
 module.exports = { app };

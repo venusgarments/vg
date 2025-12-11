@@ -22,6 +22,7 @@ const Sidebar = () => {
     { label: "Blogs", icon: <FileText size={20} />, path: "/blogs" },
     { label: "Add Product", icon: <Plus size={20} />, path: "/add-product" },
     { label: "Orders", icon: <ShoppingBag size={20} />, path: "/orders" },
+    {label:"Upload Video", path:"/upload-video"},
     {
       label: "Create Coupon",
       icon: <Ticket size={20} />,
