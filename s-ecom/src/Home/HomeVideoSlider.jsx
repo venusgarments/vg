@@ -26,7 +26,6 @@ const HomeVideoSlider = () => {
   const fetchVideos = async () => {
     try {
       const { data } = await axios.get(`${BASE_URL}/api/videos`);
-      // ensure array
       setVideos(data.videos || []);
     } catch (err) {
       console.error("Video fetch failed:", err);
@@ -109,57 +108,98 @@ const HomeVideoSlider = () => {
     isAutoScrollPausedRef.current = true;
   };
   const handleTouchEnd = () => {
-    // slight delay to avoid immediate start while momentum scroll happens on mobile
     setTimeout(() => {
       isAutoScrollPausedRef.current = false;
     }, 250);
   };
+
+  // ================= THUMBNAIL AUTOPLAY (IntersectionObserver) =================
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (!container) return;
+
+    // select only thumbnail videos inside container
+    const vids = container.querySelectorAll("video.thumbnail");
+    if (!vids || vids.length === 0) return;
+
+    // observer: play when ~60% visible, pause otherwise.
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          const v = entry.target;
+          // if modal is open, keep thumbnails paused
+          if (playVideo) {
+            try {
+              v.pause();
+            } catch (e) {}
+            return;
+          }
+
+          // If thumbnail is mostly visible => play (muted + loop)
+          if (entry.intersectionRatio >= 0.6) {
+            try {
+              v.muted = true;
+              v.loop = true;
+              // try to play; browsers allow muted autoplay usually
+              const p = v.play();
+              if (p && p instanceof Promise) p.catch(() => {});
+            } catch (e) {}
+          } else {
+            try {
+              v.pause();
+              // reset to small time to keep consistent preview (optional)
+              // v.currentTime = 0;
+            } catch (e) {}
+          }
+        });
+      },
+      {
+        threshold: [0.0, 0.25, 0.5, 0.6, 0.75, 1],
+      }
+    );
+
+    vids.forEach((v) => observer.observe(v));
+
+    return () => {
+      observer.disconnect();
+    };
+    // re-run when videos list or modal state changes
+  }, [videos, playVideo]);
 
   // ================= AUTO-SCROLL (requestAnimationFrame) =================
   useEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
 
-    // cancel any existing RAF
     if (rafRef.current) cancelAnimationFrame(rafRef.current);
 
     const step = () => {
-      // pause when user is dragging or explicitly paused
       if (!isAutoScrollPausedRef.current && !isDraggingRef.current) {
-        // increment scrollLeft
         el.scrollLeft += AUTO_SCROLL_SPEED;
-
-        // if we've scrolled past half (since we duplicated items) -> reset to start
         const maxScroll = el.scrollWidth / 2;
         if (el.scrollLeft >= maxScroll) {
-          // jump back seamlessly
           el.scrollLeft = el.scrollLeft - maxScroll;
         }
       }
-
       rafRef.current = requestAnimationFrame(step);
     };
 
     rafRef.current = requestAnimationFrame(step);
 
-    // cleanup
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [videos]); // restart when videos change
+  }, [videos]);
 
   // Pause auto-scroll on hover
   const handleMouseEnter = () => {
     isAutoScrollPausedRef.current = true;
   };
   const handleMouseLeaveContainer = () => {
-    // only unpause if not actively dragging
     if (!isDraggingRef.current) isAutoScrollPausedRef.current = false;
   };
 
   // ================= RENDER =================
-  // duplicate videos for infinite loop
   const looped = [...videos, ...videos];
 
   return (
@@ -189,7 +229,7 @@ const HomeVideoSlider = () => {
       {/* MARQUEE / SCROLLABLE (draggable + auto-scroll) */}
       <div className="w-full py-6 sm:py-8 md:py-10 relative">
         <div className="absolute inset-y-0 left-0 w-16 sm:w-20 md:w-24 " />
-        <div className="absolute inset-y-0 right-0 w-16 sm:w-20 md:w-24" />
+        <div className="absolute inset-y-0 right-0 w-16 sm:w-20 md:w-24 " />
 
         <div
           ref={scrollRef}
@@ -218,13 +258,14 @@ const HomeVideoSlider = () => {
                 onClick={() => setPlayVideo(video.url)}
               >
                 <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
-                  {/* Use muted video element as thumbnail (preload=metadata for performance) */}
+                  {/* Thumbnail video: autoplay when visible (muted + loop) */}
                   <video
+                    className="thumbnail w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     src={video.url}
                     muted
-                    preload="metadata"
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     playsInline
+                    loop
+                    preload="metadata"
                   />
 
                   <button className="absolute left-1/2 -translate-x-1/2 bottom-3 sm:bottom-4 px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm font-bold uppercase rounded-full bg-[#DFF200] text-[#222426] opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
