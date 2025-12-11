@@ -326,7 +326,7 @@ export default function Header() {
                 <div className="relative">
                   <div className="bg-[#CBE600] blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                   <img
-                    src="logo/logo.jpeg"
+                    src="/logo/logo.jpeg"
                     alt="Venus Garments Logo"
                     className="h-12 rounded-full object-contain transition-transform duration-300 group-hover:scale-105"
                   />
@@ -565,7 +565,11 @@ export default function Header() {
         <div className="h-full overflow-y-auto bg-white">
           {/* Mobile Menu Header */}
           <div className="bg-[#DFF200] p-4 md:p-6 flex items-center justify-between">
-            <img src="logo/logo.jpeg" alt="Logo" className="h-10 rounded-full" />
+            <img
+              src="/logo/logo.jpeg"
+              alt="Logo"
+              className="h-10 rounded-full"
+            />
             <button
               onClick={() => setMobileMenuOpen(false)}
               className="p-2 hover:bg-white/10 rounded-lg transition-colors"

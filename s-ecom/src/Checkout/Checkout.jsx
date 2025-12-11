@@ -57,11 +57,11 @@ export default function Checkout() {
         </div>
 
         {/* Custom Stepper */}
-        <div className="mb-8">
-          <div className="bg-white rounded-2xl  shadow-lg p-6 lg:p-10">
+        <div className="mb-6 sm:mb-8">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sm:p-6 lg:p-10">
             <div className="relative">
-              {/* Progress Line */}
-              <div className="absolute top-6 left-0 right-0 h-1 bg-[#DFF200]/30 hidden lg:block">
+              {/* Progress Line - Shows on all screens */}
+              <div className="absolute top-4 sm:top-5 lg:top-6 left-8 right-8 sm:left-12 sm:right-12 lg:left-0 lg:right-0 h-0.5 sm:h-1 bg-[#DFF200]/30">
                 <div
                   className="h-full bg-[#DFF200] transition-all duration-500"
                   style={{
@@ -70,8 +70,8 @@ export default function Checkout() {
                 />
               </div>
 
-              {/* Steps */}
-              <div className="relative grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-0">
+              {/* Steps - Single row on all screens */}
+              <div className="relative flex justify-between">
                 {steps.map((stepItem, index) => {
                   const StepIcon = stepItem.icon;
                   const stepNumber = index + 1;
@@ -81,37 +81,35 @@ export default function Checkout() {
                   return (
                     <div
                       key={stepItem.label}
-                      className="flex flex-col items-center"
+                      className="flex flex-col items-center flex-1"
                     >
                       {/* Icon Circle */}
                       <div
                         className={`
-                          w-12 h-12 lg:w-14 lg:h-14 rounded-full flex items-center justify-center
-                          transition-all duration-300 border-2 mb-3
+                          w-8 h-8 sm:w-10 sm:h-10 lg:w-14 lg:h-14 rounded-full flex items-center justify-center
+                          transition-all duration-300 border-2 mb-1 sm:mb-2 lg:mb-3 z-10 bg-white
                           ${
                             isCompleted
                               ? "bg-[#DFF200] border-[#CBE600]"
                               : isActive
-                              ? "bg-[#DFF200] border-[#CBE600] ring-4 ring-[#DFF200]/30"
+                              ? "bg-[#DFF200] border-[#CBE600] ring-2 sm:ring-4 ring-[#DFF200]/30"
                               : "bg-white border-[#DFF200]/50"
                           }
                         `}
                       >
                         <StepIcon
                           sx={{
-                            fontSize: { xs: 24, lg: 28 },
+                            fontSize: { xs: 16, sm: 20, lg: 28 },
                             color:
-                              isCompleted || isActive
-                                ? "#111111"
-                                : "#111111/40",
+                              isCompleted || isActive ? "#111111" : "#11111140",
                           }}
                         />
                       </div>
 
-                      {/* Label */}
+                      {/* Label - Hidden on very small screens, abbreviated on small */}
                       <span
                         className={`
-                          text-xs lg:text-sm font-bold text-center transition-colors
+                          text-[9px] sm:text-xs lg:text-sm font-bold text-center transition-colors leading-tight
                           ${
                             isCompleted || isActive
                               ? "text-[#111111]"
@@ -119,7 +117,12 @@ export default function Checkout() {
                           }
                         `}
                       >
-                        {stepItem.label}
+                        <span className="hidden sm:inline">
+                          {stepItem.label}
+                        </span>
+                        <span className="sm:hidden">
+                          {stepItem.label.split(" ")[0]}
+                        </span>
                       </span>
                     </div>
                   );

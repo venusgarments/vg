@@ -160,9 +160,9 @@ const OrderDetails = () => {
             </Box>
 
             {/* Address and Tracking Row */}
-            <Grid container spacing={3}>
+            <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
               {/* Delivery Address Card */}
-              <Grid item xs={12} md={4}>
+              <div className="w-full lg:w-2/5">
                 <Box className="bg-white rounded-2xl shadow-md border-2 border-[#DFF200] overflow-hidden h-full">
                   <Box className="bg-gradient-to-r from-[#DFF200] to-[#CBE600] px-6 py-4 flex items-center gap-3">
                     <LocationOnIcon sx={{ fontSize: 28, color: "#111111" }} />
@@ -174,10 +174,10 @@ const OrderDetails = () => {
                     <AddressCard address={currentOrder?.shippingAddress} />
                   </Box>
                 </Box>
-              </Grid>
+              </div>
 
               {/* Order Tracker Card */}
-              <Grid item xs={12} md={8}>
+              <div className="w-full lg:w-3/5">
                 <Box className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden h-full">
                   <Box className="bg-gradient-to-r from-[#DFF200] to-[#CBE600] px-6 py-4 flex items-center gap-3">
                     <LocalShippingIcon
@@ -188,13 +188,8 @@ const OrderDetails = () => {
                     </Typography>
                   </Box>
                   <Box className="p-6">
-                    <Grid
-                      container
-                      justifyContent="space-between"
-                      alignItems="flex-start"
-                      spacing={3}
-                    >
-                      <Grid item xs={12} md={9}>
+                    <div className="space-y-4">
+                      <div className="w-full">
                         <OrderTraker
                           activeStep={activeStep}
                           steps={steps || []}
@@ -240,9 +235,10 @@ const OrderDetails = () => {
                             )}
                           </Box>
                         )}
-                      </Grid>
+                      </div>
 
-                      <Grid item xs={12} md={3} className="flex justify-end">
+                      {/* Return Button Section */}
+                      <div className="flex justify-end">
                         {status === "DELIVERED" &&
                           ![
                             "RETURNED_REQUESTED",
@@ -290,12 +286,12 @@ const OrderDetails = () => {
                             Return Requested
                           </Button>
                         )}
-                      </Grid>
-                    </Grid>
+                      </div>
+                    </div>
                   </Box>
                 </Box>
-              </Grid>
-            </Grid>
+              </div>
+            </div>
 
             {/* Ordered Items Card */}
             <Box className="bg-white rounded-2xl shadow-md border border-gray-200 overflow-hidden">

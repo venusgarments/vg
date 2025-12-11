@@ -1,11 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 
 const HomeVideoSlider = () => {
+  const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [playVideo, setPlayVideo] = useState(null);
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
   const playerRef = useRef(null);
 
   // ================= FETCH VIDEOS =================
@@ -18,8 +21,21 @@ const HomeVideoSlider = () => {
     }
   };
 
+  // ================= FETCH PRODUCTS =================
+  const fetchProducts = async () => {
+    try {
+      const { data } = await axios.get(
+        `${BASE_URL}/api/products?pageSize=4&sort=best_selling`
+      );
+      setRecommendedProducts(data.content || []);
+    } catch (err) {
+      console.error("Products fetch failed:", err);
+    }
+  };
+
   useEffect(() => {
     fetchVideos();
+    fetchProducts();
   }, []);
 
   // Stop & reset player; used when closing the modal
@@ -102,7 +118,6 @@ const HomeVideoSlider = () => {
               onClick={() => setPlayVideo(video.url)}
             >
               <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-[#DFF200] group-hover:border-[#CBE600] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
-                
                 {/* Video Thumbnail */}
                 <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
                   <video
@@ -133,30 +148,160 @@ const HomeVideoSlider = () => {
       {/* ================= PLAY MODAL ================= */}
       {playVideo && (
         <div
-          className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4"
+          className="fixed inset-0 bg-black/90 flex items-center justify-center z-50 p-4 md:p-8"
           role="dialog"
           aria-modal="true"
+          onClick={handleClosePlayer}
         >
-          <div className="bg-white w-full max-w-4xl rounded-xl p-4 relative border-2 border-black">
-            {/* Close button — now cleanly stops playback */}
-            <button
-              onClick={handleClosePlayer}
-              className="absolute top-3 right-3 text-xl font-bold  cursor-pointer z-10 text-black"
-              aria-label="Close video"
-            >
-              ✖
-            </button>
+          {/* Complete Modal Wrapper - Scrollable on mobile */}
+          <div
+            className="relative bg-white rounded-2xl lg:rounded-3xl overflow-hidden shadow-2xl flex flex-col lg:flex-row w-auto max-h-[90vh] overflow-y-auto animate-modal-pop mx-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Left Side - Video */}
+            <div className="relative bg-black shrink-0 w-full lg:w-auto">
+              <video
+                ref={playerRef}
+                src={playVideo}
+                controls
+                autoPlay
+                playsInline
+                className="w-full h-[50vh] sm:h-[60vh] lg:h-[85vh] lg:w-auto object-contain"
+                style={{ aspectRatio: "9/16" }}
+              />
+            </div>
 
-            <video
-              ref={playerRef}
-              src={playVideo}
-              controls
-              autoPlay
-              className="w-full h-[60vh] sm:h-[70vh] rounded border-2 border-black bg-black object-contain"
-            />
+            {/* Right Side - Bestsellers/Shop the Look (Shows on all screens) */}
+            <div className="flex flex-col w-full lg:w-[380px] bg-white">
+              {/* Header with Brand + Close Button */}
+              <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#DFF200] to-[#CBE600] flex items-center justify-center shadow-sm">
+                    <span className="text-[#111111] font-bold text-xs sm:text-sm">
+                      VG
+                    </span>
+                  </div>
+                  <div>
+                    <span className="font-semibold text-gray-900 block text-sm sm:text-base">
+                      venusgarments
+                    </span>
+                    <span className="text-xs text-gray-500">
+                      Venus Garments
+                    </span>
+                  </div>
+                </div>
+                {/* Close Button */}
+                <button
+                  onClick={handleClosePlayer}
+                  className="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 text-gray-600 text-base sm:text-lg transition-all duration-200 cursor-pointer"
+                  aria-label="Close video"
+                >
+                  ✕
+                </button>
+              </div>
+
+              {/* Caption */}
+              <div className="px-6 py-4 border-b border-gray-100">
+                <p className="text-sm text-gray-700 leading-relaxed">
+                  Discover our latest collection! Premium quality, trendy
+                  designs at best prices 🛍️✨
+                </p>
+                <button className="text-sm text-gray-400 mt-2 hover:text-gray-600 transition-colors">
+                  See more
+                </button>
+              </div>
+
+              {/* Shop the Look / Bestsellers */}
+              <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-5 pb-2 sm:pb-3">
+                <h3 className="text-sm sm:text-base font-bold text-gray-900">
+                  Bestsellers
+                </h3>
+                <button
+                  onClick={() => {
+                    handleClosePlayer();
+                    navigate("/bestseller");
+                  }}
+                  className="text-xs sm:text-sm text-[#8A6F4F] font-medium hover:underline"
+                >
+                  View All →
+                </button>
+              </div>
+
+              {/* Products List - Scrollable */}
+              <div className="flex-1 overflow-y-auto px-6 pb-6 space-y-4">
+                {recommendedProducts.length > 0 ? (
+                  recommendedProducts.map((product) => (
+                    <div
+                      key={product._id}
+                      onClick={() => {
+                        handleClosePlayer();
+                        navigate(`/product/${product._id}`);
+                      }}
+                      className="flex items-start gap-4 p-4 border border-gray-200 rounded-xl hover:border-[#CBE600] hover:shadow-md transition-all cursor-pointer group"
+                    >
+                      {/* Product Image */}
+                      <div className="w-16 h-20 rounded-lg shrink-0 overflow-hidden bg-gray-100">
+                        <img
+                          src={product.imageUrl?.[0] || product.image}
+                          alt={product.title || product.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      {/* Product Info */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-semibold text-sm text-gray-900 leading-tight group-hover:text-[#8A6F4F] transition-colors line-clamp-2">
+                          {product.title || product.name}
+                        </h4>
+                        <p className="text-xs text-gray-500 mt-1 capitalize">
+                          {product.category?.name ||
+                            product.topLevelCategory ||
+                            "Fashion"}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          <span className="text-sm font-bold text-gray-900">
+                            ₹{product.discountedPrice || product.price}
+                          </span>
+                          {product.price !== product.discountedPrice && (
+                            <span className="text-xs text-gray-400 line-through">
+                              ₹{product.price}
+                            </span>
+                          )}
+                        </div>
+                        <span className="text-xs text-[#8A6F4F] mt-2 flex items-center gap-1 font-medium group-hover:underline">
+                          View product <span className="text-sm">→</span>
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="text-center text-gray-400 text-sm py-4">
+                    Loading products...
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       )}
+
+      {/* ================= MODAL ANIMATION ================= */}
+      <style>
+        {`
+          @keyframes modal-pop {
+            0% {
+              opacity: 0;
+              transform: scale(0.9) translateY(20px);
+            }
+            100% {
+              opacity: 1;
+              transform: scale(1) translateY(0);
+            }
+          }
+          .animate-modal-pop {
+            animation: modal-pop 0.3s ease-out forwards;
+          }
+        `}
+      </style>
 
       {/* ================= MARQUEE KEYFRAMES ================= */}
       <style>

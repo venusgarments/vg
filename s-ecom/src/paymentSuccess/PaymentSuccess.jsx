@@ -128,13 +128,13 @@ const PaymentSuccess = () => {
                       )}
                     </div>
 
-                    <div className="bg-[#DFF200]/20 border-l-2 border-[#DFF200] pl-3 py-1 rounded-r inline-block">
-                      <p className="text-xs text-[#111111]/60 font-semibold">
-                        Brand
-                      </p>
-                      <p className="text-sm font-bold text-[#111111]">
+                    <div className="inline-flex items-center gap-2 bg-[#DFF200]/20 border border-[#DFF200] px-3 py-1.5 rounded-lg">
+                      <span className="text-xs text-[#111111]/60 font-semibold">
+                        Brand:
+                      </span>
+                      <span className="text-sm font-bold text-[#111111]">
                         {item.product.brand}
-                      </p>
+                      </span>
                     </div>
                   </div>
                 </div>
