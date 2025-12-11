@@ -31,6 +31,7 @@ const uploadToCloudinary = (file, options = {}) => {
   });
 };
 
+
 // Create a new blog
 const createBlog = async ({ title, summary, content, author, files }) => {
   try {
