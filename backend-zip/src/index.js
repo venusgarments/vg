@@ -3,7 +3,6 @@ const cors = require("cors");
 
 const app = express();
 
-
 // Middleware
 app.use(express.json());
 app.use(cors());
@@ -45,11 +44,11 @@ const blogRoutes = require("./routes/blog.routes.js");
 // Coupon Routes
 const couponRoutes = require("./routes/coupon.routes.js");
 
-// Chat Routes
-const chatRoutes = require("./routes/chatRoute.js");
+// Chat Routes (commented out - needs GROQ_API_KEY)
+// const chatRoutes = require("./routes/chatRoute.js");
 
 // video
-const videoRoutes = require("./routes/video.routes.js")
+const videoRoutes = require("./routes/video.routes.js");
 
 // =============================================================================
 // ROUTE REGISTRATION
@@ -83,11 +82,10 @@ app.use("/api/blogs", blogRoutes);
 // Coupons
 app.use("/api/coupons", couponRoutes);
 
-// Chat
-app.use("/api", chatRoutes);
+// Chat (commented out - needs GROQ_API_KEY)
+// app.use("/api", chatRoutes);
 
 // video
-app.use("/api",videoRoutes)
-
+app.use("/api", videoRoutes);
 
 module.exports = { app };

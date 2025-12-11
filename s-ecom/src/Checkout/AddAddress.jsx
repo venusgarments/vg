@@ -230,7 +230,7 @@ export default function AddDeliveryAddressForm({ handleNext, onOrderCreated }) {
                   <div
                     key={item.id}
                     onClick={() => setSelectedAdress(item)}
-                    className={`cursor-pointer transition-all duration-300 rounded-xl p-4 ${
+                    className={`cursor-pointer transition-all duration-300 rounded-xl p-4 flex flex-col h-full ${
                       selectedAddress?.id === item.id
                         ? "bg-gradient-to-br from-[#DFF200]/30 to-[#CBE600]/20 ring-2 ring-[#DFF200]"
                         : "bg-gradient-to-br from-white to-gray-50 hover:from-[#DFF200]/10 hover:to-[#DFF200]/5"
@@ -312,7 +312,7 @@ export default function AddDeliveryAddressForm({ handleNext, onOrderCreated }) {
                     </div>
 
                     {/* Address */}
-                    <div className="bg-white/50 rounded-lg p-2 mb-3">
+                    <div className="bg-white/50 rounded-lg p-2 mb-3 flex-1">
                       <div className="flex items-start gap-1">
                         <LocationOnIcon
                           sx={{
@@ -328,7 +328,7 @@ export default function AddDeliveryAddressForm({ handleNext, onOrderCreated }) {
                       </div>
                     </div>
 
-                    {/* Button */}
+                    {/* Button - Sticks to bottom */}
                     <Button
                       sx={{
                         bgcolor:
@@ -345,6 +345,7 @@ export default function AddDeliveryAddressForm({ handleNext, onOrderCreated }) {
                         textTransform: "uppercase",
                         borderRadius: "10px",
                         py: 1,
+                        mt: "auto",
                         "&:hover": {
                           bgcolor:
                             selectedAddress?.id === item.id

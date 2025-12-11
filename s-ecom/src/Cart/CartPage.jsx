@@ -160,17 +160,22 @@ const CartPage = () => {
       {cart.cartItems?.length > 0 ? (
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
           {/* Page Header */}
-          <div className="mb-6 lg:mb-8">
-            <h1 className="text-3xl lg:text-4xl font-bold text-[#111111] flex items-center gap-3">
-              <ShoppingCartOutlinedIcon
-                sx={{ fontSize: { xs: 32, lg: 40 }, color: "#111111" }}
-              />
-              Shopping Cart
-              <span className="ml-3 text-base lg:text-lg font-semibold text-[#111111]/60 bg-[#DFF200] px-4 py-1 rounded-full">
+          <div className="mb-4 sm:mb-6 lg:mb-8">
+            <div className="flex items-center justify-between gap-3">
+              <h1 className="text-xl sm:text-2xl lg:text-4xl font-bold text-[#111111] flex items-center gap-2 sm:gap-3">
+                <ShoppingCartOutlinedIcon
+                  sx={{
+                    fontSize: { xs: 24, sm: 28, lg: 40 },
+                    color: "#111111",
+                  }}
+                />
+                <span className="italic">Shopping Cart</span>
+              </h1>
+              <span className="text-xs sm:text-sm lg:text-base font-bold text-[#111111]/80 bg-[#DFF200] px-3 py-1.5 sm:px-4 sm:py-2 rounded-full whitespace-nowrap">
                 {cart.cart?.totalItem || 0}{" "}
                 {cart.cart?.totalItem === 1 ? "Item" : "Items"}
               </span>
-            </h1>
+            </div>
           </div>
 
           <div className="lg:grid lg:grid-cols-12 lg:gap-8 lg:items-start">
