@@ -45,7 +45,7 @@ const blogRoutes = require("./routes/blog.routes.js");
 const couponRoutes = require("./routes/coupon.routes.js");
 
 // Chat Routes (commented out - needs GROQ_API_KEY)
-// const chatRoutes = require("./routes/chatRoute.js");
+const chatRoutes = require("./routes/chatRoute.js");
 
 // video
 const videoRoutes = require("./routes/video.routes.js");
@@ -83,7 +83,7 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/coupons", couponRoutes);
 
 // Chat (commented out - needs GROQ_API_KEY)
-// app.use("/api", chatRoutes);
+app.use("/api", chatRoutes);
 
 // video
 app.use("/api", videoRoutes);
