@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import HomeCarouselData from "./HomeCarouselData";
 import axios from "axios";
 import BlogModal from "../Components/BlogModal";
-import HomeVideoSlider from "./HomeVideoSlider"
+import HomeVideoSlider from "./HomeVideoSlider";
 
 const API_BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 
@@ -114,6 +114,55 @@ const Home = () => {
   const [blogsLoading, setBlogsLoading] = useState(true);
   const [selectedBlog, setSelectedBlog] = useState(null);
   const navigate = useNavigate();
+  const winterScrollRef = useRef(null);
+  const [isAutoScrollPaused, setIsAutoScrollPaused] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
+
+  // Drag handlers for manual scrolling
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setIsAutoScrollPaused(true);
+    setStartX(e.pageX - winterScrollRef.current.offsetLeft);
+    setScrollLeft(winterScrollRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - winterScrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2; // Scroll speed multiplier
+    winterScrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+    setIsAutoScrollPaused(false);
+  };
+
+  // Auto-scroll for winter collection
+  useEffect(() => {
+    const scrollContainer = winterScrollRef.current;
+    if (!scrollContainer || isAutoScrollPaused) return;
+
+    const autoScroll = setInterval(() => {
+      if (
+        scrollContainer.scrollLeft >=
+        scrollContainer.scrollWidth - scrollContainer.clientWidth
+      ) {
+        scrollContainer.scrollLeft = 0;
+      } else {
+        scrollContainer.scrollLeft += 1;
+      }
+    }, 30);
+
+    return () => clearInterval(autoScroll);
+  }, [isAutoScrollPaused]);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -444,12 +493,24 @@ const Home = () => {
           </div>
         </div>
 
-        {/* MARQUEE */}
+        {/* WINTER COLLECTION - Scrollable with Auto-scroll */}
         <div className="w-full py-6 sm:py-8 md:py-10 relative">
-          <div className="absolute inset-y-0 left-0 w-16 sm:w-20 md:w-24 bg-linear-to-r from-[#FFF9E8] to-transparent z-10" />
-          <div className="absolute inset-y-0 right-0 w-16 sm:w-20 md:w-24 bg-linear-to-l from-[#FFF9E8] to-transparent z-10" />
-
-          <div className="flex w-max animate-marquee gap-3 sm:gap-4 md:gap-6 px-2 sm:px-4 items-stretch">
+          <div
+            ref={winterScrollRef}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+            onTouchStart={() => setIsAutoScrollPaused(true)}
+            onTouchEnd={() => setIsAutoScrollPaused(false)}
+            className={`flex overflow-x-auto gap-3 sm:gap-4 md:gap-6 px-4 sm:px-6 md:px-8 pb-4 select-none ${
+              isDragging ? "cursor-grabbing" : "cursor-grab"
+            }`}
+            style={{
+              scrollbarWidth: "none",
+              msOverflowStyle: "none",
+            }}
+          >
             {[...winterImages, ...winterImages].map((img, idx) => (
               <article
                 key={idx}
@@ -459,7 +520,7 @@ const Home = () => {
                   <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
                     <img
                       src={img}
-                      alt={`Winter item ${idx + 1}`}
+                      alt={`Winter item ${(idx % winterImages.length) + 1}`}
                       className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                       loading="lazy"
                     />
@@ -480,22 +541,14 @@ const Home = () => {
               </article>
             ))}
           </div>
+          <style>
+            {`
+              div::-webkit-scrollbar {
+                display: none;
+              }
+            `}
+          </style>
         </div>
-
-        <style>
-          {`
-            @keyframes marquee {
-              0% { transform: translateX(0); }
-              100% { transform: translateX(-50%); }
-            }
-            .animate-marquee {
-              animation: marquee 30s linear infinite;
-            }
-            .animate-marquee:hover {
-              animation-play-state: paused;
-            }
-          `}
-        </style>
       </section>
 
       {/* SPOTTED SECTION */}
@@ -567,9 +620,9 @@ const Home = () => {
         </div>
       </section>
 
-{/* Video section */}
+      {/* Video section */}
 
-<HomeVideoSlider />
+      <HomeVideoSlider />
       {/* Blog Section */}
       <section
         className="py-12 sm:py-16 md:py-20 lg:py-28 relative overflow-hidden"
