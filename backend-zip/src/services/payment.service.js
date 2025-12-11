@@ -49,8 +49,11 @@ const createPaymentLink = async (orderId, usedSuperCoins = 0, couponDiscount = 0
       notify: { sms: true, email: true },
       reminder_enable: true,
       callback_url: `https://venusgarments.in/payment/${orderId}`, // 🛑 Replace with prod before launch
-      // callback_url: `http://fluteon.com/payment/${orderId}`, 
       callback_method: "get",
+        reference_id: order._id.toString(),
+  notes: {
+    orderId: order._id.toString()
+  }
     };
 
     // 🪵 Razorpay Request Preview
