@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 /**
  * BlogModal - A reusable modal component to display blog post details
@@ -8,7 +8,12 @@ import React from "react";
  * @param {Function} formatDate - Function to format the date string
  */
 const BlogModal = ({ blog, onClose, formatDate }) => {
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+
   if (!blog) return null;
+
+  const hasImages = blog.images && blog.images.length > 0;
+  const hasMultipleImages = blog.images && blog.images.length > 1;
 
   return (
     <div
@@ -39,15 +44,42 @@ const BlogModal = ({ blog, onClose, formatDate }) => {
           </svg>
         </button>
 
-        {/* Blog Images */}
-        {blog.images && blog.images.length > 0 && (
-          <div className="relative h-48 sm:h-64 md:h-80 overflow-hidden">
+        {/* Main Blog Image */}
+        {hasImages && (
+          <div className="relative bg-gray-100">
             <img
-              src={blog.images[0]}
+              src={blog.images[selectedImageIndex]}
               alt={blog.title}
-              className="w-full h-full object-cover"
+              className="w-full max-h-[50vh] sm:max-h-[60vh] object-contain transition-all duration-300"
             />
-            <div className="absolute inset-0 bg-linear-to-t from-black/50 to-transparent"></div>
+          </div>
+        )}
+
+        {/* Thumbnail Gallery - Below Main Image */}
+        {hasMultipleImages && (
+          <div className="px-4 sm:px-6 md:px-8 py-3 sm:py-4 bg-gray-50 border-b border-gray-200">
+            <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 scrollbar-hide">
+              {blog.images.map((img, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setSelectedImageIndex(idx)}
+                  className={`relative shrink-0 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-lg overflow-hidden transition-all duration-300 ${
+                    selectedImageIndex === idx
+                      ? "ring-3 ring-[#CBE600] shadow-lg scale-105"
+                      : "opacity-70 hover:opacity-100 hover:scale-105"
+                  }`}
+                >
+                  <img
+                    src={img}
+                    alt={`${blog.title} - ${idx + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                  {selectedImageIndex === idx && (
+                    <div className="absolute inset-0 border-2 border-[#CBE600] rounded-lg"></div>
+                  )}
+                </button>
+              ))}
+            </div>
           </div>
         )}
 
@@ -103,27 +135,20 @@ const BlogModal = ({ blog, onClose, formatDate }) => {
           <div className="prose prose-sm sm:prose-base md:prose-lg max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap break-words overflow-wrap-anywhere">
             {blog.content}
           </div>
-
-          {/* Image Gallery */}
-          {blog.images && blog.images.length > 1 && (
-            <div className="mt-6 sm:mt-8">
-              <h4 className="text-base sm:text-lg font-semibold text-[#111111] mb-3 sm:mb-4">
-                More Images
-              </h4>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-4">
-                {blog.images.slice(1).map((img, idx) => (
-                  <img
-                    key={idx}
-                    src={img}
-                    alt={`${blog.title} - ${idx + 2}`}
-                    className="w-full h-24 sm:h-32 object-cover rounded-lg shadow-md hover:shadow-lg transition-shadow"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
+
+      <style>
+        {`
+          .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          }
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
     </div>
   );
 };
