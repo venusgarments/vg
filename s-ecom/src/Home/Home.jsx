@@ -4,6 +4,7 @@ import { HiOutlineArrowNarrowRight } from "react-icons/hi";
 import HomeCarouselData from "./HomeCarouselData";
 import axios from "axios";
 import BlogModal from "../Components/BlogModal";
+import HomeVideoSlider from "./HomeVideoSlider"
 
 const API_BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 
@@ -566,6 +567,9 @@ const Home = () => {
         </div>
       </section>
 
+{/* Video section */}
+
+<HomeVideoSlider />
       {/* Blog Section */}
       <section
         className="py-12 sm:py-16 md:py-20 lg:py-28 relative overflow-hidden"
