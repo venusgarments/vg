@@ -646,7 +646,7 @@ export default function Header() {
           </nav>
 
           {/* Mobile Contact Info */}
-          <div className="p-6 bg-[#FFFDF6]">
+          {/* <div className="p-6 bg-[#FFFDF6]">
             <h4 className="font-bold text-sm uppercase tracking-wider mb-4 text-[#CBE600]">
               Contact Us
             </h4>
@@ -690,7 +690,7 @@ export default function Header() {
                 info@venus.com
               </a>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
