@@ -31,116 +31,20 @@ const navigation = [
           "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
       },
     ],
+
+    /* categories for women — strictly reflect your categoryHierarchy keys/values */
     categories: [
       {
-        id: "top",
-        title: "Top",
+        id: "topwear",
+        title: "Topwear",
         subHeadings: [
-          {
-            id: "ladies_tops",
-            name: "Crop Tops",
-            path: "/women/topwear/ladies_tops",
-          },
-        ],
-      },
-
-      {
-        id: "jacket",
-        title: "Jacket",
-        subHeadings: [
-          {
-            id: "half_jacket",
-            name: "Half Jackets",
-            path: "/women/topwear/half-jackets",
-          },
-          {
-            id: "crop_jacket",
-            name: "Crop Jacket",
-            path: "/women/topwear/crop-jacket",
-          },
-        ],
-      },
-
-      {
-        id: "hoodie",
-        title: "Hoodie",
-        subHeadings: [
-          {
-            id: "oversized_hoodie",
-            name: "Oversized Hoodie",
-            path: "/women/topwear/oversized-hoodie",
-          },
-          {
-            id: "back_print_hoodie",
-            name: "Back Print Hoodie",
-            path: "/women/topwear/back-print-hoodie",
-          },
-        ],
-      },
-
-      {
-        id: "cardigan",
-        title: "Cardigan",
-        subHeadings: [
-          {
-            id: "short_cardigan",
-            name: "Short Cardigan",
-            path: "/women/cardigan/short-cardigan",
-          },
-          {
-            id: "long_cardigan",
-            name: "Long Cardigan",
-            path: "/women/cardigan/long-cardigan",
-          },
-          {
-            id: "cotrise_cardigan",
-            name: "Cotrise Cardigan",
-            path: "/women/cardigan/cotrise-cardigan",
-          },
-          {
-            id: "coat_look_cardigan",
-            name: "Coat Look Cardigan",
-            path: "/women/cardigan/coat-look-cardigan",
-          },
-        ],
-      },
-
-      {
-        id: "coats",
-        title: "Coats",
-        subHeadings: [
-          {
-            id: "short_length_coat",
-            name: "Short Length",
-            path: "/women/coats/short-length",
-          },
-          {
-            id: "medium_length_coats",
-            name: "Medium Length",
-            path: "/women/coats/medium-length",
-          },
-          {
-            id: "full_length_coats",
-            name: "Full Length",
-            path: "/women/coats/full-length",
-          },
-        ],
-      },
-
-      {
-        id: "cord_set",
-        title: "Cord Set",
-        subHeadings: [
-          {
-            id: "ethentic",
-            name: "Ethnic",
-            path: "/women/sets/ethnic",
-          },
-          {
-            id: "western",
-            name: "Western",
-            path: "/women/sets/western",
-          },
+          { id: "tops", name: "Tops", path: "/women/topwear/tops" },
+          { id: "jacket", name: "Jacket", path: "/women/topwear/jacket" },
+          { id: "hoodies", name: "Hoodies", path: "/women/topwear/hoodies" },
+          { id: "cardigams", name: "Cardigams", path: "/women/topwear/cardigams" },
+          { id: "coats", name: "Coats", path: "/women/topwear/coats" },
+          { id: "shrug", name: "Shrug", path: "/women/topwear/shrug" },
+          { id: "sweat-shirts", name: "Sweat Shirts", path: "/women/topwear/sweat-shirts" },
         ],
       },
 
@@ -148,28 +52,17 @@ const navigation = [
         id: "kurti",
         title: "Kurti",
         subHeadings: [
-          {
-            id: "party_wear",
-            name: "Party Wear",
-            path: "/women/kurti/party-wear",
-          },
-          {
-            id: "casual",
-            name: "Casual",
-            path: "/women/kurti/casual",
-          },
+          { id: "party_wear", name: "Party Wear", path: "/women/kurti/party_wear" },
+          { id: "casual", name: "Casual", path: "/women/kurti/casual" },
         ],
       },
 
       {
-        id: "sleep_wear",
-        title: "Sleep Wear",
+        id: "cord_set",
+        title: "Cord Set",
         subHeadings: [
-          {
-            id: "night_suits",
-            name: "Night Suits",
-            path: "/women/sleep_wear/night_suits",
-          },
+          { id: "ethentic", name: "Ethentic", path: "/women/cord_set/ethentic" },
+          { id: "western", name: "Western", path: "/women/cord_set/western" },
         ],
       },
 
@@ -177,94 +70,27 @@ const navigation = [
         id: "dresses",
         title: "Dresses",
         subHeadings: [
-          {
-            id: "woolen",
-            name: "Woollen",
-            path: "/women/dresses/woolen",
-          },
-          {
-            id: "party_wear",
-            name: "Party Wear",
-            path: "/women/dresses/party-wear",
-          },
+          { id: "woolen", name: "Woolen", path: "/women/dresses/woolen" },
+          { id: "party_waer", name: "Party Wear", path: "/women/dresses/party_waer" },
         ],
       },
 
       {
-        id: "jeans",
-        title: "Jeans",
+        id: "night_suits",
+        title: "Night Suits",
         subHeadings: [
-          {
-            id: "narrow_fit",
-            name: "Narrow Fit",
-            path: "/women/jeans/narrow-fit",
-          },
-          {
-            id: "regular_fit",
-            name: "Regular Fit",
-            path: "/women/jeans/regular-fit",
-          },
+          { id: "sleep_wear", name: "Sleep Wear", path: "/women/night_suits/sleep_wear" },
         ],
       },
 
       {
-        id: "pants",
-        title: "Pants",
+        id: "bottom_wear",
+        title: "Bottom Wear",
         subHeadings: [
-          {
-            id: "formal_pants",
-            name: "Formal Pants",
-            path: "/women/pants/formal-pants",
-          },
-          {
-            id: "trouser",
-            name: "Trouser",
-            path: "/women/pants/trouser",
-          },
-          {
-            id: "bell_bottom",
-            name: "Bell Bottom",
-            path: "/women/pants/bell-bottom",
-          },
-        ],
-      },
-
-      {
-        id: "jeggings",
-        title: "Jeggings",
-        subHeadings: [
-          {
-            id: "jeggings_narrow_fit",
-            name: "Narrow Fit",
-            path: "/women/jeggings/narrow-fit",
-          },
-        ],
-      },
-
-      {
-        id: "lower",
-        title: "Lower",
-        subHeadings: [
-          {
-            id: "cottonise",
-            name: "Cotrise",
-            path: "/women/lower/cottonise",
-          },
-          {
-            id: "pants_fits",
-            name: "Pants Fit",
-            path: "/women/lower/pants-fits",
-          },
-          {
-            id: "regular_fit",
-            name: "Regular Fit",
-            path: "/women/lower/regular-fit",
-          },
-          {
-            id: "slim_fit",
-            name: "Slim Fit",
-            path: "/women/lower/slim-fit",
-          },
+          { id: "jeans", name: "Jeans", path: "/women/bottom_wear/jeans" },
+          { id: "pants", name: "Pants", path: "/women/bottom_wear/pants" },
+          { id: "jeggings", name: "Jeggings", path: "/women/bottom_wear/jeggings" },
+          { id: "lower", name: "Lower", path: "/women/bottom_wear/lower" },
         ],
       },
 
@@ -272,16 +98,8 @@ const navigation = [
         id: "lingerie",
         title: "Lingerie",
         subHeadings: [
-          {
-            id: "Jockey",
-            name: "Jockey",
-            path: "/women/lingerie/jockey",
-          },
-          {
-            id: "Amante",
-            name: "Amante",
-            path: "/women/lingerie/amante",
-          },
+          { id: "Jockey", name: "Jockey", path: "/women/lingerie/Jockey" },
+          { id: "Amante", name: "Amante", path: "/women/lingerie/Amante" },
         ],
       },
     ],
@@ -308,121 +126,39 @@ const navigation = [
           "Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.",
       },
     ],
+
+    /* categories for men — strictly reflect your categoryHierarchy keys/values */
     categories: [
       {
-        id: "zipper",
-        title: "Zipper",
+        id: "top_wear",
+        title: "Top Wear",
         subHeadings: [
-          {
-            id: "half-ziper",
-            name: "Half Zipper",
-            path: "/men/zipper/half-zipper",
-          },
-          {
-            id: "full-zipper",
-            name: "Full Zipper",
-            path: "/men/zipper/full-zipper",
-          },
+          { id: "ziper", name: "Ziper", path: "/men/top_wear/ziper" },
+          { id: "jackets", name: "Jackets", path: "/men/top_wear/jackets" },
+          { id: "hoodies", name: "Hoodies", path: "/men/top_wear/hoodies" },
+          { id: "sweaters", name: "Sweaters", path: "/men/top_wear/sweaters" },
+          { id: "shirts", name: "Shirts", path: "/men/top_wear/shirts" },
+          { id: "coats", name: "Coats", path: "/men/top_wear/coats" },
         ],
       },
 
       {
-        id: "jacket",
-        title: "Jacket",
+        id: "bottom_wear",
+        title: "Bottom Wear",
         subHeadings: [
-          {
-            id: "half-jacket",
-            name: "Half Jacket",
-            path: "/men/jacket/half-jacket",
-          },
-          {
-            id: "cotnise-jacket",
-            name: "Cotrise Jacket",
-            path: "/men/jacket/cotnise-jacket",
-          },
-          {
-            id: "denim-jacket",
-            name: "Denim Jacket",
-            path: "/men/jacket/cotnise-jacket",
-          },
+          // note: your categoryHierarchy originally had a typo "valuse" for jeans under men.bottom_wear;
+          // but the top-level men.bottom_wear array in the hierarchy still implies "jeans","trousers","lower"
+          { id: "jeans", name: "Jeans", path: "/men/bottom_wear/jeans" },
+          { id: "trousers", name: "Trousers", path: "/men/bottom_wear/trousers" },
+          { id: "lower", name: "Lower", path: "/men/bottom_wear/lower" },
         ],
       },
+
       {
-        id: "formal-trouser",
-        title: "Formal-Trousers",
+        id: "inner_wear",
+        title: "Inner Wear",
         subHeadings: [
-          {
-            id: "linen-trouser",
-            name: "Linen Trouser",
-            path: "/men/formal-trouser/linen-trouser",
-          },
-          {
-            id: "cargo",
-            name: "Cargo",
-            path: "/men/formal-trouser/cargo",
-          },
-        ],
-      },
-      {
-        id: "jeans",
-        title: "Jeans",
-        subHeadings: [
-          {
-            id: "cotrises-jeans",
-            name: "Cotrise Jeans",
-            path: "/men/jeans/cotrises-jeans",
-          },
-          {
-            id: "fleece",
-            name: "Fleece",
-            path: "/men/jeans/fleece",
-          },
-          {
-            id: "without-fleece",
-            name: "Without Fleece",
-            path: "/men/jeans/without-fleece",
-          },
-        ],
-      },
-      {
-        id: "lower",
-        title: "Lower",
-        subHeadings: [
-          {
-            id: "cotrises",
-            name: "Cotrise",
-            path: "/men/lower/cotrises",
-          },
-          {
-            id: "fleece",
-            name: "Fleece",
-            path: "/men/lower/fleece",
-          },
-          {
-            id: "straight-fit",
-            name: "Straight Fit",
-            path: "/men/lower/straight-fit",
-          },
-          {
-            id: "narrow-fit",
-            name: "Narrow Fit",
-            path: "/men/lower/narrow-fit",
-          },
-          {
-            id: "lower-style-pant",
-            name: "Lower Style Pant",
-            path: "/men/lower/lower-style-pant",
-          },
-          {
-            id: "denim",
-            name: "Denim",
-            path: "/men/lower/denim",
-          },
-          {
-            id: "cargo",
-            name: "Cargo",
-            path: "/men/lower/cargo",
-          },
+          { id: "jockey", name: "Jockey", path: "/men/inner_wear/jockey" },
         ],
       },
     ],
