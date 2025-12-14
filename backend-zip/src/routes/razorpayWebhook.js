@@ -89,9 +89,6 @@ Router.post(
 
       console.log("💳 Payment update result:", result);
 
-      /* ===============================
-         5️⃣ Send WhatsApp ONCE per order
-/* ===============================
    5️⃣ Send WhatsApp ONCE per order
 =============================== */
 console.log("📞 WhatsApp sender type:", typeof sendAdminWhatsApp);
@@ -107,21 +104,21 @@ if (!orderObj.adminWhatsappSent) {
       amount: orderObj.totalDiscountedPrice || 0,
     });
 
-    // ✅ Mark ONLY after success
+    // ✅ SAVE FLAG ONLY ON SUCCESS
     orderObj.adminWhatsappSent = true;
     await orderObj.save();
 
     console.log("✅ Admin WhatsApp SENT & flag saved");
 
-  } catch (waErr) {
-    console.error("❌ WhatsApp send failed (will retry on next webhook):", waErr.message || waErr);
+  } catch (err) {
+    console.error("❌ WhatsApp failed, flag NOT saved. Will retry later.");
+    // DO NOT save flag
     // DO NOT throw
-    // DO NOT set adminWhatsappSent
   }
-
 } else {
   console.log("⚠️ Admin WhatsApp already sent — skipping");
 }
+
 
 
       return res.status(200).json({ success: true });
