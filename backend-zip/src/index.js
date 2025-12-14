@@ -3,16 +3,13 @@ const cors = require("cors");
 
 const app = express();
 
-// Middleware
-// app.use("/api/webhook", require("./routes/razorpayWebhook.js"));
+app.use("/api/webhook", require("./routes/razorpayWebhook.js"));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
-
-// Health check
 app.get("/", (req, res) => {
   return res.status(200).send({ message: "welcome to ecommerce api - node" });
 });
-
 // =============================================================================
 // ROUTE IMPORTS
 // =============================================================================

@@ -1,20 +1,22 @@
-// utils/sendAdminWhatsApp.js
 const axios = require("axios");
 
 const sendAdminWhatsApp = async ({ name, phone, orderId, amount }) => {
   try {
     const token = process.env.WHATSAPP_TOKEN;
     const phoneId = process.env.WHATSAPP_PHONE_ID;
-    const adminNumber = process.env.ADMIN_WHATSAPP; // must be in international format e.g. 91XXXXXXXXXX
+    const adminNumber = String(process.env.ADMIN_WHATSAPP || "");
+    const templateName = process.env.WHATSAPP_TEMPLATE_NAME || "new_order_alert";
 
     if (!token || !phoneId || !adminNumber) {
-      console.warn("WhatsApp env vars missing");
+      console.error("❌ WhatsApp ENV missing", {
+        token: !!token,
+        phoneId: !!phoneId,
+        adminNumber: !!adminNumber,
+      });
       return;
     }
 
-    const templateName = process.env.WHATSAPP_TEMPLATE_NAME || "new_order_alert";
-    // build template message parameters (adjust order if your template expects different placeholders)
-    const body = {
+    const payload = {
       messaging_product: "whatsapp",
       to: adminNumber,
       type: "template",
@@ -28,29 +30,66 @@ const sendAdminWhatsApp = async ({ name, phone, orderId, amount }) => {
               { type: "text", text: name || "Customer" },
               { type: "text", text: phone || "N/A" },
               { type: "text", text: orderId },
-              { type: "text", text: `${amount}` },
+              { type: "text", text: String(amount) },
             ],
           },
         ],
       },
     };
 
-    const resp = await axios.post(
+    const response = await axios.post(
       `https://graph.facebook.com/v18.0/${phoneId}/messages`,
-      body,
+      payload,
       {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
         },
+        timeout: 10000,
       }
     );
 
-    console.log("WhatsApp sent:", resp.data);
-    return resp.data;
+    console.log("✅ Admin WhatsApp sent successfully:", response.data);
+    return response.data;
+
   } catch (err) {
-    console.error("Error sending WhatsApp:", err.response?.data || err.message);
-    // optionally retry here or log to DB for later retry
+    // 🔥 Detailed Meta error logging
+    console.error(
+      "❌ WhatsApp send failed:",
+      err.response?.data || err.message
+    );
+
+    // OPTIONAL FALLBACK (for debugging only)
+    // Try plain text message if template fails
+    try {
+      const fallbackPayload = {
+        messaging_product: "whatsapp",
+        to: process.env.ADMIN_WHATSAPP,
+        type: "text",
+        text: {
+          body: `New Order Received\nOrder ID: ${orderId}\nAmount: ₹${amount}`,
+        },
+      };
+
+      await axios.post(
+        `https://graph.facebook.com/v18.0/${process.env.WHATSAPP_PHONE_ID}/messages`,
+        fallbackPayload,
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+          timeout: 10000,
+        }
+      );
+
+      console.log("⚠️ Fallback text WhatsApp sent");
+    } catch (fallbackErr) {
+      console.error(
+        "❌ Fallback WhatsApp also failed:",
+        fallbackErr.response?.data || fallbackErr.message
+      );
+    }
   }
 };
 
