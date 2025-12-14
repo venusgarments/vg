@@ -92,6 +92,11 @@ earnedSuperCoins:{
   type:Number,
   default:0
 },
+adminWhatsappSent: {
+  type: Boolean,
+  default: false,
+},
+
   couponCode: {
     type: String,
     default: null,
