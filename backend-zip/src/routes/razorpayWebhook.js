@@ -37,7 +37,7 @@ Router.post(
         return res.status(400).json({ success: false });
       }
 
-      
+
       console.log("✅ Razorpay signature verified");
 
       /* ===============================
@@ -91,29 +91,38 @@ Router.post(
 
       /* ===============================
          5️⃣ Send WhatsApp ONCE per order
-      =============================== */
-      console.log(
-        "📞 WhatsApp sender type:",
-        typeof sendAdminWhatsApp
-      );
+/* ===============================
+   5️⃣ Send WhatsApp ONCE per order
+=============================== */
+console.log("📞 WhatsApp sender type:", typeof sendAdminWhatsApp);
 
-      if (!orderObj.adminWhatsappSent) {
-        console.log("📤 Sending WhatsApp to admin (first time)");
+if (!orderObj.adminWhatsappSent) {
+  console.log("📤 Attempting WhatsApp to admin (first time)");
 
-        await sendAdminWhatsApp({
-          name: `${orderObj.user?.firstName || ""} ${orderObj.user?.lastName || ""}`.trim(),
-          phone: orderObj.shippingInfo?.phone || orderObj.user?.mobile || "N/A",
-          orderId: orderObj._id.toString(),
-          amount: orderObj.totalDiscountedPrice || 0,
-        });
+  try {
+    await sendAdminWhatsApp({
+      name: `${orderObj.user?.firstName || ""} ${orderObj.user?.lastName || ""}`.trim(),
+      phone: orderObj.shippingInfo?.phone || orderObj.user?.mobile || "N/A",
+      orderId: orderObj._id.toString(),
+      amount: orderObj.totalDiscountedPrice || 0,
+    });
 
-        orderObj.adminWhatsappSent = true;
-        await orderObj.save();
+    // ✅ Mark ONLY after success
+    orderObj.adminWhatsappSent = true;
+    await orderObj.save();
 
-        console.log("✅ Admin WhatsApp SENT & flag saved");
-      } else {
-        console.log("⚠️ Admin WhatsApp already sent — skipping");
-      }
+    console.log("✅ Admin WhatsApp SENT & flag saved");
+
+  } catch (waErr) {
+    console.error("❌ WhatsApp send failed (will retry on next webhook):", waErr.message || waErr);
+    // DO NOT throw
+    // DO NOT set adminWhatsappSent
+  }
+
+} else {
+  console.log("⚠️ Admin WhatsApp already sent — skipping");
+}
+
 
       return res.status(200).json({ success: true });
 
