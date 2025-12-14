@@ -89,6 +89,7 @@ Router.post(
 
       console.log("💳 Payment update result:", result);
 
+/* ===============================
    5️⃣ Send WhatsApp ONCE per order
 =============================== */
 console.log("📞 WhatsApp sender type:", typeof sendAdminWhatsApp);
