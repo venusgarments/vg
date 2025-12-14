@@ -22,7 +22,7 @@ const sendAdminWhatsApp = async ({ name, phone, orderId, amount }) => {
       type: "template",
       template: {
         name: templateName,
-        language: { code: "en" },
+        language: { code: "en_US" },
         components: [
           {
             type: "body",
