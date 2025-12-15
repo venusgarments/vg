@@ -22,7 +22,7 @@ const FloatingIcons = () => {
           justifyContent: "center",
           boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
           cursor: "pointer",
-          zIndex: 2000,
+          zIndex: 10,
         }}
       >
         <FaWhatsapp size={28} />

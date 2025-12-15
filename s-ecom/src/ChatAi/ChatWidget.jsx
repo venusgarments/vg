@@ -13,7 +13,7 @@ const ChatWidget = () => {
         color="primary"
         aria-label="chat"
         onClick={() => setOpen(true)}
-        sx={{ position: 'fixed', bottom: 16, right: 16, zIndex: 9999 }}
+        sx={{ position: 'fixed', bottom: 16, right: 16, zIndex: 20 }}
       >
         <ChatIcon />
       </Fab>

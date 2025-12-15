@@ -50,6 +50,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        zIndex:50000
       }}
     >
       <Fade in={open}>
