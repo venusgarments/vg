@@ -41,7 +41,7 @@ const navigation = [
           { id: "tops", name: "Tops", path: "/women/topwear/tops" },
           { id: "jacket", name: "Jacket", path: "/women/topwear/jacket" },
           { id: "hoodies", name: "Hoodies", path: "/women/topwear/hoodies" },
-          { id: "cardigams", name: "Cardigams", path: "/women/topwear/cardigams" },
+          { id: "cardigans", name: "Cardigams", path: "/women/topwear/cardigams" },
           { id: "coats", name: "Coats", path: "/women/topwear/coats" },
           { id: "shrug", name: "Shrug", path: "/women/topwear/shrug" },
           { id: "sweat-shirts", name: "Sweat Shirts", path: "/women/topwear/sweat-shirts" },
@@ -61,7 +61,7 @@ const navigation = [
         id: "cord_set",
         title: "Cord Set",
         subHeadings: [
-          { id: "ethentic", name: "Ethentic", path: "/women/cord_set/ethentic" },
+          { id: "ethentic", name: "Ethntic", path: "/women/cord_set/ethentic" },
           { id: "western", name: "Western", path: "/women/cord_set/western" },
         ],
       },
@@ -70,7 +70,7 @@ const navigation = [
         id: "dresses",
         title: "Dresses",
         subHeadings: [
-          { id: "woolen", name: "Woolen", path: "/women/dresses/woolen" },
+          { id: "woolen", name: "Woollen", path: "/women/dresses/woolen" },
           { id: "party_waer", name: "Party Wear", path: "/women/dresses/party_waer" },
         ],
       },
@@ -133,7 +133,7 @@ const navigation = [
         id: "top_wear",
         title: "Top Wear",
         subHeadings: [
-          { id: "ziper", name: "Ziper", path: "/men/top_wear/ziper" },
+          { id: "ziper", name: "Zipper", path: "/men/top_wear/ziper" },
           { id: "jackets", name: "Jackets", path: "/men/top_wear/jackets" },
           { id: "hoodies", name: "Hoodies", path: "/men/top_wear/hoodies" },
           { id: "sweaters", name: "Sweaters", path: "/men/top_wear/sweaters" },
