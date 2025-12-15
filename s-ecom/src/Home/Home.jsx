@@ -5,109 +5,11 @@ import HomeCarouselData from "./HomeCarouselData";
 import axios from "axios";
 import BlogModal from "../Components/BlogModal";
 import HomeVideoSlider from "./HomeVideoSlider";
+import { newArrivals, spottedItems, winterImages } from "./HomeData";
 
 const API_BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 
 // Data arrays
-const newArrivals = [
-  {
-    id: 1,
-    title: "Dark Cotton Kurtis",
-    image:
-      "https://rukminim2.flixcart.com/image/612/612/kq5iykw0/top/s/o/3/xl-plt205top-pretty-loving-thing-original-imag482b623yvzw2.jpeg?q=70",
-  },
-  {
-    id: 2,
-    title: "Sweat-Tshirts",
-    image:
-      "https://rukminim2.flixcart.com/image/612/612/xif0q/top/i/t/z/s-1-zm70-samragyi-original-imahf42hxmv9thm8.jpeg?q=70",
-  },
-  {
-    id: 3,
-    title: "Daily Use Kurtis",
-    image:
-      "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/p/m/c/14-15-years-hoodie-shirt-navy-blue-pampa-fashion-original-imahy7smwanapmwm.jpeg?q=70",
-  },
-  {
-    id: 4,
-    title: "Blazer Coat",
-    image:
-      "https://rukminim2.flixcart.com/image/612/612/xif0q/shirt/7/7/6/s-st2-vebnor-original-imahekf5guf9jzar.jpeg?q=70",
-  },
-  {
-    id: 5,
-    title: "Gowns",
-    image:
-      "https://rukminim2.flixcart.com/image/612/612/kfwvcsw0/legging/3/f/2/free-bws023-k-m-r-garments-original-imafw9zmbgye5f9y.jpeg?q=70",
-  },
-  {
-    id: 6,
-    title: "Street Looks",
-    image:
-      "https://rukminim2.flixcart.com/image/612/612/xif0q/dress/r/u/b/m-ssf-507-bk-pr-bobn-neemiya-original-imah5y25ggap3wvh.jpeg?q=70",
-  },
-];
-
-const winterImages = [
-  "https://rukminim2.flixcart.com/image/612/612/xif0q/cap/r/a/9/free-winter-cap-woolen-beanie-neck-warmer-muffler-for-men-women-original-imahhggyacxgvqqa.jpeg?q=70",
-  "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=500&q=80",
-  "https://rukminim2.flixcart.com/image/612/612/xif0q/sweatshirt/r/h/m/xl-zipper-hoodie-divra-clothing-original-imahgfgkrhhrhwas.jpeg?q=70",
-  "https://images.unsplash.com/photo-1618354691458-471b88fcf0c6?auto=format&fit=crop&w=500&q=80",
-  "https://rukminim2.flixcart.com/image/612/612/xif0q/sweatshirt/c/c/u/xl-mt478-metronaut-original-imah4nh9hgqtb6wt.jpeg?q=70",
-  "https://rukminim2.flixcart.com/image/612/612/xif0q/sweatshirt/9/v/g/xxl-rs29h-front-hard-airforce-sl-woostro-original-imagwfrffah2qhyb.jpeg?q=70",
-];
-
-const spottedItems = [
-  {
-    id: 1,
-    title: "Womens Leather Jacket",
-    image:
-      "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 2,
-    title: "Half Kurta Shirt For Men",
-    image:
-      "https://images.unsplash.com/photo-1531123414780-f0b5898f0fff?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 3,
-    title: "Sweater For Women",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 4,
-    title: "Premium Blazer",
-    image:
-      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 5,
-    title: "Casual Knit",
-    image:
-      "https://images.unsplash.com/photo-1524503033411-c9566986fc8f?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 6,
-    title: "Denim Jacket",
-    image:
-      "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 7,
-    title: "Grey Blazer",
-    image:
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
-  },
-  {
-    id: 8,
-    title: "Everyday Shirt",
-    image:
-      "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-  },
-];
-
 const Home = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [blogs, setBlogs] = useState([]);
@@ -386,13 +288,11 @@ const Home = () => {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:gap-10">
             {newArrivals.map((item, index) => (
-              <article
-                key={item.id}
-                className="group relative"
-                style={{ animationDelay: `${index * 100}ms` }}
-                data-aos="fade-up"
-                data-aos-delay={index * 100}
-              >
+         <article
+  onClick={() => navigate(item.path)}
+  className="group relative cursor-pointer"
+>
+
                 <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
                   <div className="relative w-full h-40 sm:h-48 md:h-56 lg:h-72 xl:h-80 overflow-hidden">
                     <img
@@ -511,35 +411,37 @@ const Home = () => {
               msOverflowStyle: "none",
             }}
           >
-            {[...winterImages, ...winterImages].map((img, idx) => (
-              <article
-                key={idx}
-                className="group relative w-48 sm:w-56 md:w-64 lg:w-72 shrink-0"
-              >
-                <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-[#DFF200] group-hover:border-[#CBE600] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
-                  <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
-                    <img
-                      src={img}
-                      alt={`Winter item ${(idx % winterImages.length) + 1}`}
-                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                      loading="lazy"
-                    />
+        {[...winterImages, ...winterImages].map((item, idx) => (
+  <article
+    key={idx}
+    onClick={() => navigate(item.path)}
+    className="group relative w-48 sm:w-56 md:w-64 lg:w-72 shrink-0 cursor-pointer"
+  >
+    <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-[#DFF200] group-hover:border-[#CBE600] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+      <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
+        <img
+          src={item.image}
+          alt="Winter Collection"
+          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+          loading="lazy"
+        />
 
-                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    <button className="absolute left-1/2 -translate-x-1/2 bottom-3 sm:bottom-4 px-4 py-2 sm:px-5 sm:py-2.5 md:px-6 md:py-3 text-xs sm:text-sm font-bold uppercase rounded-full bg-[#DFF200] text-[#222426] opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
-                      Explore
-                    </button>
-                  </div>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            navigate(item.path);
+          }}
+          className="absolute left-1/2 -translate-x-1/2 bottom-3 px-5 py-2 text-xs font-bold uppercase rounded-full bg-[#DFF200] text-[#222426] opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500"
+        >
+          Explore
+        </button>
+      </div>
+    </div>
+  </article>
+))}
 
-                  <div className="py-3 sm:py-4 text-center bg-linear-to-b from-white to-gray-50">
-                    <h3 className="text-xs sm:text-sm md:text-base font-semibold text-[#222426] uppercase tracking-wider">
-                      Winter Essential {(idx % winterImages.length) + 1}
-                    </h3>
-                  </div>
-                </div>
-              </article>
-            ))}
           </div>
           <style>
             {`
@@ -581,13 +483,11 @@ const Home = () => {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3 lg:gap-6 xl:gap-8">
             {spottedItems.map((it, index) => (
-              <article
-                key={it.id}
-                className="group relative"
-                style={{ animationDelay: `${index * 100}ms` }}
-                data-aos="zoom-in"
-                data-aos-delay={index * 100}
-              >
+         <article
+  onClick={() => navigate(it.path)}
+  className="group relative cursor-pointer"
+>
+
                 <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
                   <div className="relative w-full aspect-4/5 overflow-hidden">
                     <img

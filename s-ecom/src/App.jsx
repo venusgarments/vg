@@ -52,6 +52,10 @@ function App() {
           path="/:lavelOne/:lavelTwo/:lavelThree"
           element={<ProductPage />}
         />
+                <Route
+          path="/:lavelOne/:lavelTwo"
+          element={<ProductPage />}
+        />
         <Route path="/product/:productId" element={<ProductDetailsPage />} />
         <Route path="/account/order" element={<Order />}></Route>
         <Route

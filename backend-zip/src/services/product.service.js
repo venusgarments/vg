@@ -239,79 +239,6 @@ async function getProductsByCategoryName(name, limit = 10) {
   return products;
 }
 
-
-// async function createProduct(req) {
-//   try {
-//     const reqData = req.body;
-
-//     // Parse size string to JSON array
-//     let sizes = reqData.size;
-//     if (typeof sizes === "string") sizes = JSON.parse(sizes);
-
-//     // Upload images to Cloudinary
-//     if (!req.files || req.files.length === 0) throw new Error("No images uploaded");
-
-//     const uploadResults = await Promise.all(
-//       req.files.map(file => {
-//         const base64Image = `data:${file.mimetype};base64,${file.buffer.toString("base64")}`;
-//         return cloudinary.uploader.upload(base64Image, {
-//           folder: "ecommerce/products",
-//         });
-//       })
-//     );
-
-//     const imageUrls = uploadResults.map(result => result.secure_url);
-//     console.log("Uploaded image URLs:", imageUrls);
-
-//     // Handle category creation
-//     const topLevel = await Category.findOne({ name: reqData.topLevelCategory }) ||
-//       await new Category({ name: reqData.topLevelCategory, level: 1 }).save();
-
-//     const secondLevel = await Category.findOne({
-//       name: reqData.secondLevelCategory,
-//       parentCategory: topLevel._id,
-//     }) || await new Category({
-//       name: reqData.secondLevelCategory,
-//       parentCategory: topLevel._id,
-//       level: 2,
-//     }).save();
-
-//     const thirdLevel = await Category.findOne({
-//       name: reqData.thirdLevelCategory,
-//       parentCategory: secondLevel._id,
-//     }) || await new Category({
-//       name: reqData.thirdLevelCategory,
-//       parentCategory: secondLevel._id,
-//       level: 3,
-//     }).save();
-
-//     // Create and save product
-//     const product = new Product({
-//       title: reqData.title,
-//       description: reqData.description,
-//       discountedPrice: reqData.discountedPrice,
-//       discountPersent: reqData.discountPersent,
-//       imageUrl: imageUrls,
-//       brand: reqData.brand,
-//       price: reqData.price,
-//       sizes: sizes,
-//       quantity: reqData.quantity,
-//       color: reqData.color,
-//       category: thirdLevel._id,
-//     });
-
-//     return await product.save();
-
-//   } catch (error) {
-//     console.error("Create Product Error:", error);
-//     throw new Error(error.message || "Something went wrong");
-//   }
-// }
-
-// Delete a product by ID
-
-
-
 async function createProduct(req) {
   try {
     console.log("== createProduct called ==");
@@ -539,6 +466,23 @@ async function findProductById(id) {
 }
 
 // Get all products with filtering and pagination
+
+async function getAllChildCategoryIds(categoryId) {
+  const ids = [categoryId.toString()];
+
+  async function fetchChildren(parentIds) {
+    const children = await Category.find({ parentCategory: { $in: parentIds } });
+    if (!children.length) return;
+
+    const childIds = children.map(c => c._id.toString());
+    childIds.forEach(id => ids.push(id));
+    await fetchChildren(childIds);
+  }
+
+  await fetchChildren([categoryId]);
+  return ids;
+}
+
 async function getAllProducts(reqQuery) {
   let {
     category,
@@ -556,12 +500,26 @@ async function getAllProducts(reqQuery) {
   let query = Product.find().populate("category");
 
 
+  // if (category) {
+  //   const existCategory = await Category.findOne({ name: category });
+  //   if (existCategory)
+  //     query = query.where("category").equals(existCategory._id);
+  //   else return { content: [], currentPage: 1, totalPages:1 };
+  // }
+
   if (category) {
-    const existCategory = await Category.findOne({ name: category });
-    if (existCategory)
-      query = query.where("category").equals(existCategory._id);
-    else return { content: [], currentPage: 1, totalPages:1 };
+  const existCategory = await Category.findOne({ name: category });
+
+  if (!existCategory) {
+    return { content: [], currentPage: 1, totalPages: 1 };
   }
+
+  // 🔥 get self + children categories
+  const categoryIds = await getAllChildCategoryIds(existCategory._id);
+
+  query = query.where("category").in(categoryIds);
+}
+
 
   if (color) {
     const colorSet = new Set(color.split(",").map(color => color.trim().toLowerCase()));
