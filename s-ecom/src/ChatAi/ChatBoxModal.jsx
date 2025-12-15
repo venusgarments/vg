@@ -94,8 +94,8 @@ const ChatBoxModal = ({ open, handleClose }) => {
           {/* Header */}
           <Box
             sx={{
-              background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-              color: "white",
+              background: "#c8ff00",
+              color: "#000",
               p: { xs: 2, sm: 2.5 },
               display: "flex",
               alignItems: "center",
@@ -106,12 +106,12 @@ const ChatBoxModal = ({ open, handleClose }) => {
             <Box display="flex" alignItems="center" gap={1.5}>
               <Avatar
                 sx={{
-                  bgcolor: "rgba(255,255,255,0.2)",
+                  bgcolor: "rgba(0,0,0,0.1)",
                   width: { xs: 36, sm: 40 },
                   height: { xs: 36, sm: 40 },
                 }}
               >
-                <SupportAgentIcon sx={{ fontSize: { xs: 20, sm: 24 } }} />
+                <SupportAgentIcon sx={{ fontSize: { xs: 20, sm: 24 }, color: "#000" }} />
               </Avatar>
               <Box>
                 <Typography
@@ -120,6 +120,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
                     fontWeight: 600,
                     fontSize: { xs: "1rem", sm: "1.1rem" },
                     lineHeight: 1.2,
+                    color: "#000",
                   }}
                 >
                   Venus Garments
@@ -127,8 +128,9 @@ const ChatBoxModal = ({ open, handleClose }) => {
                 <Typography
                   variant="caption"
                   sx={{
-                    opacity: 0.9,
+                    opacity: 0.8,
                     fontSize: { xs: "0.7rem", sm: "0.75rem" },
+                    color: "#000",
                   }}
                 >
                   Customer Support
@@ -138,8 +140,8 @@ const ChatBoxModal = ({ open, handleClose }) => {
             <IconButton
               onClick={handleClose}
               sx={{
-                color: "white",
-                "&:hover": { bgcolor: "rgba(255,255,255,0.1)" },
+                color: "#000",
+                "&:hover": { bgcolor: "rgba(0,0,0,0.1)" },
               }}
             >
               <CloseIcon />
@@ -153,7 +155,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
               overflowY: "auto",
               p: { xs: 2, sm: 2.5 },
               bgcolor: "#f8f9fa",
-              backgroundImage: "radial-gradient(circle at 20px 20px, rgba(102, 126, 234, 0.03) 1px, transparent 1px)",
+              backgroundImage: "radial-gradient(circle at 20px 20px, rgba(200, 255, 0, 0.03) 1px, transparent 1px)",
               backgroundSize: "40px 40px",
               scrollbarWidth: "thin",
               scrollbarColor: "#ccc transparent",
@@ -186,21 +188,21 @@ const ChatBoxModal = ({ open, handleClose }) => {
                   {msg.sender !== "user" && (
                     <Avatar
                       sx={{
-                        bgcolor: "#667eea",
+                        bgcolor: "#c8ff00",
                         width: { xs: 28, sm: 32 },
                         height: { xs: 28, sm: 32 },
                       }}
                     >
-                      <SupportAgentIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                      <SupportAgentIcon sx={{ fontSize: { xs: 16, sm: 18 }, color: "#000" }} />
                     </Avatar>
                   )}
                   <Box
                     sx={{
                       background:
                         msg.sender === "user"
-                          ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                          ? "#c8ff00"
                           : "white",
-                      color: msg.sender === "user" ? "white" : "#333",
+                      color: msg.sender === "user" ? "#000" : "#333",
                       padding: { xs: "10px 14px", sm: "12px 16px" },
                       borderRadius:
                         msg.sender === "user"
@@ -209,11 +211,12 @@ const ChatBoxModal = ({ open, handleClose }) => {
                       maxWidth: { xs: "75%", sm: "70%" },
                       boxShadow:
                         msg.sender === "user"
-                          ? "0 2px 8px rgba(102, 126, 234, 0.3)"
+                          ? "0 2px 8px rgba(200, 255, 0, 0.3)"
                           : "0 2px 8px rgba(0,0,0,0.08)",
                       fontSize: { xs: "0.9rem", sm: "0.95rem" },
                       lineHeight: 1.5,
                       wordBreak: "break-word",
+                      fontWeight: msg.sender === "user" ? 500 : 400,
                     }}
                   >
                     {msg.text}
@@ -221,12 +224,12 @@ const ChatBoxModal = ({ open, handleClose }) => {
                   {msg.sender === "user" && (
                     <Avatar
                       sx={{
-                        bgcolor: "#764ba2",
+                        bgcolor: "#a8d900",
                         width: { xs: 28, sm: 32 },
                         height: { xs: 28, sm: 32 },
                       }}
                     >
-                      <PersonIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                      <PersonIcon sx={{ fontSize: { xs: 16, sm: 18 }, color: "#000" }} />
                     </Avatar>
                   )}
                 </Box>
@@ -238,12 +241,12 @@ const ChatBoxModal = ({ open, handleClose }) => {
               <Box display="flex" alignItems="flex-end" gap={1} mb={2}>
                 <Avatar
                   sx={{
-                    bgcolor: "#667eea",
+                    bgcolor: "#c8ff00",
                     width: { xs: 28, sm: 32 },
                     height: { xs: 28, sm: 32 },
                   }}
                 >
-                  <SupportAgentIcon sx={{ fontSize: { xs: 16, sm: 18 } }} />
+                  <SupportAgentIcon sx={{ fontSize: { xs: 16, sm: 18 }, color: "#000" }} />
                 </Avatar>
                 <Box
                   sx={{
@@ -261,7 +264,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      bgcolor: "#667eea",
+                      bgcolor: "#c8ff00",
                       animation: "bounce 1.4s infinite ease-in-out both",
                       animationDelay: "0s",
                       "@keyframes bounce": {
@@ -275,7 +278,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      bgcolor: "#667eea",
+                      bgcolor: "#c8ff00",
                       animation: "bounce 1.4s infinite ease-in-out both",
                       animationDelay: "0.2s",
                     }}
@@ -285,7 +288,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
                       width: 8,
                       height: 8,
                       borderRadius: "50%",
-                      bgcolor: "#667eea",
+                      bgcolor: "#c8ff00",
                       animation: "bounce 1.4s infinite ease-in-out both",
                       animationDelay: "0.4s",
                     }}
@@ -328,10 +331,11 @@ const ChatBoxModal = ({ open, handleClose }) => {
                       borderColor: "#e0e0e0",
                     },
                     "&:hover fieldset": {
-                      borderColor: "#667eea",
+                      borderColor: "#c8ff00",
                     },
                     "&.Mui-focused fieldset": {
-                      borderColor: "#667eea",
+                      borderColor: "#c8ff00",
+                      borderWidth: "2px",
                     },
                   },
                 }}
@@ -341,14 +345,14 @@ const ChatBoxModal = ({ open, handleClose }) => {
                 disabled={!input.trim()}
                 sx={{
                   background: input.trim()
-                    ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+                    ? "#c8ff00"
                     : "#e0e0e0",
-                  color: "white",
+                  color: input.trim() ? "#000" : "#999",
                   width: { xs: 44, sm: 48 },
                   height: { xs: 44, sm: 48 },
                   "&:hover": {
                     background: input.trim()
-                      ? "linear-gradient(135deg, #5568d3 0%, #653a8b 100%)"
+                      ? "#b8ef00"
                       : "#e0e0e0",
                   },
                   "&:disabled": {
