@@ -7,57 +7,57 @@ const Collection = () => {
   const collections = [
     {
       id: 1,
-      title: "Winter Collection",
+      title: "Muffler",
       description: "Stay warm and stylish with our exclusive winter range",
       image:
-        "https://images.unsplash.com/photo-1483985988355-763728e1935b?q=80&w=800",
-      category: "women",
-      path: "/women/coats/full-length", // ADDED
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1765891472/0c6745ac-0751-49ec-8c5c-a0f932007838_cxw3id.jpg",
+      category: "men",
+      path: "/men/accessories/muffler", // ADDED
     },
     {
       id: 2,
-      title: "Summer Essentials",
-      description: "Light, breezy, and perfect for sunny days",
+      title: "Caps",
+      description: "Light, breezy, and perfect for winter days",
       image:
-        "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?q=80&w=800",
-      category: "women",
-      path: "/women/topwear/ladies_tops", // ADDED
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1765891568/bf0eeb8c-5a91-459d-9625-a339b7077891_jk5ny1.jpg",
+      category: "men",
+      path: "/men/accessories/cap", // ADDED
     },
     {
       id: 3,
-      title: "Ethnic Wear",
+      title: "Socks",
       description: "Traditional styles meet modern elegance",
       image:
-        "https://images.unsplash.com/photo-1610030469983-98e550d6193c?q=80&w=800",
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766027749/cb826da9-72e9-49dd-84fe-4b33918fe5da_qhe8ug.jpg",
       category: "women",
-      path: "/women/sets/ethnic", // ADDED
+      path: "/men/accessories/socks", // ADDED
     },
     {
       id: 4,
-      title: "Party Wear",
-      description: "Shine bright at every celebration",
+      title: "GLoves",
+      description: "Shine bright at every where",
       image:
-        "https://images.unsplash.com/photo-1566174053879-31528523f8ae?q=80&w=800",
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766027793/85d25426-4cc5-4db2-8802-038ba36a748f_pwjdzy.jpg",
       category: "women",
-      path: "/women/dresses/party-wear", // ADDED
+      path: "/men/accessories/gloves", // ADDED
     },
     {
       id: 5,
-      title: "Casual Comfort",
+      title: "Handkerchief",
       description: "Everyday wear that feels like a dream",
       image:
-        "https://images.unsplash.com/photo-1581044777550-4cfa60707c03?q=80&w=800",
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766027776/c678503c-5753-4881-a834-8ee789298a7c_qwqflo.jpg",
       category: "women",
-      path: "/women/topwear/ladies_tops", // ADDED
+      path: "/women/accessories/handkerchief", // ADDED
     },
     {
       id: 6,
-      title: "Men's Formals",
-      description: "Sharp, sophisticated, and office-ready",
+      title: "Towel",
+      description: "Soft, Febric ",
       image:
-        "https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=800",
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766028425/OIP_wydk5k.jpg",
       category: "men",
-      path: "/men/topwear/shirts", // ADDED
+      path: "/men/towel", // ADDED
     },
   ];
 
