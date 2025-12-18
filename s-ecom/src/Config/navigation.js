@@ -41,7 +41,7 @@ const navigation = [
           { id: "tops", name: "Tops", path: "/women/topwear/tops" },
           { id: "jacket", name: "Jacket", path: "/women/topwear/jacket" },
           { id: "hoodies", name: "Hoodies", path: "/women/topwear/hoodies" },
-          { id: "cardigans", name: "Cardigams", path: "/women/topwear/cardigams" },
+          { id: "cardigans", name: "Cardigans", path: "/women/topwear/cardigans" },
           { id: "coats", name: "Coats", path: "/women/topwear/coats" },
           { id: "shrug", name: "Shrug", path: "/women/topwear/shrug" },
           { id: "sweat-shirts", name: "Sweat Shirts", path: "/women/topwear/sweat-shirts" },

@@ -11,7 +11,7 @@ const dummySizeCharts = [
   { category: "tops", sizes: [{ label: "XS" }, { label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
   { category: "jacket", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
   { category: "hoodies", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
-  { category: "cardigams", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
+  { category: "cardigans", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
   { category: "coats", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
   { category: "shrug", sizes: [{ label: "Free" }, { label: "S" }, { label: "M" }, { label: "L" }] },
   { category: "sweat-shirts", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "XL" }, { label: "Free" }] },
