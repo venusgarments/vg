@@ -74,7 +74,7 @@ function App() {
         <Route path="/terms-condition" element={<TearmsCondition />}></Route>
         <Route path="/contact-us" element={<Contact />}></Route>
         <Route path="/about-us" element={<About />}></Route>
-        <Route path="/collection" element={<Collection />}></Route>
+        <Route path="/accessories" element={<Collection />}></Route>
         <Route path="/bestseller" element={<Bestseller />}></Route>
         <Route path="/blog" element={<Blog />}></Route>
         <Route path="*" element={<NotFound />} />

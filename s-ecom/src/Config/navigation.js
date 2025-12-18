@@ -135,7 +135,7 @@ const navigation = [
         subHeadings: [
           { id: "ziper", name: "Zipper", path: "/men/top_wear/ziper" },
           { id: "jackets", name: "Jackets", path: "/men/top_wear/jackets" },
-          { id: "hoodies", name: "Hoodies", path: "/men/top_wear/hoodies" },
+          { id: "hoodie", name: "Hoodies", path: "/men/top_wear/hoodie" },
           { id: "sweaters", name: "Sweaters", path: "/men/top_wear/sweaters" },
           { id: "shirts", name: "Shirts", path: "/men/top_wear/shirts" },
           { id: "coats", name: "Coats", path: "/men/top_wear/coats" },
@@ -165,10 +165,10 @@ const navigation = [
   },
 
   {
-    id: "collection",
-    title: "Collection",
+    id: "accessories",
+    title: "Accessories",
     type: "link",
-    path: "/collection",
+    path: "/accessories",
     images: [
       "https://images.unsplash.com/photo-1512436991641-6745cdb1723f?q=80&w=1200",
       "https://images.unsplash.com/photo-1543486958-d783bfbf1f2b?q=80&w=1200",

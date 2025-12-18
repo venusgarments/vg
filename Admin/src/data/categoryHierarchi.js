@@ -52,7 +52,7 @@ const categoryHierarchy = {
     top_wear: [
       { value: "zipper", label: "Zipper" }, // fixed
       { value: "jackets", label: "Jackets" },
-      { value: "hoodies", label: "Hoodies" },
+      { value: "hoodie", label: "Hoodie" },
       { value: "sweaters", label: "Sweaters" },
       { value: "shirts", label: "Shirts" },
       { value: "coats", label: "Coats" },

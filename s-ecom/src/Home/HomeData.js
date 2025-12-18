@@ -41,81 +41,91 @@ export const newArrivals = [
 
 
 
-export const winterImages = [
-  {
-    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/cap/r/a/9/free-winter-cap-woolen-beanie-neck-warmer-muffler-for-men-women-original-imahhggyacxgvqqa.jpeg?q=70",
-    path: "/winter/caps",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?auto=format&fit=crop&w=500&q=80",
-    path: "/winter/jackets",
-  },
-  {
-    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/sweatshirt/r/h/m/xl-zipper-hoodie-divra-clothing-original-imahgfgkrhhrhwas.jpeg?q=70",
-    path: "/winter/hoodies",
-  },
-  {
-    image: "https://images.unsplash.com/photo-1618354691458-471b88fcf0c6?auto=format&fit=crop&w=500&q=80",
-    path: "/winter/sweaters",
-  },
-  {
-    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/sweatshirt/c/c/u/xl-mt478-metronaut-original-imah4nh9hgqtb6wt.jpeg?q=70",
-    path: "/winter/sweatshirts",
-  },
-  {
-    image: "https://rukminim2.flixcart.com/image/612/612/xif0q/sweatshirt/9/v/g/xxl-rs29h-front-hard-airforce-sl-woostro-original-imagwfrffah2qhyb.jpeg?q=70",
-    path: "/winter/collections",
-  },
-];
+  export const winterImages = [
+    {
+      id: 1,
+      title: "Muffler",
+      description: "Stay warm and stylish with our exclusive winter range",
+      image:
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1765891472/0c6745ac-0751-49ec-8c5c-a0f932007838_cxw3id.jpg",
+      category: "men",
+      path: "/men/accessories/muffler", // ADDED
+    },
+    {
+      id: 2,
+      title: "Caps",
+      description: "Light, breezy, and perfect for winter days",
+      image:
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1765891568/bf0eeb8c-5a91-459d-9625-a339b7077891_jk5ny1.jpg",
+      category: "men",
+      path: "/men/accessories/cap", // ADDED
+    },
+    {
+      id: 3,
+      title: "Socks",
+      description: "Traditional styles meet modern elegance",
+      image:
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766027749/cb826da9-72e9-49dd-84fe-4b33918fe5da_qhe8ug.jpg",
+      category: "women",
+      path: "/men/accessories/socks", // ADDED
+    },
+    {
+      id: 4,
+      title: "GLoves",
+      description: "Shine bright at every where",
+      image:
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766027793/85d25426-4cc5-4db2-8802-038ba36a748f_pwjdzy.jpg",
+      category: "women",
+      path: "/men/accessories/gloves", // ADDED
+    },
+    {
+      id: 5,
+      title: "Handkerchief",
+      description: "Everyday wear that feels like a dream",
+      image:
+        "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766027776/c678503c-5753-4881-a834-8ee789298a7c_qwqflo.jpg",
+      category: "women",
+      path: "/women/accessories/handkerchief", // ADDED
+    },
+  ];
+
 
 
 export const spottedItems = [
   {
     id: 1,
-    title: "Womens Leather Jacket",
-    image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=800&q=80",
-    path: "/women/jackets/leather",
+    title: "Top wear",
+    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766066609/e645ea8a-b3b2-49ba-a96b-69b952d2ac35_wsgpdc.jpg",
+    path: "/women/topwear",
   },
   {
     id: 2,
-    title: "Half Kurta Shirt For Men",
-    image: "https://images.unsplash.com/photo-1531123414780-f0b5898f0fff?auto=format&fit=crop&w=800&q=80",
-    path: "/men/kurtas/half",
+    title: "Lower",
+    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766067308/35e10b5a-50b8-40f8-84db-907e8f491348_llsv8r.jpg",
+    path: "/men/bottom_wear/lower",
   },
   {
     id: 3,
-    title: "Sweater For Women",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-    path: "/women/sweaters",
+    title: "Kurti",
+    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766066630/5051f30a-fa06-444c-a8c0-e16549059d2e_kux3jj.jpg",
+    path: "/women/kurti",
   },
   {
     id: 4,
     title: "Premium Blazer",
-    image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
+    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766067259/2518fa71-005f-474a-98d9-8272879c1eb3_pv711c.jpg",
     path: "/men/blazers/premium",
   },
   {
     id: 5,
-    title: "Casual Knit",
-    image: "https://images.unsplash.com/photo-1524503033411-c9566986fc8f?auto=format&fit=crop&w=800&q=80",
-    path: "/collections/knitwear",
+    title: "Cord sets",
+    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766067001/cebbaf4d-7e77-46f1-9e60-343fed833f97_eeyahb.jpg",
+    path: "/women/cord_set",
   },
   {
     id: 6,
-    title: "Denim Jacket",
-    image: "https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=80",
-    path: "/men/jackets/denim",
-  },
-  {
-    id: 7,
-    title: "Grey Blazer",
-    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?auto=format&fit=crop&w=800&q=80",
-    path: "/men/blazers/grey",
-  },
-  {
-    id: 8,
-    title: "Everyday Shirt",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=800&q=80",
-    path: "/men/shirts/everyday",
+    title: "Coats",
+    image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1766067578/4f1d1a26-dcd1-4042-a28b-bca09115bbd7_jfrmnp.jpg",
+    path: "/women/topwear/coats",
   },
 ];
