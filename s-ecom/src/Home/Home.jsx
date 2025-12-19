@@ -190,6 +190,45 @@ const Home = () => {
               }
             `}
         </style>
+        {/* Custom Navigation Arrows */}
+        <button
+          className="custom-prev absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#DFF200] hover:text-black transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Previous slide"
+        >
+          <svg
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M15 19l-7-7 7-7"
+            />
+          </svg>
+        </button>
+
+        <button
+          className="custom-next absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#DFF200] hover:text-black transition-all duration-300 hover:scale-110 disabled:opacity-50 disabled:cursor-not-allowed"
+          aria-label="Next slide"
+        >
+          <svg
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
+            />
+          </svg>
+        </button>
+
         <Swiper
           spaceBetween={0}
           centeredSlides={true}
@@ -209,7 +248,10 @@ const Home = () => {
               </span>`;
             },
           }}
-          navigation={true}
+          navigation={{
+            nextEl: ".custom-next",
+            prevEl: ".custom-prev",
+          }}
           modules={[Autoplay, Pagination, Navigation]}
           className="w-full h-full"
         >
