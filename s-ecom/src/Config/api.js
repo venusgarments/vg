@@ -13,10 +13,9 @@
 
 // export default api;
 
-
 // src/utils/api.js
 
-import axios from 'axios';
+import axios from "axios";
 
 export const API_BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 console.log("API_BASE_URL =", API_BASE_URL);
@@ -25,12 +24,18 @@ const api = axios.create({
   baseURL: API_BASE_URL,
 });
 
-const token = localStorage.getItem('jwt');
-if (token) {
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-}
-api.defaults.headers.post['Content-Type'] = 'application/json';
-
+// ✅ Request interceptor to attach token dynamically
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("jwt");
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+api.defaults.headers.post["Content-Type"] = "application/json";
 
 // ✅ Retry interceptor
 api.interceptors.response.use(
@@ -44,7 +49,9 @@ api.interceptors.response.use(
       (!config._retryCount || config._retryCount < 3)
     ) {
       config._retryCount = config._retryCount ? config._retryCount + 1 : 1;
-      console.warn(`⚠️ Backend sleeping, retrying... (${config._retryCount}/3)`);
+      console.warn(
+        `⚠️ Backend sleeping, retrying... (${config._retryCount}/3)`
+      );
       await new Promise((resolve) => setTimeout(resolve, 3000)); // Wait 3 sec
       return api(config); // Retry the request
     }

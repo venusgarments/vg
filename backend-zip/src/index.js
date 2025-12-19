@@ -42,7 +42,7 @@ const blogRoutes = require("./routes/blog.routes.js");
 // Coupon Routes
 const couponRoutes = require("./routes/coupon.routes.js");
 
-// Chat Routes (commented out - needs GROQ_API_KEY)
+// Chat Routes (commented out - needs GETOTP_API_KEY)
 const chatRoutes = require("./routes/chatRoute.js");
 
 // video
@@ -80,7 +80,7 @@ app.use("/api/blogs", blogRoutes);
 // Coupons
 app.use("/api/coupons", couponRoutes);
 
-// Chat (commented out - needs GROQ_API_KEY)
+// Chat (commented out - needs GETOTP_API_KEY)
 app.use("/api", chatRoutes);
 
 // video

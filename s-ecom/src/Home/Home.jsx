@@ -1,3 +1,14 @@
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+// import required modules
+import { Autoplay, Pagination, Navigation } from "swiper/modules";
+
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { HiOutlineArrowNarrowRight } from "react-icons/hi";
@@ -11,7 +22,7 @@ const API_BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 
 // Data arrays
 const Home = () => {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  // Removed custom carousel state (currentIndex)
   const [blogs, setBlogs] = useState([]);
   const [blogsLoading, setBlogsLoading] = useState(true);
   const [selectedBlog, setSelectedBlog] = useState(null);
@@ -66,14 +77,7 @@ const Home = () => {
     return () => clearInterval(autoScroll);
   }, [isAutoScrollPaused]);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentIndex((prev) =>
-        prev === HomeCarouselData.length - 1 ? 0 : prev + 1
-      );
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
+  // Removed custom carousel useEffect
 
   // Fetch blogs from API
   useEffect(() => {
@@ -111,140 +115,162 @@ const Home = () => {
     document.body.style.overflow = "auto";
   };
 
-  const current = HomeCarouselData[currentIndex];
-
   return (
     <>
-      {/* HERO SECTION */}
-      <div className="relative w-full h-[380px] sm:h-[450px] md:h-[550px] lg:h-[650px] xl:h-[750px] max-[2499px]:2xl:h-[850px] min-[2500px]:h-[1000px] overflow-hidden">
-        {HomeCarouselData.map((item, index) => (
-          <div
-            key={item.id}
-            className={`absolute inset-0 transition-all duration-1000 ease-out ${
-              index === currentIndex
-                ? "opacity-100 scale-100 z-10"
-                : "opacity-0 scale-105 pointer-events-none z-0"
-            }`}
-          >
-            <img
-              src={item.image}
-              alt={item.title}
-              loading="lazy"
-              className="w-full h-full object-cover object-top"
-            />
-            <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
-          </div>
-        ))}
+      {/* HERO SECTION - REPLACED WITH SWIPER */}
+      <div className="relative w-full h-[380px] sm:h-[450px] md:h-[550px] lg:h-[650px] xl:h-[750px] max-[2499px]:2xl:h-[850px] min-[2500px]:h-[1000px]">
+        <style>
+          {`
+              /* Custom Pagination Styles */
+              .swiper-pagination-bullet {
+                width: 20px !important;
+                height: 20px !important;
+                background: transparent !important;
+                opacity: 1 !important;
+                position: relative;
+                display: inline-flex !important;
+                align-items: center;
+                justify-content: center;
+                margin: 0 4px !important;
+              }
 
-        <div
-          className="absolute inset-0 flex flex-col justify-end items-center text-center px-4 z-20 pb-32"
-          data-aos="fade-up"
-          data-aos-duration="600"
+              /* The SVG Ring */
+              .autoplay-progress {
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 10;
+                width: 100%;
+                height: 100%;
+                stroke-width: 4px;
+                stroke: #fff; /* Inactive color (faint) */
+                fill: none;
+                stroke-dashoffset: 0;
+                stroke-opacity: 0.3;
+                transform: rotate(-90deg);
+              }
+
+              .autoplay-progress circle {
+                stroke-dasharray: 125; /* Circumference roughly 2 * pi * r (r=20 -> ~125) */
+                stroke-dashoffset: 125; /* Start empty */
+              }
+
+              /* Active Bullet Animation */
+              .swiper-pagination-bullet-active .autoplay-progress {
+                stroke: #CBE600; /* Theme Lime Green */
+                stroke-opacity: 1;
+              }
+
+              .swiper-pagination-bullet-active .autoplay-progress circle {
+                animation: progress 3.8s linear forwards; /* Matches autoplay delay */
+              }
+
+              @keyframes progress {
+                0% {
+                  stroke-dashoffset: 125;
+                }
+                100% {
+                  stroke-dashoffset: 0;
+                }
+              }
+
+              /* Center dot for active state */
+              .swiper-pagination-bullet::after {
+                content: "";
+                width: 8px;
+                height: 8px;
+                background: #fff;
+                border-radius: 50%;
+                position: absolute;
+                z-index: 20;
+              }
+
+              .swiper-pagination-bullet-active::after {
+                background: #CBE600; /* Theme Lime Green */
+              }
+            `}
+        </style>
+        <Swiper
+          spaceBetween={0}
+          centeredSlides={true}
+          loop={true}
+          effect="fade"
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+          }}
+          pagination={{
+            clickable: true,
+            renderBullet: function (index, className) {
+              return `<span class="${className}">
+                <svg class="autoplay-progress" viewBox="0 0 48 48">
+                  <circle cx="24" cy="24" r="20"></circle>
+                </svg>
+              </span>`;
+            },
+          }}
+          navigation={true}
+          modules={[Autoplay, Pagination, Navigation]}
+          className="w-full h-full"
         >
-          <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6">
-            <p className="text-xs sm:text-sm md:text-base tracking-[0.25em] font-light text-white/90 uppercase">
-              Timeless Fashion
-            </p>
+          {HomeCarouselData.map((item) => (
+            <SwiperSlide key={item.id} className="relative w-full h-full">
+              {/* Image Layer */}
+              <div className="absolute inset-0">
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover object-top"
+                />
+                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+              </div>
 
-            <h1
-              className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-light leading-tight px-2"
-              style={{ color: "#CBE600" }}
-            >
-              {current.title}
-            </h1>
-
-            <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto font-light px-4">
-              Discover elegance in every stitch
-            </p>
-
-            <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 pt-3 sm:pt-4 px-2">
-              {current.buttons.map((btn, i) => (
-                <button
-                  key={i}
-                  className="group relative px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 text-xs sm:text-sm md:text-base font-medium tracking-wide uppercase overflow-hidden rounded-md transition-all duration-300 hover:shadow-2xl hover:shadow-[#CBE600]/20"
-                  style={{
-                    backgroundColor: "#DFF200",
-                    color: "#111111",
-                  }}
-                >
-                  <span className="relative z-10 group-hover:text-black transition-colors">
-                    {btn.text}
-                  </span>
-                  <div className="absolute inset-0 bg-[#CBE600] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Navigation Arrows */}
-        <button
-          onClick={() =>
-            setCurrentIndex((prev) =>
-              prev === 0 ? HomeCarouselData.length - 1 : prev - 1
-            )
-          }
-          className="absolute left-2 sm:left-4 md:left-6 lg:left-8 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#DFF200] hover:text-black transition-all duration-300 hover:scale-110"
-          aria-label="Previous slide"
-        >
-          <svg
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 19l-7-7 7-7"
-            />
-          </svg>
-        </button>
-
-        <button
-          onClick={() =>
-            setCurrentIndex((prev) =>
-              prev === HomeCarouselData.length - 1 ? 0 : prev + 1
-            )
-          }
-          className="absolute right-2 sm:right-4 md:right-6 lg:right-8 top-1/2 -translate-y-1/2 z-30 w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-[#DFF200] hover:text-black transition-all duration-300 hover:scale-110"
-          aria-label="Next slide"
-        >
-          <svg
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M9 5l7 7-7 7"
-            />
-          </svg>
-        </button>
-
-        {/* Progress indicators */}
-        <div className="absolute bottom-3 sm:bottom-4 md:bottom-6 lg:bottom-8 left-1/2 transform -translate-x-1/2 flex gap-1.5 sm:gap-2 md:gap-3 z-30">
-          {HomeCarouselData.map((_, idx) => (
-            <button
-              key={idx}
-              onClick={() => setCurrentIndex(idx)}
-              className="group relative"
-              aria-label={`Go to slide ${idx + 1}`}
-            >
+              {/* Content Layer (Overlay) */}
               <div
-                className={`w-6 sm:w-8 md:w-10 lg:w-12 h-0.5 sm:h-1 rounded-full transition-all duration-300 ${
-                  currentIndex === idx
-                    ? "bg-[#DFF200]"
-                    : "bg-white/30 group-hover:bg-white/50"
-                }`}
-              />
-            </button>
+                className="absolute inset-0 flex flex-col justify-end items-center text-center px-4 z-20 pb-32"
+                data-aos="fade-up"
+                data-aos-duration="600"
+              >
+                <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4 md:space-y-6">
+                  <p className="text-xs sm:text-sm md:text-base tracking-[0.25em] font-light text-white/90 uppercase">
+                    Timeless Fashion
+                  </p>
+
+                  <h1
+                    className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl xl:text-7xl font-serif font-light leading-tight px-2"
+                    style={{ color: "#CBE600" }}
+                  >
+                    {item.title}
+                  </h1>
+
+                  <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto font-light px-4">
+                    Discover elegance in every stitch
+                  </p>
+
+                  <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 pt-3 sm:pt-4 px-2">
+                    {item.buttons.map((btn, i) => (
+                      <button
+                        key={i}
+                        onClick={() => navigate(btn.link || "/")}
+                        className="group relative px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 text-xs sm:text-sm md:text-base font-medium tracking-wide uppercase overflow-hidden rounded-md transition-all duration-300 hover:shadow-2xl hover:shadow-[#CBE600]/20"
+                        style={{
+                          backgroundColor: "#DFF200",
+                          color: "#111111",
+                        }}
+                      >
+                        <span className="relative z-10 group-hover:text-black transition-colors">
+                          {btn.text}
+                        </span>
+                        <div className="absolute inset-0 bg-[#CBE600] transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </SwiperSlide>
           ))}
-        </div>
+        </Swiper>
       </div>
 
       {/* NEW ARRIVALS SECTION */}
@@ -288,11 +314,10 @@ const Home = () => {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3 lg:gap-8 xl:gap-10">
             {newArrivals.map((item, index) => (
-         <article
-  onClick={() => navigate(item.path)}
-  className="group relative cursor-pointer"
->
-
+              <article
+                onClick={() => navigate(item.path)}
+                className="group relative cursor-pointer"
+              >
                 <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
                   <div className="relative w-full h-40 sm:h-48 md:h-56 lg:h-72 xl:h-80 overflow-hidden">
                     <img
@@ -411,37 +436,36 @@ const Home = () => {
               msOverflowStyle: "none",
             }}
           >
-        {[...winterImages, ...winterImages].map((item, idx) => (
-  <article
-    key={idx}
-    onClick={() => navigate(item.path)}
-    className="group relative w-48 sm:w-56 md:w-64 lg:w-72 shrink-0 cursor-pointer"
-  >
-    <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-[#DFF200] group-hover:border-[#CBE600] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
-      <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
-        <img
-          src={item.image}
-          alt="Winter Collection"
-          className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-          loading="lazy"
-        />
+            {[...winterImages, ...winterImages].map((item, idx) => (
+              <article
+                key={idx}
+                onClick={() => navigate(item.path)}
+                className="group relative w-48 sm:w-56 md:w-64 lg:w-72 shrink-0 cursor-pointer"
+              >
+                <div className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-[#DFF200] group-hover:border-[#CBE600] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+                  <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
+                    <img
+                      src={item.image}
+                      alt="Winter Collection"
+                      className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      loading="lazy"
+                    />
 
-        <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                    <div className="absolute inset-0 bg-linear-to-t from-black/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            navigate(item.path);
-          }}
-          className="absolute left-1/2 -translate-x-1/2 bottom-3 px-5 py-2 text-xs font-bold uppercase rounded-full bg-[#DFF200] text-[#222426] opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500"
-        >
-          Explore
-        </button>
-      </div>
-    </div>
-  </article>
-))}
-
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(item.path);
+                      }}
+                      className="absolute left-1/2 -translate-x-1/2 bottom-3 px-5 py-2 text-xs font-bold uppercase rounded-full bg-[#DFF200] text-[#222426] opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500"
+                    >
+                      Explore
+                    </button>
+                  </div>
+                </div>
+              </article>
+            ))}
           </div>
           <style>
             {`
@@ -483,11 +507,10 @@ const Home = () => {
 
           <div className="grid grid-cols-2 gap-3 sm:gap-4 md:gap-6 lg:grid-cols-3 lg:gap-6 xl:gap-8">
             {spottedItems.map((it, index) => (
-         <article
-  onClick={() => navigate(it.path)}
-  className="group relative cursor-pointer"
->
-
+              <article
+                onClick={() => navigate(it.path)}
+                className="group relative cursor-pointer"
+              >
                 <div className="bg-white rounded-xl overflow-hidden shadow-lg border-2 border-transparent group-hover:border-[#DFF200] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
                   <div className="relative w-full aspect-4/5 overflow-hidden">
                     <img

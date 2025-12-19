@@ -5,7 +5,6 @@ const User = require("../models/user.model.js");
 const Coupon = require("../models/coupon.model");
 const couponModel = require("../models/coupon.model.js");
 
-
 // Create a new cart for a user
 async function createCart(user) {
   const cart = new Cart({ user });
@@ -14,10 +13,15 @@ async function createCart(user) {
 }
 
 async function findUserCart(userId) {
+  console.log("Cart Service - findUserCart for userId:", userId);
   let cart = await Cart.findOne({ user: userId });
 
   // 🛠️ Create cart if not exists
   if (!cart) {
+    console.log(
+      "Cart Service - No cart found, creating one for userId:",
+      userId
+    );
     cart = await createCart(userId);
   }
 
@@ -39,20 +43,22 @@ async function findUserCart(userId) {
   cart.totalItem = totalItem;
   cart.totalDiscountedPrice = totalDiscountedPrice;
   cart.discounte = totalPrice - totalDiscountedPrice;
-cart.couponCode = cart.couponCode;
-cart.couponDiscount = cart.couponDiscount;
+  cart.couponCode = cart.couponCode;
+  cart.couponDiscount = cart.couponDiscount;
+  console.log("Cart Service - findUserCart success for userId:", userId);
   return cart;
 }
 
-
 // Add an item to the user's cart
 async function addCartItem(userId, req) {
- 
   const cart = await Cart.findOne({ user: userId });
   const product = await Product.findById(req.productId);
 
-  const isPresent = await CartItem.findOne({ cart: cart._id, product: product._id, userId });
-  
+  const isPresent = await CartItem.findOne({
+    cart: cart._id,
+    product: product._id,
+    userId,
+  });
 
   if (!isPresent) {
     const cartItem = new CartItem({
@@ -62,19 +68,16 @@ async function addCartItem(userId, req) {
       userId,
       price: product.discountedPrice,
       size: req.size,
-      discountedPrice:product.discountedPrice
+      discountedPrice: product.discountedPrice,
     });
-
-   
 
     const createdCartItem = await cartItem.save();
     cart.cartItems.push(createdCartItem);
     await cart.save();
   }
 
-  return 'Item added to cart';
+  return "Item added to cart";
 }
-
 
 // Updated applyCoupon() without orderId dependency
 const applyCoupon = async (code, userId, cartId, cartTotal) => {
@@ -82,7 +85,9 @@ const applyCoupon = async (code, userId, cartId, cartTotal) => {
   if (!coupon) throw new Error("Invalid or expired coupon");
 
   if (coupon.minOrderAmount && cartTotal < coupon.minOrderAmount) {
-    throw new Error(`Minimum order amount of ₹${coupon.minOrderAmount} required`);
+    throw new Error(
+      `Minimum order amount of ₹${coupon.minOrderAmount} required`
+    );
   }
 
   let discountAmount = 0;
@@ -119,4 +124,10 @@ const allCoupon = async () => {
   return await Coupon.find().sort({ createdAt: -1 });
 };
 
-module.exports = { createCart, findUserCart, addCartItem,applyCoupon, allCoupon  };
+module.exports = {
+  createCart,
+  findUserCart,
+  addCartItem,
+  applyCoupon,
+  allCoupon,
+};

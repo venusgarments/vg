@@ -1,14 +1,16 @@
-const express=require("express");
+const express = require("express");
 
-const router=express.Router();
-const authController=require("../controllers/auth.controller.js")
-const {verifyEmailService, confirmOtpService,sendResetOtpService, resetPasswordService} =require("../services/user.service.js")
+const router = express.Router();
+const authController = require("../controllers/auth.controller.js");
+const {
+  verifyEmailService,
+  confirmOtpService,
+  sendResetOtpService,
+  resetPasswordService,
+} = require("../services/user.service.js");
 
-
-
-router.post("/signup",authController.register)
-router.post("/signin",authController.login)
-
+router.post("/signup", authController.register);
+router.post("/signin", authController.login);
 
 router.post("/send-otp", async (req, res) => {
   try {
@@ -16,6 +18,7 @@ router.post("/send-otp", async (req, res) => {
     const result = await verifyEmailService(email);
     res.json(result);
   } catch (err) {
+    console.error("❌ Email sending failed:", err);
     res.status(400).json({ error: err.message });
   }
 });
@@ -26,6 +29,7 @@ router.post("/verify-otp", async (req, res) => {
     const result = await confirmOtpService(email, otp);
     res.json(result);
   } catch (err) {
+    console.error("❌ OTP Send Route Error:", err);
     res.status(400).json({ error: err.message });
   }
 });
@@ -49,5 +53,4 @@ router.post("/reset-password", async (req, res) => {
   }
 });
 
-
-module.exports=router;
+module.exports = router;

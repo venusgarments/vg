@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   Box,
   Modal,
@@ -9,7 +9,6 @@ import {
   Fade,
   Slide,
   Snackbar,
-  Button,
   Alert,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -19,6 +18,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { useDispatch, useSelector } from "react-redux";
 import { sendChatMessage } from "../redux/Chat/Action";
 import { useNavigate } from "react-router-dom";
+import TypingDots from "./TypingDots";
 
 /* ================== JWT HELPER ================== */
 const isJwtExpired = (token) => {
@@ -33,53 +33,71 @@ const isJwtExpired = (token) => {
 const ChatBoxModal = ({ open, handleClose }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const messagesEndRef = useRef(null);
 
   const [input, setInput] = useState("");
-  const [loginAlert, setLoginAlert] = useState(false);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false); // Replaced loginAlert with showLoginPrompt
 
-  const { messages, loading } = useSelector((state) => state.chat);
+  // Redux
+  const { messages, loading, error } = useSelector((state) => state.chat); // Added error
+  const auth = useSelector((state) => state.auth);
 
   /* ================== AUTH CHECK ================== */
   useEffect(() => {
     if (!open) return;
 
-    const jwt = localStorage.getItem("jwt");
+    // Check if user is already in Redux OR if we have a valid token in storage
+    const token = localStorage.getItem("jwt");
+    const hasValidToken = token && !isJwtExpired(token);
+    const isLoggedIn = auth.user || hasValidToken;
 
-    if (!jwt || jwt === "undefined" || isJwtExpired(jwt)) {
-      setLoginAlert(true);
-      handleClose();
-
-      // setTimeout(() => {
-      //   navigate("/login");
-      //   window.location.reload();
-      // }, 1500);
-    }
-  }, [open, handleClose, navigate]);
+    setShowLoginPrompt(!isLoggedIn); // Set showLoginPrompt based on login status
+  }, [open, auth.user]); // Listen to auth.user
 
   /* ================== WELCOME MESSAGE ================== */
   useEffect(() => {
-    if (open && messages?.length === 0) {
-      dispatch({
-        type: "CHAT_SUCCESS",
-        payload: {
-          sender: "bot",
-          text:
-            "Hi! 👋 I can help you with product details, order status, super coins, and payments.",
-        },
-      });
+    if (open && (!messages || messages.length === 0) && !showLoginPrompt) {
+      // Added !showLoginPrompt
+      // Only dispatch if we actually have a valid user
+      const token = localStorage.getItem("jwt");
+      if (auth.user || (token && !isJwtExpired(token))) {
+        dispatch({
+          type: "CHAT_SUCCESS",
+          payload: {
+            sender: "bot",
+            text: "Hi! 👋 I can help you with product details, order status, super coins, and payments.",
+          },
+        });
+      }
     }
-  }, [open, messages, dispatch]);
+  }, [open, messages, dispatch, auth.user, showLoginPrompt]); // Added showLoginPrompt to dependencies
+
+  /* ================== AUTO SCROLL ================== */
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, loading, showLoginPrompt, error]); // Added showLoginPrompt, error to dependencies
 
   /* ================== SEND MESSAGE ================== */
   const handleSend = () => {
+    if (showLoginPrompt) {
+      // Logic to redirect to login would go here, maybe open login modal
+      // For now, just ensure we don't send.
+      return;
+    }
     if (!input.trim()) return;
     dispatch(sendChatMessage(input));
     setInput("");
   };
 
+  const handleLoginRedirect = () => {
+    handleClose();
+    navigate("/login"); // Or however your app handles login opening
+    // If the login is a modal on Home, navigate("/") might be needed + some state
+    // But looking at App.jsx, /login routes to Home.
+  };
+
   return (
     <>
-      {/* ================== CHAT MODAL ================== */}
       <Modal
         open={open}
         onClose={handleClose}
@@ -103,7 +121,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
               overflow: "hidden",
             }}
           >
-            {/* Header */}
+            {/* Header - REVERTED TO NEON GREEN */}
             <Box
               sx={{
                 background: "#c8ff00",
@@ -119,9 +137,7 @@ const ChatBoxModal = ({ open, handleClose }) => {
                 </Avatar>
                 <Box>
                   <Typography fontWeight={600}>Venus Garments</Typography>
-                  <Typography variant="caption">
-                    Customer Support
-                  </Typography>
+                  <Typography variant="caption">Customer Support</Typography>
                 </Box>
               </Box>
               <IconButton onClick={handleClose}>
@@ -136,48 +152,115 @@ const ChatBoxModal = ({ open, handleClose }) => {
                 overflowY: "auto",
                 p: 2,
                 bgcolor: "#f8f9fa",
+                display: "flex",
+                flexDirection: "column",
               }}
             >
-              {messages?.map((msg, i) => (
-                <Slide key={i} direction="up" in timeout={300}>
-                  <Box
-                    display="flex"
-                    justifyContent={
-                      msg.sender === "user" ? "flex-end" : "flex-start"
-                    }
-                    mb={2}
+              {showLoginPrompt ? (
+                <Box
+                  flex={1}
+                  display="flex"
+                  flexDirection="column"
+                  alignItems="center"
+                  justifyContent="center"
+                  p={3}
+                  textAlign="center"
+                >
+                  <SupportAgentIcon
+                    sx={{ fontSize: 60, color: "#ccc", mb: 2 }}
+                  />
+                  <Typography variant="h6" gutterBottom>
+                    Login Required
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary" mb={3}>
+                    Please login to chat with our support assistant and track
+                    your orders.
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={handleLoginRedirect}
+                    sx={{
+                      bgcolor: "#c8ff00",
+                      color: "#000",
+                      "&:hover": { bgcolor: "#b8ef00" },
+                    }}
                   >
-                    {msg.sender !== "user" && (
-                      <Avatar sx={{ bgcolor: "#c8ff00", mr: 1 }}>
-                        <SupportAgentIcon sx={{ color: "#000" }} />
-                      </Avatar>
-                    )}
+                    Go to Login
+                  </Button>
+                </Box>
+              ) : (
+                <>
+                  {messages?.map((msg, i) => (
+                    <Slide key={i} direction="up" in timeout={300}>
+                      <Box
+                        display="flex"
+                        justifyContent={
+                          msg.sender === "user" ? "flex-end" : "flex-start"
+                        }
+                        mb={2}
+                      >
+                        {msg.sender !== "user" && (
+                          <Avatar sx={{ bgcolor: "#c8ff00", mr: 1 }}>
+                            <SupportAgentIcon sx={{ color: "#000" }} />
+                          </Avatar>
+                        )}
 
+                        <Box
+                          sx={{
+                            bgcolor: msg.sender === "user" ? "#c8ff00" : "#fff",
+                            color: "#000",
+                            p: 1.5,
+                            borderRadius: 2,
+                            maxWidth: "70%",
+                            boxShadow: 1,
+                          }}
+                        >
+                          {msg.text}
+                        </Box>
+
+                        {msg.sender === "user" && (
+                          <Avatar sx={{ bgcolor: "#a8d900", ml: 1 }}>
+                            <PersonIcon sx={{ color: "#000" }} />
+                          </Avatar>
+                        )}
+                      </Box>
+                    </Slide>
+                  ))}
+
+                  {loading && (
                     <Box
-                      sx={{
-                        bgcolor:
-                          msg.sender === "user" ? "#c8ff00" : "#fff",
-                        color: "#000",
-                        p: 1.5,
-                        borderRadius: 2,
-                        maxWidth: "70%",
-                        boxShadow: 1,
-                      }}
+                      display="flex"
+                      alignItems="center"
+                      gap={1}
+                      mt={1}
+                      ml={1}
                     >
-                      {msg.text}
+                      <Typography
+                        variant="caption"
+                        sx={{ fontStyle: "italic", color: "#666" }}
+                      >
+                        Typing
+                        <TypingDots />
+                      </Typography>
                     </Box>
+                  )}
 
-                    {msg.sender === "user" && (
-                      <Avatar sx={{ bgcolor: "#a8d900", ml: 1 }}>
-                        <PersonIcon sx={{ color: "#000" }} />
-                      </Avatar>
-                    )}
-                  </Box>
-                </Slide>
-              ))}
+                  {error && (
+                    <Box
+                      mt={2}
+                      p={1}
+                      bgcolor="#ffebee"
+                      borderRadius={1}
+                      border="1px solid #ffcdd2"
+                    >
+                      <Typography variant="caption" color="error">
+                        Unable to connect: {error}. Please try refreshing.
+                      </Typography>
+                    </Box>
+                  )}
 
-              {loading && (
-                <Typography variant="caption">Typing...</Typography>
+                  <div ref={messagesEndRef} />
+                </>
               )}
             </Box>
 
@@ -186,8 +269,13 @@ const ChatBoxModal = ({ open, handleClose }) => {
               <Box display="flex" gap={1}>
                 <TextField
                   fullWidth
-                  placeholder="Type your message..."
+                  placeholder={
+                    showLoginPrompt
+                      ? "Please login to chat..."
+                      : "Type your message..."
+                  }
                   value={input}
+                  disabled={showLoginPrompt}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
@@ -198,10 +286,11 @@ const ChatBoxModal = ({ open, handleClose }) => {
                 />
                 <IconButton
                   onClick={handleSend}
-                  disabled={!input.trim()}
+                  disabled={!input.trim() || showLoginPrompt}
                   sx={{
                     bgcolor: "#c8ff00",
                     "&:hover": { bgcolor: "#b8ef00" },
+                    "&:disabled": { bgcolor: "#ddd" },
                   }}
                 >
                   <SendIcon />
@@ -211,17 +300,6 @@ const ChatBoxModal = ({ open, handleClose }) => {
           </Box>
         </Fade>
       </Modal>
-
-      {/* ================== LOGIN ALERT ================== */}
-      <Snackbar
-        open={loginAlert}
-        autoHideDuration={3000}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert severity="warning" variant="filled">
-          Please login to chat with support
-        </Alert>
-      </Snackbar>
     </>
   );
 };

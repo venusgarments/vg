@@ -114,7 +114,6 @@ const safeSendToLLM = async (prompt) => {
   }
 };
 
-
 // ===============================
 // ✅ MAIN ADVANCED AI CONTROLLER
 // ===============================
@@ -124,7 +123,8 @@ const aiChatAssistant = async (req, res) => {
     const user = req.user;
     const rawMessage = normalize(req.body.message || "");
 
-    if (!user) return res.status(401).json({ reply: "Authentication required." });
+    if (!user)
+      return res.status(401).json({ reply: "Authentication required." });
     if (!rawMessage) return res.json({ reply: "Please type a message." });
 
     if (isProfane(rawMessage)) {
@@ -142,19 +142,30 @@ const aiChatAssistant = async (req, res) => {
     // ✅ Latest Order
     if (/latest order|last order|my order/i.test(cleanedMessage)) {
       const orders = await orderService.usersOrderHistory(user._id);
-      if (!orders.length) return res.json({ reply: "You haven't placed any orders yet." });
+      if (!orders.length)
+        return res.json({ reply: "You haven't placed any orders yet." });
 
       const latest = orders[0];
       const reply = `🧾 Latest Order: ${latest.orderItems[0]?.name}\n📦 Status: ${latest.orderStatus}\n💰 Total: ₹${latest.totalPrice}`;
-      session.history.push({ user: cleanedMessage, bot: reply, ts: Date.now() });
+      session.history.push({
+        user: cleanedMessage,
+        bot: reply,
+        ts: Date.now(),
+      });
       await saveSession(user._id, session);
       return res.json({ reply });
     }
 
     // ✅ Super Coins
     if (/super\s*coins?|reward\s*points?/i.test(cleanedMessage)) {
-      const reply = `💰 You currently have ${user.superCoins || 0} Super Coins.`;
-      session.history.push({ user: cleanedMessage, bot: reply, ts: Date.now() });
+      const reply = `💰 You currently have ${
+        user.superCoins || 0
+      } Super Coins.`;
+      session.history.push({
+        user: cleanedMessage,
+        bot: reply,
+        ts: Date.now(),
+      });
       await saveSession(user._id, session);
       return res.json({ reply });
     }
@@ -170,7 +181,11 @@ const aiChatAssistant = async (req, res) => {
 
       const p = products[0];
       const reply = `🛍️ ${p.title || p.name}\n💰 Price: ₹${p.price}`;
-      session.history.push({ user: cleanedMessage, bot: reply, ts: Date.now() });
+      session.history.push({
+        user: cleanedMessage,
+        bot: reply,
+        ts: Date.now(),
+      });
       await saveSession(user._id, session);
       return res.json({ reply });
     }
@@ -179,48 +194,67 @@ const aiChatAssistant = async (req, res) => {
     const categoryMatch = cleanedMessage.match(/show me (.+)/i);
     if (categoryMatch) {
       const category = categoryMatch[1];
-      const products = await productService.getProductsByCategoryName(category, 6);
-      if (!products.length) return res.json({ reply: `No items found in ${category}.` });
+      const products = await productService.getProductsByCategoryName(
+        category,
+        6
+      );
+      if (!products.length)
+        return res.json({ reply: `No items found in ${category}.` });
 
-      const list = products.map(p => `• ${p.title} – ₹${p.price}`).join("\n");
+      const list = products.map((p) => `• ${p.title} – ₹${p.price}`).join("\n");
       const reply = `Here are some ${category}:\n\n${list}`;
-      session.history.push({ user: cleanedMessage, bot: reply, ts: Date.now() });
+      session.history.push({
+        user: cleanedMessage,
+        bot: reply,
+        ts: Date.now(),
+      });
       await saveSession(user._id, session);
       return res.json({ reply });
     }
 
     // ✅ Product Details
     if (/tell me about|describe|details of/i.test(cleanedMessage)) {
-      const query = cleanedMessage.replace(/tell me about|describe|details of/i, "").trim();
+      const query = cleanedMessage
+        .replace(/tell me about|describe|details of/i, "")
+        .trim();
       const products = await productService.searchProducts(query);
       if (!products.length) return res.json({ reply: "❌ Product not found." });
 
       const p = products[0];
-      const reply = `📦 ${p.title}\n💰 Price: ₹${p.price}\n⭐ Rating: ${p.rating || "N/A"}`;
-      session.history.push({ user: cleanedMessage, bot: reply, ts: Date.now() });
+      const reply = `📦 ${p.title}\n💰 Price: ₹${p.price}\n⭐ Rating: ${
+        p.rating || "N/A"
+      }`;
+      session.history.push({
+        user: cleanedMessage,
+        bot: reply,
+        ts: Date.now(),
+      });
       await saveSession(user._id, session);
       return res.json({ reply });
     }
-// ✅ Customer Care / Support Number
-if (
-  /customer\s*(care|support)|support\s*number|contact\s*(us|number)|help\s*line|call\s*(you|support)/i.test(
-    cleanedMessage
-  )
-) {
-  const reply = `📞 You can contact our Customer Support at:\n\n✅ +91 750 077 3292\n🕘 Available: 10 AM – 7 PM (Mon–Sat)\n\nWe’re always happy to help you! 😊`;
+    // ✅ Customer Care / Support Number
+    if (
+      /customer\s*(care|support)|support\s*number|contact\s*(us|number)|help\s*line|call\s*(you|support)/i.test(
+        cleanedMessage
+      )
+    ) {
+      const reply = `📞 You can contact our Customer Support at:\n\n✅ +91 750 077 3292\n🕘 Available: 10 AM – 7 PM (Mon–Sat)\n\nWe’re always happy to help you! 😊`;
 
-  session.history.push({ user: cleanedMessage, bot: reply, ts: Date.now() });
-  await saveSession(user._id, session);
-  return res.json({ reply });
-}
-
+      session.history.push({
+        user: cleanedMessage,
+        bot: reply,
+        ts: Date.now(),
+      });
+      await saveSession(user._id, session);
+      return res.json({ reply });
+    }
 
     // ======================================================
     // ✅ 2) ALWAYS FALLBACK TO GROQ (NORMAL CHAT + MIXED)
     // ======================================================
     const lastContext = session.history
       .slice(-5)
-      .map(h => `User: ${h.user}\nAssistant: ${h.bot}`)
+      .map((h) => `User: ${h.user}\nAssistant: ${h.bot}`)
       .join("\n");
 
     const prompt = `
@@ -239,7 +273,11 @@ Assistant:
     const groqReply = await safeSendToLLM(prompt);
 
     if (groqReply) {
-      session.history.push({ user: cleanedMessage, bot: groqReply, ts: Date.now() });
+      session.history.push({
+        user: cleanedMessage,
+        bot: groqReply,
+        ts: Date.now(),
+      });
       await saveSession(user._id, session);
       return res.json({ reply: groqReply });
     }
