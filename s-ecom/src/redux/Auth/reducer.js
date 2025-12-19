@@ -1,4 +1,3 @@
-
 import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -13,6 +12,7 @@ import {
   GET_ALL_USERS_SUCCESS,
   GET_ALL_USERS_FAILURE,
   LOGOUT,
+  CLEAR_AUTH_ERROR,
 } from "./ActionTypes";
 
 const initialState = {
@@ -70,6 +70,11 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         user: null,
+      };
+    case CLEAR_AUTH_ERROR:
+      return {
+        ...state,
+        error: null,
       };
 
     default:

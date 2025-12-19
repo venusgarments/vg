@@ -195,9 +195,6 @@ const HomeVideoSlider = () => {
   const handleMouseEnter = () => {
     isAutoScrollPausedRef.current = true;
   };
-  const handleMouseLeaveContainer = () => {
-    if (!isDraggingRef.current) isAutoScrollPausedRef.current = false;
-  };
 
   // ================= RENDER =================
   const looped = [...videos, ...videos];
@@ -240,7 +237,6 @@ const HomeVideoSlider = () => {
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onMouseEnter={handleMouseEnter}
-          onMouseLeave={handleMouseLeaveContainer}
           className={`flex overflow-x-auto gap-3 sm:gap-4 md:gap-6 px-4 sm:px-6 md:px-8 pb-4 select-none cursor-grab`}
           style={{
             scrollbarWidth: "none",
@@ -329,7 +325,9 @@ const HomeVideoSlider = () => {
                     <span className="font-semibold text-gray-900 block text-sm sm:text-base">
                       venusgarments
                     </span>
-                    <span className="text-xs text-gray-500">Venus Garments</span>
+                    <span className="text-xs text-gray-500">
+                      Venus Garments
+                    </span>
                   </div>
                 </div>
 

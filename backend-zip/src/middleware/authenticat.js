@@ -1,26 +1,43 @@
-const jwtProvider=require("../config/jwtProvider")
-const userService=require("../services/user.service")
+const jwtProvider = require("../config/jwtProvider");
+const userService = require("../services/user.service");
 
+const authenticate = async (req, res, next) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    console.log(
+      "Auth Middleware - Token received:",
+      token ? "Yes (starts with " + token.substring(0, 10) + "...)" : "No"
+    );
 
-const authenticate = async(req,res,next)=>{
-
-    try {
-        const token=req.headers.authorization?.split(" ")[1]
-        if(!token){
-            return res.status(404).send({message:"token not found"})
-        }
-
-        const userId=jwtProvider.getUserIdFromToken(token);
-        const user=await userService.findUserById(userId);
-
-        req.user=user;
-    } catch (error) {
-        return res.status(500).send({error:error.message})
+    if (!token) {
+      return res.status(404).send({ message: "token not found" });
     }
-    next();
-}
 
-module.exports=authenticate;
+    const userId = jwtProvider.getUserIdFromToken(token);
+    console.log("Auth Middleware - Decoded Result - userId:", userId);
+
+    const user = await userService.findUserById(userId);
+    if (!user) {
+      console.log("Auth Middleware - User not found for id:", userId);
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    req.user = user;
+  } catch (error) {
+    console.error("❌ Auth Middleware Error:", error.message);
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError" ||
+      error.message.includes("signature")
+    ) {
+      return res.status(401).send({ error: "Invalid or expired token" });
+    }
+    return res.status(500).send({ error: error.message });
+  }
+  next();
+};
+
+module.exports = authenticate;
 
 // middleware/authenticate.js
 

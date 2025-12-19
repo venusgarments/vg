@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -12,22 +12,23 @@ import {
   GET_ALL_USERS_REQUEST,
   GET_ALL_USERS_SUCCESS,
   GET_ALL_USERS_FAILURE,
-  LOGOUT
-} from './ActionTypes';
-import api, { API_BASE_URL } from '../../Config/api';
+  LOGOUT,
+  CLEAR_AUTH_ERROR,
+} from "./ActionTypes";
+import api, { API_BASE_URL } from "../../Config/api";
 
 // Register action creators
 const registerRequest = () => ({ type: REGISTER_REQUEST });
-const registerSuccess = (user) => ({ type: REGISTER_SUCCESS, payload:user });
-const registerFailure = error => ({ type: REGISTER_FAILURE, payload: error });
+const registerSuccess = (user) => ({ type: REGISTER_SUCCESS, payload: user });
+const registerFailure = (error) => ({ type: REGISTER_FAILURE, payload: error });
 
-export const register = userData => async dispatch => {
+export const register = (userData) => async (dispatch) => {
   dispatch(registerRequest());
   try {
-    const response=await axios.post(`${API_BASE_URL}/auth/signup`, userData);
+    const response = await axios.post(`${API_BASE_URL}/auth/signup`, userData);
     const user = response.data;
-    if(user.jwt) localStorage.setItem("jwt",user.jwt)
-    console.log("registerr :",user)
+    if (user.jwt) localStorage.setItem("jwt", user.jwt);
+    console.log("registerr :", user);
     dispatch(registerSuccess(user));
   } catch (error) {
     dispatch(registerFailure(error.message));
@@ -36,42 +37,46 @@ export const register = userData => async dispatch => {
 
 // Login action creators
 const loginRequest = () => ({ type: LOGIN_REQUEST });
-const loginSuccess = user => ({ type: LOGIN_SUCCESS, payload: user });
-const loginFailure = error => ({ type: LOGIN_FAILURE, payload: error });
+const loginSuccess = (user) => ({ type: LOGIN_SUCCESS, payload: user });
+const loginFailure = (error) => ({ type: LOGIN_FAILURE, payload: error });
 
-export const login = userData => async dispatch => {
+export const login = (userData) => async (dispatch) => {
   dispatch(loginRequest());
   try {
     const response = await axios.post(`${API_BASE_URL}/auth/signin`, userData);
     const user = response.data;
-    if(user.jwt) localStorage.setItem("jwt",user.jwt)
-    console.log("login ",user)
+    if (user.jwt) localStorage.setItem("jwt", user.jwt);
+    console.log("login ", user);
     dispatch(loginSuccess(user));
   } catch (error) {
     const errorMessage =
-  error.response?.data?.message || "Login failed. Please try again.";
-dispatch(loginFailure(errorMessage));
+      error.response?.data?.message || "Login failed. Please try again.";
+    dispatch(loginFailure(errorMessage));
   }
 };
-
-
 
 //  get user from token
 export const getUser = (token) => {
   return async (dispatch) => {
     dispatch({ type: GET_USER_REQUEST });
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/users/profile`,{
-        headers:{
-          "Authorization":`Bearer ${token}`
-        }
+      const response = await axios.get(`${API_BASE_URL}/api/users/profile`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       });
       const user = response.data;
       dispatch({ type: GET_USER_SUCCESS, payload: user });
-      console.log("req User ",user)
+      console.log("req User ", user);
     } catch (error) {
-      const errorMessage = error.message;
-      dispatch({ type: GET_USER_FAILURE, payload: errorMessage });
+      if (error.response?.status === 401) {
+        console.warn("Session expired or invalid token - clearing storage.");
+        localStorage.removeItem("jwt");
+        dispatch({ type: LOGOUT });
+      } else {
+        const errorMessage = error.message;
+        dispatch({ type: GET_USER_FAILURE, payload: errorMessage });
+      }
     }
   };
 };
@@ -94,16 +99,14 @@ export const allUser = () => {
   };
 };
 
-
 export const logout = (token) => {
-    return async (dispatch) => {
-      dispatch({ type: LOGOUT });
-      localStorage.clear();
-    };
+  return async (dispatch) => {
+    dispatch({ type: LOGOUT });
+    localStorage.clear();
   };
+};
 
-  
-  // ✅ Load user from JWT in localStorage (for auto-login after refresh)
+// ✅ Load user from JWT in localStorage (for auto-login after refresh)
 export const loadUserFromToken = () => {
   return async (dispatch) => {
     const token = localStorage.getItem("jwt");
@@ -112,3 +115,5 @@ export const loadUserFromToken = () => {
     }
   };
 };
+
+export const clearAuthError = () => ({ type: CLEAR_AUTH_ERROR });
