@@ -114,13 +114,27 @@ const createMultipleProduct= async (req, res) => {
 
 const searchProduct = async (req, res) => {
   try {
-    const { query } = req.query;
-    const products = await productService.searchProducts(query);
-    res.status(200).json(products);
+    const {
+      query,
+      pageNumber = 1,
+      pageSize = 10,
+      page,
+      limit
+    } = req.query;
+
+    const result = await productService.searchProducts(
+      query,
+      Number(pageNumber || page) || 1,
+      Number(pageSize || limit) || 10
+    );
+
+    res.status(200).json(result);
   } catch (error) {
+    console.error("SEARCH ERROR:", error);
     res.status(400).json({ error: error.message });
   }
 };
+
 
 
 module.exports = {

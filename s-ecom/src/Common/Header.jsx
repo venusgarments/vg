@@ -10,26 +10,9 @@ import { getCart } from "../redux/Cart/Action";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { Button } from "@mui/material";
 import AddsBar from "../AddsBar";
-
+ import SearchBar  from '../SearchBar'
 const iconButtonClass =
   "p-2.5 rounded-full hover:bg-white/10 focus:bg-white/10 transition-all duration-300 flex items-center justify-center outline-none relative group";
-
-/* SVG icons (unchanged) */
-const SearchIcon = (props) => (
-  <svg
-    {...props}
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2.5"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-  >
-    <circle cx="11" cy="11" r="8"></circle>
-    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-  </svg>
-);
 const UserIcon = (props) => (
   <svg
     {...props}
@@ -306,7 +289,10 @@ export default function Header() {
           </div> */}
 
           {/* Main Header */}
+          <SearchBar />
+
           <div className="flex items-center justify-between h-16 md:h-20 lg:h-24">
+                
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -336,6 +322,8 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex flex-1 justify-center px-8 relative">
+
+           
               <ul className="flex items-center gap-1 font-semibold uppercase tracking-wider text-sm lg:text-base">
                 {navigation.map((nav) => {
                   const isMega =
@@ -442,14 +430,11 @@ export default function Header() {
               </ul>
             </nav>
 
+            
+
             {/* Action Icons */}
             <div className="flex items-center gap-1 mg:gap-2">
-              <button aria-label="Search" className={iconButtonClass}>
-                <SearchIcon className="w-5 h-5 md:w-6 md:h-6" />
-                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#111111] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap hidden lg:block">
-                  Search
-                </span>
-              </button>
+
 
               {/* Account / Avatar */}
               <div className="relative" ref={profileRef}>
@@ -546,6 +531,8 @@ export default function Header() {
             </div>
           </div>
         </div>
+
+       
       </header>
 
       {/* Mobile Menu Overlay */}

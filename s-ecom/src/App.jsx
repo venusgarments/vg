@@ -78,6 +78,9 @@ function App() {
         <Route path="/bestseller" element={<Bestseller />}></Route>
         <Route path="/blog" element={<Blog />}></Route>
         <Route path="*" element={<NotFound />} />
+        <Route path="/search" element={<ProductPage />} />
+<Route path="/search" element={<ProductPage />} />
+
       </Routes>
       <ChatWidget />
       <FloatingIcons />

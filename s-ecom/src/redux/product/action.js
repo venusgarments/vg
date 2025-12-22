@@ -209,17 +209,37 @@ export const fetchHomepageCategoryProducts = (reqData) => async (dispatch) => {
 };
 
 
-export const searchProducts = (query) => async (dispatch) => {
+export const searchProducts = ({ query, pageNumber = 1, pageSize = 10 }) => 
+  async (dispatch) => {
   try {
     dispatch({ type: SEARCH_PRODUCTS_REQUEST });
 
-    const { data } = await api.get(`/api/products/search?query=${query}`);
+    const { data } = await api.get(`/api/products/search`, {
+      params: {
+        query,
+        pageNumber,
+        pageSize
+      },
+    });
 
-    dispatch({ type: SEARCH_PRODUCTS_SUCCESS, payload: data });
+    dispatch({
+      type: SEARCH_PRODUCTS_SUCCESS,
+      payload: {
+        content: data?.products || [],
+        totalPages: data?.totalPages || 1,
+        currentPage: data?.currentPage || 1,
+      },
+    });
 
-    return data; // ⬅️ return to use in component
+    return data;
   } catch (error) {
-    dispatch({ type: SEARCH_PRODUCTS_FAILURE, payload: error.message });
+    dispatch({
+      type: SEARCH_PRODUCTS_FAILURE,
+      payload: error.response?.data?.message || error.message,
+    });
     throw error;
   }
 };
+
+
+

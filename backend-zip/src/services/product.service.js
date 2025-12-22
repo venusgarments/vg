@@ -582,46 +582,150 @@ function normalizeText(text) {
   return text.trim().toLowerCase().replace(/s$/, ""); // removes plural 's' (basic plural support)
 }
 
-async function searchProducts(query) {
-  const normalizedQuery = query.trim().toLowerCase();
+async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
 
-  // Find matching categories (case-insensitive)
+  // Normalize query safely
+  if (typeof rawQuery === "object" && rawQuery !== null) {
+    rawQuery = rawQuery.query || "";
+  }
+
+  if (!rawQuery || typeof rawQuery !== "string") {
+    return {
+      products: [],
+      currentPage: 1,
+      totalPages: 1,
+      totalProducts: 0
+    };
+  }
+
+  const normalizedQuery = rawQuery.trim().toLowerCase();
+
+  pageNumber = Number(pageNumber) || 1;
+  pageSize = Number(pageSize) || 10;
+  const skip = (pageNumber - 1) * pageSize;
+
+  /* -------------------- 1️⃣ Find matching categories -------------------- */
   const matchingCategories = await Category.find({
     name: { $regex: new RegExp(normalizedQuery, "i") },
   });
 
-  const matchingCategoryIds = matchingCategories.map((cat) => cat._id);
+  const allCategoryIds = new Set();
 
-  // Collect all child categories recursively
-  const allCategoryIds = new Set(matchingCategoryIds.map(id => id.toString()));
+  if (matchingCategories.length > 0) {
+    matchingCategories.forEach(c => allCategoryIds.add(c._id.toString()));
 
-  async function fetchChildCategories(parentIds) {
-    const children = await Category.find({ parentCategory: { $in: parentIds } });
-    for (const child of children) {
-      allCategoryIds.add(child._id.toString());
+    // 🔼 Fetch parents
+    async function fetchParentCategories(ids) {
+      if (!ids?.length) return;
+
+      const parents = await Category.find({
+        _id: { $in: ids },
+        parentCategory: { $ne: null }
+      }).populate("parentCategory");
+
+      const newParents = [];
+
+      parents.forEach(cat => {
+        if (cat.parentCategory) {
+          const pid = cat.parentCategory._id.toString();
+          if (!allCategoryIds.has(pid)) {
+            allCategoryIds.add(pid);
+            newParents.push(cat.parentCategory._id);
+          }
+        }
+      });
+
+      if (newParents.length) await fetchParentCategories(newParents);
     }
-    if (children.length > 0) {
-      await fetchChildCategories(children.map((c) => c._id));
+
+    await fetchParentCategories(matchingCategories.map(c => c._id));
+
+    // 🔽 Fetch children
+    async function fetchChildCategories(ids) {
+      if (!ids?.length) return;
+
+      const children = await Category.find({
+        parentCategory: { $in: ids }
+      });
+
+      const newChildren = [];
+
+      children.forEach(child => {
+        const cid = child._id.toString();
+        if (!allCategoryIds.has(cid)) {
+          allCategoryIds.add(cid);
+          newChildren.push(child._id);
+        }
+      });
+
+      if (newChildren.length) await fetchChildCategories(newChildren);
     }
+
+    await fetchChildCategories(matchingCategories.map(c => c._id));
   }
 
-  await fetchChildCategories(matchingCategoryIds);
+  let products = [];
+  let totalProducts = 0;
 
-  // Now find products in those categories
-  const products = await Product.find({
-    category: { $in: [...allCategoryIds] },
-  }).populate({
-    path: "category",
-    populate: {
-      path: "parentCategory",
-      populate: {
-        path: "parentCategory",
-      },
-    },
-  });
+  /* -------------------- 🛍 Category Search -------------------- */
+  if (allCategoryIds.size > 0) {
+    totalProducts = await Product.countDocuments({
+      category: { $in: [...allCategoryIds] }
+    });
 
-  return products;
+    products = await Product.find({
+      category: { $in: [...allCategoryIds] }
+    })
+      .populate({
+        path: "category",
+        populate: {
+          path: "parentCategory",
+          populate: { path: "parentCategory" }
+        }
+      })
+      .skip(skip)
+      .limit(pageSize);
+  }
+
+  /* -------------------- 🔥 Fallback: keyword search -------------------- */
+  if (products.length === 0) {
+    const regex = new RegExp(normalizedQuery, "i");
+
+    totalProducts = await Product.countDocuments({
+      $or: [
+        { title: regex },
+        { description: regex },
+        { brand: regex },
+      ],
+    });
+
+    products = await Product.find({
+      $or: [
+        { title: regex },
+        { description: regex },
+        { brand: regex },
+      ],
+    })
+      .populate({
+        path: "category",
+        populate: {
+          path: "parentCategory",
+          populate: { path: "parentCategory" }
+        },
+      })
+      .skip(skip)
+      .limit(pageSize);
+  }
+
+  return {
+    products,
+    currentPage: pageNumber,
+    totalPages: Math.ceil(totalProducts / pageSize) || 1,
+    totalProducts,
+  };
 }
+
+
 
 
 module.exports = {

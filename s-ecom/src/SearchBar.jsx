@@ -1,16 +1,26 @@
 import React, { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import { CircularProgress, InputAdornment, TextField, Box } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import {
+  CircularProgress,
+  InputAdornment,
+  TextField,
+  Box,
+  Snackbar,
+  Alert,
+  IconButton,
+} from "@mui/material";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { searchProducts } from "../../../src/Redux/Customers/Product/Action";
-import { Snackbar, Alert } from "@mui/material";
-import { navigation } from "../../config/navigationMenu"; // Adjust import as per your project
+import { searchProducts } from "./redux/product/action";
+import { motion, AnimatePresence } from "framer-motion";
 
 const SearchBar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const words = ["Formal Pants", "Cotton Pants", "Linen Pants", "Cargo", "Track Pants", "Jeans", "Formal Shirts", "Satin Shirts", "Hidden Button Shirts", "Tanik Tops", "Tank Tops", "Peplum Tops", "Crop Tops", "Office Wear Kurti", "Kalamkari", "A-Line Kurtis"];
+
+
+
   const [typingText, setTypingText] = useState("");
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -21,29 +31,38 @@ const SearchBar = () => {
   const [snackbarMessage, setSnackbarMessage] = useState("");
   const [snackbarSeverity, setSnackbarSeverity] = useState("info");
 
-  useEffect(() => {
-    const style = document.createElement("style");
-    style.innerHTML = `
-      @keyframes blink {
-        0%, 100% { opacity: 1; }
-        50% { opacity: 0; }
-      }
-      .blinking-cursor {
-        display: inline;
-        animation: blink 1s step-end infinite;
-        font-weight: bold;
-        margin-left: 2px;
-      }
-    `;
-    document.head.appendChild(style);
-    return () => document.head.removeChild(style);
-  }, []);
+  /* ---------------- Cursor Blink ---------------- */
+const words = [
+  "Formal Pants",
+  "Cotton Pants",
+  "Linen Pants",
+  "Cargo",
+  "Track Pants",
+  "Jeans",
+  "Formal Shirts",
+  "Satin Shirts",
+  "Hidden Button Shirts",
+  "Tank Tops",
+  "Peplum Tops",
+  "Crop Tops",
+];
 
+const [index, setIndex] = useState(0);
+
+useEffect(() => {
+  const interval = setInterval(() => {
+    setIndex((prev) => (prev + 1) % words.length);
+  }, 2500); // change word every 2.5s
+  return () => clearInterval(interval);
+}, []);
+
+
+  /* ---------------- Typing Animation ---------------- */
   useEffect(() => {
     if (isUserTyping) return;
 
     const currentWord = words[wordIndex];
-    const speed = isDeleting ? 50 : 120;
+    const speed = isDeleting ? 60 : 120;
 
     const timeout = setTimeout(() => {
       const updatedText = isDeleting
@@ -53,7 +72,7 @@ const SearchBar = () => {
       setTypingText(updatedText);
 
       if (!isDeleting && updatedText === currentWord) {
-        setTimeout(() => setIsDeleting(true), 800);
+        setTimeout(() => setIsDeleting(true), 900);
       } else if (isDeleting && updatedText === "") {
         setIsDeleting(false);
         setWordIndex((prev) => (prev + 1) % words.length);
@@ -63,145 +82,212 @@ const SearchBar = () => {
     return () => clearTimeout(timeout);
   }, [typingText, isDeleting, wordIndex, isUserTyping]);
 
+  /* ---------------- Input Change ---------------- */
   const handleChange = (e) => {
     const value = e.target.value;
     setUserInput(value);
     setIsUserTyping(value !== "");
   };
 
-  const normalize = (text) => {
-    return text.trim().toLowerCase().replace(/\s+/g, "_");
+  /* ---------------- Clear ---------------- */
+  const handleClear = () => {
+    setUserInput("");
+    setIsUserTyping(false);
   };
 
-  const findPathFromNavigation = (normalizedInput) => {
-    for (const category of navigation.categories) {
-      for (const section of category.sections) {
-        const sectionNormalized = normalize(section.name);
-
-        if (sectionNormalized === normalizedInput || sectionNormalized.includes(normalizedInput) || normalizedInput.includes(sectionNormalized)) {
-          if (section.items.length > 0) {
-            return `/${category.id}/${section.id}`;
-          }
-        }
-
-        for (const item of section.items) {
-          const itemId = normalize(item.id);
-          const itemName = normalize(item.name);
-
-          if (
-            normalizedInput === itemId ||
-            itemId.includes(normalizedInput) ||
-            normalizedInput.includes(itemId) ||
-            itemName === normalizedInput ||
-            itemName.includes(normalizedInput) ||
-            normalizedInput.includes(itemName)
-          ) {
-            return item.href.replace(/{|}/g, "");
-          }
-        }
-      }
-    }
-    return null;
-  };
-
+  /* ---------------- Search on Enter ---------------- */
   const handleKeyDown = async (e) => {
     if (e.key === "Enter" && userInput.trim() !== "") {
+      const query = userInput.trim();
       setLoading(true);
 
-      const normalizedInput = normalize(userInput);
-      const foundPath = findPathFromNavigation(normalizedInput);
+      try {
+        const res = await dispatch(searchProducts({ query }));
+        setLoading(false);
 
-      if (foundPath) {
+        navigate(`/search?query=${encodeURIComponent(query)}&page=1`);
+
+        if (res?.products?.length > 0) {
+          setSnackbarSeverity("success");
+          setSnackbarMessage(`Showing results for "${query}"`);
+        } else {
+          setSnackbarSeverity("warning");
+          setSnackbarMessage("No products found.");
+        }
+      } catch {
         setLoading(false);
-        navigate(foundPath);
-        setSnackbarSeverity("success");
-        setSnackbarMessage("Showing results for " + userInput);
-        setSnackbarOpen(true);
-      } else {
-        setLoading(false);
-        setSnackbarSeverity("warning");
-        setSnackbarMessage("No data available for this query.");
-        setSnackbarOpen(true);
+        setSnackbarSeverity("error");
+        setSnackbarMessage("Search failed. Please try again.");
       }
+
+      setSnackbarOpen(true);
     }
   };
 
   return (
     <>
-      <Box position="relative" className="my-2">
-        <TextField
-          variant="outlined"
-          fullWidth
-          size="small"
-          value={userInput}
-          onChange={handleChange}
-          onKeyDown={handleKeyDown}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon className="text-gray-500" />
-              </InputAdornment>
-            ),
-            sx: {
-              backgroundColor: "#f9fafb",
-              borderRadius: 2,
-              "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#d1d5db",
-              },
-              "&:hover .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#d1d5db",
-              },
-              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                borderColor: "#d1d5db",
-              },
-            },
-          }}
-          InputLabelProps={{ shrink: false }}
-        />
+<Box
+  sx={{
+    position: "relative",
+    marginTop: "5px",
+    width: "100%",
+    borderRadius: "14px",
+    backgroundColor: "transparent",
+  }}
+>
+  <TextField
+    fullWidth
+    variant="outlined"
+    size="small"
+    value={userInput}
+    onChange={handleChange}
+    onKeyDown={handleKeyDown}
+    disabled={loading}
+    placeholder=""
+    InputProps={{
+      startAdornment: (
+        <InputAdornment position="start">
+          <SearchIcon sx={{ color: "#2d2d2d", fontSize: 22 }} />
+        </InputAdornment>
+      ),
+      endAdornment: userInput && (
+        <InputAdornment position="end">
+          <IconButton onClick={handleClear}>
+            <CloseIcon sx={{ color: "#6b7280", fontSize: 18 }} />
+          </IconButton>
+        </InputAdornment>
+      ),
+    }}
+    sx={{
+      backgroundColor: "transparent",
+      borderRadius: "14px",
 
-        {!isUserTyping && (
-          <Box
-            position="absolute"
-            top="50%"
-            left="40px"
-            sx={{
-              transform: "translateY(-50%)",
-              pointerEvents: "none",
-              color: "#9ca3af",
-              fontSize: "0.875rem",
-            }}
-          >
-            <span>
-              Search here {typingText}
-              <span className="blinking-cursor">|</span>
-            </span>
-          </Box>
-        )}
+      "& .MuiOutlinedInput-root": {
+        borderRadius: "14px",
+        fontSize: "14px",
+        fontWeight: 500,
 
-        <Snackbar
-          open={snackbarOpen}
-          autoHideDuration={3000}
+        // Default white border
+        "& fieldset": {
+          borderColor: "white",
+          borderWidth: "1.8px",
+        },
+
+        // Hover stays white
+        "&:hover fieldset": {
+          borderColor: "white",
+        },
+
+        // Focus white + slightly thicker
+        "&.Mui-focused fieldset": {
+          borderColor: "white",
+          borderWidth: "2.5px",
+        },
+
+        boxShadow: "0px 6px 18px rgba(0,0,0,0.08)",
+      },
+
+      "& .MuiInputBase-input": {
+        padding: "12px 10px",
+        color: "black",
+      },
+    }}
+  />
+
+{!isUserTyping && (
+  <Box
+    sx={{
+      position: "absolute",
+      top: "50%",
+      left: "46px",
+      transform: "translateY(-50%)",
+      pointerEvents: "none",
+      fontSize: "14px",
+      display: "flex",
+      gap: "6px",
+      alignItems: "center",
+      overflow: "hidden",
+      height: "20px",
+      width: "fit-content",
+    }}
+  >
+    <span style={{ color: "black" }}>Search here</span>
+
+    <AnimatePresence mode="wait">
+      <motion.span
+        key={index}
+        initial={{ y: 25, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: -25, opacity: 0 }}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
+        style={{
+          color: "#5A8F00",
+          fontWeight: 700,
+          marginLeft: 6
+        }}
+      >
+        {words[index]}
+      </motion.span>
+    </AnimatePresence>
+
+
+  </Box>
+)}
+
+
+</Box>
+
+
+
+      {/* Snackbar */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={4000}
+        onClose={() => setSnackbarOpen(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <Alert
           onClose={() => setSnackbarOpen(false)}
-          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          severity={snackbarSeverity}
+          variant="filled"
+          sx={{
+            borderRadius: "10px",
+            fontSize: "14px",
+            backgroundColor:
+              snackbarSeverity === "success"
+                ? "#8A6F4F"
+                : snackbarSeverity === "warning"
+                ? "#d97706"
+                : "#b91c1c",
+          }}
         >
-          <Alert
-            onClose={() => setSnackbarOpen(false)}
-            severity={snackbarSeverity}
-            sx={{ width: "100%" }}
-          >
-            {snackbarMessage}
-          </Alert>
-        </Snackbar>
+          {snackbarMessage}
+        </Alert>
+      </Snackbar>
 
-        {loading && (
-          <div className="fixed inset-0 flex items-center justify-center z-50 bg-white/60">
-            <CircularProgress />
-          </div>
-        )}
-      </Box>
+      {/* Loader */}
+      {loading && (
+        <Box
+          sx={{
+            position: "fixed",
+            inset: 0,
+            background: "rgba(0,0,0,0.45)",
+            backdropFilter: "blur(2px)",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            zIndex: 9999,
+          }}
+        >
+          <CircularProgress
+            size={55}
+            thickness={4}
+            sx={{ color: "#DFF200" }}
+          />
+        </Box>
+      )}
     </>
   );
 };
 
 export default SearchBar;
-
