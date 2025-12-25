@@ -388,12 +388,12 @@ const Home = () => {
             ))}
           </div>
 
-          <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 flex justify-center">
+          {/* <div className="mt-6 sm:mt-8 md:mt-10 lg:mt-12 flex justify-center">
             <button className="group inline-flex items-center gap-2 sm:gap-3 px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 border-2 border-[#444648] text-xs sm:text-sm md:text-base font-semibold text-[#444648] uppercase tracking-wide transition-all duration-300 hover:border-[#CBE600] hover:bg-[#CBE600] hover:text-white rounded-full">
               <span>Shop New Arrivals</span>
               <HiOutlineArrowNarrowRight className="text-base sm:text-lg md:text-xl transition-transform duration-300 group-hover:translate-x-2" />
             </button>
-          </div>
+          </div> */}
         </div>
       </section>
 
@@ -437,7 +437,7 @@ const Home = () => {
             warm layers, and timeless fashion made for everyday elegance.
           </p>
 
-          <div className="mt-4 sm:mt-5 md:mt-6">
+          {/* <div className="mt-4 sm:mt-5 md:mt-6">
             <button
               className="group inline-flex items-center gap-2 sm:gap-3 px-6 py-2.5 sm:px-8 sm:py-3 md:px-10 md:py-4 rounded-full text-sm sm:text-base font-bold text-white shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 uppercase tracking-wide"
               style={{ backgroundColor: "#CBE600" }}
@@ -457,7 +457,7 @@ const Home = () => {
                 />
               </svg>
             </button>
-          </div>
+          </div> */}
         </div>
 
         {/* WINTER COLLECTION - Scrollable with Auto-scroll */}
