@@ -4,7 +4,7 @@ const HomeCarouselData = [
     image: "https://res.cloudinary.com/da1ugn0cq/image/upload/v1766650965/23b44928-a023-4a7a-99cb-5a90c6d589fc_yw3hdn.jpg", // place your uploaded image here
     title: "Luxury That Moves With You",
     buttons: [
-      { text: "Explore Western Wear", link: "/western" },
+      { text: "Explore Western Wear", link: "/women/cord_set/western" },
       { text: "Shop Kurtis", link: "/kurtis" },
     ],
   },
@@ -13,8 +13,8 @@ const HomeCarouselData = [
     image: "https://res.cloudinary.com/da1ugn0cq/image/upload/v1766651092/b25e6ef7-ef8e-4e88-af39-0389f1eb9343_dp8qg1.jpg",
     title: "Elegance in Every Stitch",
     buttons: [
-      { text: "Shop Women", link: "/women" },
-      { text: "Shop Men", link: "/men" },
+      { text: "Shop Women", link: "/women/topwear" },
+      { text: "Shop Men", link: "/men/topwear" },
     ],
   },
   // {
