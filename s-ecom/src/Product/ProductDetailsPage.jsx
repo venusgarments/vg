@@ -16,6 +16,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
+import { openLoginModal } from "../redux/Auth/action";
 import { useDispatch, useSelector } from "react-redux";
 import { jwtDecode } from "jwt-decode";
 import Backdrop from "@mui/material/Backdrop";
@@ -150,7 +151,7 @@ const ProductDetailsPage = () => {
 
     // validate login
     if (!jwt || jwt === "undefined" || isJwtExpired(jwt)) {
-      setLoginAlert(true);
+      dispatch(openLoginModal());
       return;
     }
 
@@ -552,11 +553,18 @@ const ProductDetailsPage = () => {
               <Button
                 type="submit"
                 variant="contained"
-                color="primary"
-                sx={{ padding: ".8rem 2rem", marginTop: "2rem" }}
+                sx={{
+                  padding: ".8rem 2rem",
+                  marginTop: "2rem",
+                  backgroundColor: "#CBE600",
+                  color: "#000",
+                  "&:hover": {
+                    backgroundColor: "#99B300",
+                  },
+                }}
                 disabled={isAdding}
               >
-                {isAdding ? "Adding..." : "Add to Cart"}
+                {isAdding ? "Adding..." : "Buy Now"}
               </Button>
             </form>
 
@@ -878,8 +886,18 @@ const ProductDetailsPage = () => {
                         Rs. {item.discountedPrice || item.price}
                       </span>
                     </div>
-                    <button className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-black text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-[#CBE600] hover:text-black transition-all duration-300 uppercase tracking-wide">
-                      Add to bag
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (!jwt || isJwtExpired(jwt)) {
+                          dispatch(openLoginModal());
+                        } else {
+                          navigate(`/product/${item._id || item.id}`);
+                        }
+                      }}
+                      className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-black text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-[#CBE600] hover:text-black transition-all duration-300 uppercase tracking-wide"
+                    >
+                      Buy Now
                     </button>
                   </div>
                 </article>
@@ -889,30 +907,6 @@ const ProductDetailsPage = () => {
       </div>
 
       {/* login snackbar */}
-      <Snackbar
-        open={loginAlert}
-        autoHideDuration={4000}
-        onClose={() => setLoginAlert(false)}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
-      >
-        <Alert
-          onClose={() => setLoginAlert(false)}
-          severity="warning"
-          variant="filled"
-          sx={{ width: "100%" }}
-          action={
-            <Button
-              color="inherit"
-              size="small"
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </Button>
-          }
-        >
-          Please login to add items to your cart.
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

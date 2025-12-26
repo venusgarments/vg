@@ -22,7 +22,7 @@ const ProductPage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const param = useParams();
-const [hoveredProduct, setHoveredProduct] = useState(null);
+  const [hoveredProduct, setHoveredProduct] = useState(null);
   // Redux state
   const { customersProduct } = useSelector((store) => store);
   // const products = customersProduct?.products?.content || [];
@@ -49,21 +49,21 @@ const [hoveredProduct, setHoveredProduct] = useState(null);
   // parse URL search params
   const decodedQueryString = decodeURIComponent(location.search || "");
   const searchParams = new URLSearchParams(decodedQueryString);
-const searchQuery = searchParams.get("query");
-const products = useMemo(() => {
-  if (searchQuery) {
-    return customersProduct?.searchedProducts?.content || [];
-  }
-  return customersProduct?.products?.content || [];
-}, [searchQuery, customersProduct]);
+  const searchQuery = searchParams.get("query");
+  const products = useMemo(() => {
+    if (searchQuery) {
+      return customersProduct?.searchedProducts?.content || [];
+    }
+    return customersProduct?.products?.content || [];
+  }, [searchQuery, customersProduct]);
 
-const totalPages = searchQuery
-  ? customersProduct?.searchedProducts?.totalPages || 1
-  : customersProduct?.products?.totalPages || 1;
+  const totalPages = searchQuery
+    ? customersProduct?.searchedProducts?.totalPages || 1
+    : customersProduct?.products?.totalPages || 1;
 
-const currentPage = searchQuery
-  ? customersProduct?.searchedProducts?.currentPage || 1
-  : customersProduct?.products?.currentPage || 1;
+  const currentPage = searchQuery
+    ? customersProduct?.searchedProducts?.currentPage || 1
+    : customersProduct?.products?.currentPage || 1;
 
   const colorParam = searchParams.get("color");
   const sizeParam = searchParams.get("size");
@@ -80,57 +80,55 @@ const currentPage = searchQuery
     (param && (param.lavelThree || param.lavelTwo)) ||
     searchParams.get("category") ||
     null;
-useEffect(() => {
-  let [minPrice, maxPrice] = [0, 0];
+  useEffect(() => {
+    let [minPrice, maxPrice] = [0, 0];
 
-  if (priceParam) {
-    const parts = priceParam.split("-").map(Number);
-    [minPrice, maxPrice] = parts.length === 2 ? parts : [parts[0], 10000];
-  }
+    if (priceParam) {
+      const parts = priceParam.split("-").map(Number);
+      [minPrice, maxPrice] = parts.length === 2 ? parts : [parts[0], 10000];
+    }
 
-  // SEARCH MODE
-  if (searchQuery) {
+    // SEARCH MODE
+    if (searchQuery) {
+      dispatch(
+        searchProducts({
+          query: searchQuery,
+          pageNumber: Number(pageNumber) || 1,
+          pageSize: 10,
+        })
+      );
+      return;
+    }
+
+    // CATEGORY MODE
+    const categoryFromRoute = param.lavelThree || param.lavelTwo || null;
+
     dispatch(
-      searchProducts({
-        query: searchQuery,
+      findProducts({
+        category: categoryFromRoute,
+        colors: colorParam ? colorParam.split(",") : [],
+        sizes: sizeParam ? sizeParam.split(",") : [],
+        minPrice: minPrice || 0,
+        maxPrice: maxPrice || 10000,
+        minDiscount: discountParamValue ? Number(discountParamValue) : 0,
+        sort: sortValue || "price_low",
         pageNumber: Number(pageNumber) || 1,
-        pageSize: 10
+        pageSize: 10,
+        stock: stockParam || null,
       })
     );
-    return;
-  }
-
-  // CATEGORY MODE
-  const categoryFromRoute = param.lavelThree || param.lavelTwo || null;
-
-  dispatch(
-    findProducts({
-      category: categoryFromRoute,
-      colors: colorParam ? colorParam.split(",") : [],
-      sizes: sizeParam ? sizeParam.split(",") : [],
-      minPrice: minPrice || 0,
-      maxPrice: maxPrice || 10000,
-      minDiscount: discountParamValue ? Number(discountParamValue) : 0,
-      sort: sortValue || "price_low",
-      pageNumber: Number(pageNumber) || 1,
-      pageSize: 10,
-      stock: stockParam || null,
-    })
-  );
-}, [
-  searchQuery,
-  param.lavelTwo,
-  param.lavelThree,
-  colorParam,
-  sizeParam,
-  priceParam,
-  discountParamValue,
-  sortValue,
-  pageNumber,
-  stockParam,
-]);
-
-
+  }, [
+    searchQuery,
+    param.lavelTwo,
+    param.lavelThree,
+    colorParam,
+    sizeParam,
+    priceParam,
+    discountParamValue,
+    sortValue,
+    pageNumber,
+    stockParam,
+  ]);
 
   // loader UI
   const [isLoaderOpen, setIsLoaderOpen] = useState(false);
@@ -185,19 +183,17 @@ useEffect(() => {
   };
 
   // pagination handler
-const handlePaginationChange = (event, value) => {
-  const sp = new URLSearchParams(location.search);
+  const handlePaginationChange = (event, value) => {
+    const sp = new URLSearchParams(location.search);
 
-  // If searching → keep query + update page
-  if (searchQuery) {
-    sp.set("query", searchQuery);
-  }
+    // If searching → keep query + update page
+    if (searchQuery) {
+      sp.set("query", searchQuery);
+    }
 
-  sp.set("page", value);
-  navigate({ search: `?${sp.toString()}` });
-};
-
-
+    sp.set("page", value);
+    navigate({ search: `?${sp.toString()}` });
+  };
 
   // small rating renderer
   const renderStars = (rating = 0) => {
@@ -267,10 +263,10 @@ const handlePaginationChange = (event, value) => {
       {/* Header */}
       <div className="bg-linear-to-r from-[#8A6F4F] to-[#6B5B4A] text-white py-8 sm:py-12 md:py-16 px-4 sm:px-6">
         {isLoaderOpen && (
-  <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-[2000]">
-    <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-  </div>
-)}
+          <div className="fixed inset-0 bg-black/30 flex justify-center items-center z-[2000]">
+            <div className="w-12 h-12 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        )}
 
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm mb-3 sm:mb-4 text-white/80">
@@ -657,8 +653,8 @@ const handlePaginationChange = (event, value) => {
                         </div>
                       )}
 
-                      <button className="mt-auto w-full py-2 sm:py-2.5 md:py-3 px-2 sm:px-3 md:px-4 bg-black text-white text-[10px] sm:text-xs md:text-sm font-semibold rounded-lg hover:bg-[#DFF200] hover:text-black transition-all duration-300 uppercase tracking-wide">
-                        {product.shades ? "Select Shades" : "Add to bag"}
+                      <button className="mt-auto w-full py-2 sm:py-2.5 md:py-3 px-2 sm:px-3 md:px-4 bg-[#CBE600] text-black text-[10px] sm:text-xs md:text-sm font-semibold rounded-lg hover:bg-[#99B300] transition-all duration-300 uppercase tracking-wide">
+                        {product.shades ? "Select Shades" : "Buy Now"}
                       </button>
                     </div>
                   </article>
