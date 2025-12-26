@@ -3,7 +3,8 @@ import React, { useState } from "react";
 import { Fab, Snackbar, Alert } from "@mui/material";
 import ChatIcon from "@mui/icons-material/Chat";
 import ChatBoxModal from "./ChatBoxModal";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { openLoginModal } from "../redux/Auth/action";
 
 /* ================== JWT HELPER ================== */
 const isJwtExpired = (token) => {
@@ -16,6 +17,7 @@ const isJwtExpired = (token) => {
 };
 
 const ChatWidget = () => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
@@ -29,6 +31,7 @@ const ChatWidget = () => {
 
     if (!isLoggedIn) {
       setShowToast(true);
+      dispatch(openLoginModal()); // Open Login Modal
       return;
     }
 

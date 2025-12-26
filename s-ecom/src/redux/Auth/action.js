@@ -14,6 +14,8 @@ import {
   GET_ALL_USERS_FAILURE,
   LOGOUT,
   CLEAR_AUTH_ERROR,
+  OPEN_LOGIN_MODAL,
+  CLOSE_LOGIN_MODAL,
 } from "./ActionTypes";
 import api, { API_BASE_URL } from "../../Config/api";
 
@@ -117,3 +119,6 @@ export const loadUserFromToken = () => {
 };
 
 export const clearAuthError = () => ({ type: CLEAR_AUTH_ERROR });
+
+export const openLoginModal = () => ({ type: OPEN_LOGIN_MODAL });
+export const closeLoginModal = () => ({ type: CLOSE_LOGIN_MODAL });

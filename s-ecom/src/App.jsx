@@ -22,6 +22,7 @@ import { useDispatch } from "react-redux";
 import Collection from "./Collection";
 import Bestseller from "./Bestseller";
 import Blog from "./Pages/Blog";
+import Profile from "./Pages/Profile";
 
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -52,16 +53,14 @@ function App() {
           path="/:lavelOne/:lavelTwo/:lavelThree"
           element={<ProductPage />}
         />
-                <Route
-          path="/:lavelOne/:lavelTwo"
-          element={<ProductPage />}
-        />
+        <Route path="/:lavelOne/:lavelTwo" element={<ProductPage />} />
         <Route path="/product/:productId" element={<ProductDetailsPage />} />
         <Route path="/account/order" element={<Order />}></Route>
         <Route
           path="/account/order/:orderId"
           element={<OrderDetails />}
         ></Route>
+        <Route path="/profile" element={<Profile />} />
         <Route path="/checkout" element={<Checkout />}></Route>
 
         <Route path="/cart" element={<CartPage />} />
@@ -79,8 +78,7 @@ function App() {
         <Route path="/blog" element={<Blog />}></Route>
         <Route path="*" element={<NotFound />} />
         <Route path="/search" element={<ProductPage />} />
-<Route path="/search" element={<ProductPage />} />
-
+        <Route path="/search" element={<ProductPage />} />
       </Routes>
       <ChatWidget />
       <FloatingIcons />
