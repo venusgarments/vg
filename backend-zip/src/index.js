@@ -14,6 +14,47 @@ app.get("/", (req, res) => {
 // ROUTE IMPORTS
 // =============================================================================
 
+
+app.post("/api/whatsapp/webhook", async (req, res) => {
+  try {
+    const message = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
+    const from = message?.from;
+    const text = message?.text?.body?.toLowerCase() || "";
+
+    if (!message || !from) return res.sendStatus(200);
+
+    // Auto Reply Message
+    await axios.post(
+      `https://graph.facebook.com/v19.0/${process.env.WHATSAPP_PHONE_ID}/messages`,
+      {
+        messaging_product: "whatsapp",
+        to: from,
+        type: "text",
+        text: {
+          body: `Thanks for contacting us! 😊
+We will get back to you shortly.
+
+Follow us here:
+Instagram 👉 https://instagram.com/yourpage
+YouTube 👉 https://youtube.com/yourchannel
+Website 👉 https://yourwebsite.com`
+        },
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    return res.sendStatus(200);
+  } catch (err) {
+    console.log("WhatsApp Auto Reply Error:", err?.response?.data || err.message);
+    return res.sendStatus(500);
+  }
+});
+
 // Auth & User Routes
 const authRouter = require("./routes/auth.routes.js");
 const userRouter = require("./routes/user.routes.js");
