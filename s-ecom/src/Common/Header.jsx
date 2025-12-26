@@ -464,106 +464,230 @@ export default function Header() {
                 </button>
 
                 {/* Profile dropdown */}
+                {/* Profile dropdown / Drawer */}
                 {loggedIn && (
-                  <div
-                    className={`absolute right-0 mt-3 w-64 rounded-xl shadow-2xl bg-[#FFFDF6] border-2 border-[#DFF200] z-50 transition-all duration-300 origin-top-right overflow-hidden ${
-                      profileOpen
-                        ? "scale-100 opacity-100 translate-y-0"
-                        : "scale-95 opacity-0 -translate-y-2 pointer-events-none"
-                    }`}
-                    role="menu"
-                    aria-hidden={!profileOpen}
-                  >
-                    {/* Dropdown Header */}
-                    <div className="bg-[#DFF200] px-5 py-4 border-b-2 border-[#CBE600]">
-                      <p className="text-xs font-bold text-[#111111]/70 uppercase tracking-wider mb-1">
-                        Signed in as
-                      </p>
-                      <p className="text-[#111111] font-bold text-lg truncate">
-                        {displayName}
-                      </p>
+                  <>
+                    {/* Desktop Dropdown (lg+) */}
+                    <div
+                      className={`hidden lg:block absolute right-0 mt-3 w-56 rounded-xl shadow-2xl bg-[#FFFDF6] border-2 border-[#DFF200] z-50 transition-all duration-300 origin-top-right overflow-hidden ${
+                        profileOpen
+                          ? "scale-100 opacity-100 translate-y-0"
+                          : "scale-95 opacity-0 -translate-y-2 pointer-events-none"
+                      }`}
+                      role="menu"
+                      aria-hidden={!profileOpen}
+                    >
+                      {/* Dropdown Header */}
+                      <div className="bg-[#DFF200] px-4 py-3 border-b-2 border-[#CBE600]">
+                        <p className="text-[10px] font-bold text-[#111111]/70 uppercase tracking-wider mb-0.5">
+                          Signed in as
+                        </p>
+                        <p className="text-[#111111] font-bold text-sm truncate">
+                          {displayName}
+                        </p>
+                      </div>
+
+                      <div className="p-1.5 space-y-1">
+                        {/* My Orders */}
+                        <button
+                          onClick={() => {
+                            setProfileOpen(false);
+                            navigate("/account/order");
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#DFF200]/30 text-[#111111] transition-colors group"
+                        >
+                          <div className="bg-[#DFF200] p-1.5 rounded-md group-hover:bg-[#CBE600] transition-colors">
+                            <svg
+                              className="w-3.5 h-3.5 text-[#111111]"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                              />
+                            </svg>
+                          </div>
+                          <span className="font-semibold text-xs">
+                            My Orders
+                          </span>
+                        </button>
+
+                        {/* Profile */}
+                        <button
+                          onClick={() => {
+                            setProfileOpen(false);
+                            navigate("/profile");
+                          }}
+                          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-[#DFF200]/30 text-[#111111] transition-colors group"
+                        >
+                          <div className="bg-[#DFF200] p-1.5 rounded-md group-hover:bg-[#CBE600] transition-colors">
+                            <svg
+                              className="w-3.5 h-3.5 text-[#111111]"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                              />
+                            </svg>
+                          </div>
+                          <span className="font-semibold text-xs">
+                            My Profile
+                          </span>
+                        </button>
+
+                        <div className="h-px bg-[#DFF200] my-1 mx-2"></div>
+
+                        <button
+                          onClick={handleLogout}
+                          className="w-full flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-red-50 text-red-600 transition-colors group"
+                        >
+                          <div className="bg-red-100 p-1.5 rounded-md group-hover:bg-red-200 transition-colors">
+                            <svg
+                              className="w-3.5 h-3.5 text-red-600"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                          </div>
+                          <span className="font-bold text-xs">Logout</span>
+                        </button>
+                      </div>
                     </div>
 
-                    <div className="p-2 space-y-1">
-                      {/* My Orders */}
-                      <button
-                        onClick={() => {
-                          setProfileOpen(false);
-                          navigate("/account/order");
-                        }}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#DFF200]/30 text-[#111111] transition-colors group"
-                      >
-                        <div className="bg-[#DFF200] p-2 rounded-md group-hover:bg-[#CBE600] transition-colors">
-                          <svg
-                            className="w-4 h-4 text-[#111111]"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-                            />
-                          </svg>
-                        </div>
-                        <span className="font-semibold text-sm">My Orders</span>
-                      </button>
+                    {/* Mobile Drawer (lg hidden) */}
+                    <div className="lg:hidden">
+                      {/* Overlay */}
+                      <div
+                        className={`fixed inset-0 bg-black/50 backdrop-blur-sm z-[60] transition-opacity duration-300 ${
+                          profileOpen
+                            ? "opacity-100 visible"
+                            : "opacity-0 invisible"
+                        }`}
+                        onClick={() => setProfileOpen(false)}
+                      />
 
-                      {/* Profile */}
-                      <button
-                        onClick={() => {
-                          setProfileOpen(false);
-                          navigate("/profile");
-                        }}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#DFF200]/30 text-[#111111] transition-colors group"
+                      {/* Drawer Panel */}
+                      <div
+                        className={`fixed top-0 right-0 h-full w-72 bg-[#FFFDF6] z-[70] shadow-2xl transform transition-transform duration-300 border-l-2 border-[#DFF200] flex flex-col ${
+                          profileOpen ? "translate-x-0" : "translate-x-full"
+                        }`}
                       >
-                        <div className="bg-[#DFF200] p-2 rounded-md group-hover:bg-[#CBE600] transition-colors">
-                          <svg
-                            className="w-4 h-4 text-[#111111]"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                        {/* Drawer Header */}
+                        <div className="bg-[#DFF200] p-6 flex items-center justify-between">
+                          <div>
+                            <p className="text-xs font-bold text-[#111111]/70 uppercase tracking-wider mb-1">
+                              Signed in as
+                            </p>
+                            <p className="text-[#111111] font-bold text-lg truncate max-w-[180px]">
+                              {displayName}
+                            </p>
+                          </div>
+                          <button
+                            onClick={() => setProfileOpen(false)}
+                            className="p-2 hover:bg-white/20 rounded-full transition-colors"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                            />
-                          </svg>
+                            <CloseIcon className="w-6 h-6 text-[#111111]" />
+                          </button>
                         </div>
-                        <span className="font-semibold text-sm">
-                          My Profile
-                        </span>
-                      </button>
 
-                      <div className="h-px bg-[#DFF200] my-1 mx-2"></div>
-
-                      <button
-                        onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors group"
-                      >
-                        <div className="bg-red-100 p-2 rounded-md group-hover:bg-red-200 transition-colors">
-                          <svg
-                            className="w-4 h-4 text-red-600"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                        {/* Drawer Content */}
+                        <div className="flex-1 p-4 space-y-2 overflow-y-auto">
+                          <button
+                            onClick={() => {
+                              setProfileOpen(false);
+                              navigate("/account/order");
+                            }}
+                            className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-[#DFF200]/30 text-[#111111] transition-colors group border border-transparent hover:border-[#DFF200]"
                           >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                            />
-                          </svg>
+                            <div className="bg-[#DFF200] p-2.5 rounded-lg group-hover:bg-[#CBE600] transition-colors shadow-sm">
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                                />
+                              </svg>
+                            </div>
+                            <span className="font-bold text-base">
+                              My Orders
+                            </span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              setProfileOpen(false);
+                              navigate("/profile");
+                            }}
+                            className="w-full flex items-center gap-4 px-4 py-4 rounded-xl hover:bg-[#DFF200]/30 text-[#111111] transition-colors group border border-transparent hover:border-[#DFF200]"
+                          >
+                            <div className="bg-[#DFF200] p-2.5 rounded-lg group-hover:bg-[#CBE600] transition-colors shadow-sm">
+                              <svg
+                                className="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                                />
+                              </svg>
+                            </div>
+                            <span className="font-bold text-base">
+                              My Profile
+                            </span>
+                          </button>
                         </div>
-                        <span className="font-bold text-sm">Logout</span>
-                      </button>
+
+                        {/* Drawer Footer */}
+                        <div className="p-4 border-t border-gray-200 bg-gray-50">
+                          <button
+                            onClick={handleLogout}
+                            className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 transition-colors font-bold shadow-sm"
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                              />
+                            </svg>
+                            <span>Sign Out</span>
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
               </div>
 
