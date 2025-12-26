@@ -257,16 +257,25 @@ const Home = () => {
         >
           {HomeCarouselData.map((item) => (
             <SwiperSlide key={item.id} className="relative w-full h-full">
-              {/* Image Layer */}
-              <div className="absolute inset-0">
-                <img
-                  src={item.image}
-                  alt={item.title}
-                  loading="lazy"
-                  className="w-full h-full object-cover object-top"
-                />
-                <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
-              </div>
+         
+{/* Image Layer */}
+<div className="absolute inset-0">
+  <picture>
+    {/* Mobile image (below Tailwind sm breakpoint i.e. < 640px) */}
+    <source media="(max-width: 639px)" srcSet={item.image1} />
+
+    {/* Desktop / Tablet */}
+    <img
+      src={item.image}
+      alt={item.title}
+      loading="lazy"
+      className="w-full h-full object-cover object-top"
+    />
+  </picture>
+
+  <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/20 to-transparent" />
+</div>
+
 
               {/* Content Layer (Overlay) */}
               <div
@@ -295,10 +304,11 @@ const Home = () => {
                       <button
                         key={i}
                         onClick={() => navigate(btn.link || "/")}
-                        className="group relative px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 text-xs sm:text-sm md:text-base font-medium tracking-wide uppercase overflow-hidden rounded-md transition-all duration-300 hover:shadow-2xl hover:shadow-[#CBE600]/20"
+                        className="group  relative px-4 py-2 sm:px-6 sm:py-2.5 md:px-8 md:py-3 text-xs sm:text-sm md:text-base font-medium tracking-wide uppercase overflow-hidden rounded-md transition-all duration-300 hover:shadow-2xl hover:shadow-[#CBE600]/20"
                         style={{
                           backgroundColor: "#DFF200",
                           color: "#111111",
+                         
                         }}
                       >
                         <span className="relative z-10 group-hover:text-black transition-colors">

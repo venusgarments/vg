@@ -583,7 +583,6 @@ function normalizeText(text) {
 }
 
 async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
-
   // Normalize query safely
   if (typeof rawQuery === "object" && rawQuery !== null) {
     rawQuery = rawQuery.query || "";
@@ -604,17 +603,65 @@ async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
   pageSize = Number(pageSize) || 10;
   const skip = (pageNumber - 1) * pageSize;
 
-  /* -------------------- 1️⃣ Find matching categories -------------------- */
-  const matchingCategories = await Category.find({
-    name: { $regex: new RegExp(normalizedQuery, "i") },
-  });
+  /* ------------------------------------------------------------------
+      1️⃣ Detect Audience (Women / Men / Kids)
+  ------------------------------------------------------------------ */
+  const audienceKeywords = {
+    women: ["woman", "women", "lady", "ladies", "female", "girl", "girls"],
+    men: ["man", "men", "male", "boy", "boys"],
+    kids: ["kid", "kids", "children", "child"]
+  };
 
-  const allCategoryIds = new Set();
+  let selectedAudience = null;
 
-  if (matchingCategories.length > 0) {
+  for (const key in audienceKeywords) {
+    if (audienceKeywords[key].some(k => normalizedQuery.includes(k))) {
+      selectedAudience = key;
+      break;
+    }
+  }
+
+  /* ------------------------------------------------------------------
+      2️⃣ Extract Real Product Query (remove audience words)
+  ------------------------------------------------------------------ */
+  let productQuery = normalizedQuery;
+
+  for (const key in audienceKeywords) {
+    audienceKeywords[key].forEach(word => {
+      productQuery = productQuery.replace(word, "");
+    });
+  }
+
+  productQuery = productQuery.trim();
+
+  if (!productQuery) productQuery = normalizedQuery;
+
+  /* ------------------------------------------------------------------
+      3️⃣ Smart Category Matching
+      Priority:
+      1. Word Match
+      2. StartsWith
+      3. Contains
+  ------------------------------------------------------------------ */
+  const wordRegex = new RegExp(`\\b${productQuery}s?\\b`, "i");
+  const startsWithRegex = new RegExp(`^${productQuery}`, "i");
+  const containsRegex = new RegExp(productQuery, "i");
+
+  let matchingCategories = await Category.find({ name: wordRegex });
+
+  if (!matchingCategories.length)
+    matchingCategories = await Category.find({ name: startsWithRegex });
+
+  if (!matchingCategories.length)
+    matchingCategories = await Category.find({ name: containsRegex });
+
+  let allCategoryIds = new Set();
+
+  // If matched categories found → build full tree
+  if (matchingCategories.length) {
     matchingCategories.forEach(c => allCategoryIds.add(c._id.toString()));
 
-    // 🔼 Fetch parents
+    /* ---------- fetch parents ---------- */
     async function fetchParentCategories(ids) {
       if (!ids?.length) return;
 
@@ -640,7 +687,7 @@ async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
 
     await fetchParentCategories(matchingCategories.map(c => c._id));
 
-    // 🔽 Fetch children
+    /* ---------- fetch children ---------- */
     async function fetchChildCategories(ids) {
       if (!ids?.length) return;
 
@@ -662,12 +709,47 @@ async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
     }
 
     await fetchChildCategories(matchingCategories.map(c => c._id));
+
+    /* ------------------------------------------------------------------
+        4️⃣ Audience Filtering (ONLY audience branch)
+    ------------------------------------------------------------------ */
+    if (selectedAudience) {
+      const audienceRoot = await Category.findOne({
+        name: new RegExp(selectedAudience, "i")
+      });
+
+      if (audienceRoot) {
+        const filtered = [];
+
+        for (const id of allCategoryIds) {
+          let cat = await Category.findById(id).populate("parentCategory");
+
+          let belongs = false;
+
+          while (cat?.parentCategory) {
+            if (cat.parentCategory._id.toString() === audienceRoot._id.toString()) {
+              belongs = true;
+              break;
+            }
+            cat = await Category.findById(cat.parentCategory._id).populate("parentCategory");
+          }
+
+          if (belongs) filtered.push(id);
+        }
+
+        if (filtered.length) {
+          allCategoryIds = new Set(filtered);
+        }
+      }
+    }
   }
 
   let products = [];
   let totalProducts = 0;
 
-  /* -------------------- 🛍 Category Search -------------------- */
+  /* ------------------------------------------------------------------
+      🛍 Category Based Search
+  ------------------------------------------------------------------ */
   if (allCategoryIds.size > 0) {
     totalProducts = await Product.countDocuments({
       category: { $in: [...allCategoryIds] }
@@ -687,31 +769,31 @@ async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
       .limit(pageSize);
   }
 
-  /* -------------------- 🔥 Fallback: keyword search -------------------- */
+  /* ------------------------------------------------------------------
+      🔥 Fallback: Product Keyword Search
+  ------------------------------------------------------------------ */
   if (products.length === 0) {
-    const regex = new RegExp(normalizedQuery, "i");
+    const regex = new RegExp(productQuery, "i");
 
-    totalProducts = await Product.countDocuments({
+    const query = {
       $or: [
         { title: regex },
         { description: regex },
-        { brand: regex },
-      ],
-    });
+        { brand: regex }
+      ]
+    };
 
-    products = await Product.find({
-      $or: [
-        { title: regex },
-        { description: regex },
-        { brand: regex },
-      ],
-    })
+    if (selectedAudience) query.gender = selectedAudience;
+
+    totalProducts = await Product.countDocuments(query);
+
+    products = await Product.find(query)
       .populate({
         path: "category",
         populate: {
           path: "parentCategory",
           populate: { path: "parentCategory" }
-        },
+        }
       })
       .skip(skip)
       .limit(pageSize);
@@ -721,9 +803,10 @@ async function searchProducts(rawQuery, pageNumber = 1, pageSize = 10) {
     products,
     currentPage: pageNumber,
     totalPages: Math.ceil(totalProducts / pageSize) || 1,
-    totalProducts,
+    totalProducts
   };
 }
+
 
 
 

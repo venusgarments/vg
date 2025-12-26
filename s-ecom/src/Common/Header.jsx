@@ -451,18 +451,22 @@ export default function Header() {
                     setProfileOpen((p) => !p);
                   }}
                 >
-                  {loggedIn && firstChar ? (
-                    <div className="w-8 h-8 bg-[#CBE600] text-[#111111] font-bold rounded-full flex items-center justify-center text-sm shadow-md select-none">
-                      {firstChar}
-                    </div>
-                  ) : (
-                    <>
-                      <UserIcon className="w-5 h-5 md:w-6 md:h-6" />
-                      <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 bg-[#111111] text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none whitespace-nowrap">
-                        Account
-                      </span>
-                    </>
-                  )}
+{loggedIn && firstChar ? (
+  <div className="w-8 h-8 bg-[#CBE600] text-[#111111] font-bold rounded-full flex items-center justify-center text-sm shadow-md select-none">
+    {firstChar}
+  </div>
+) : (
+  <div className="flex items-center gap-2">
+    <UserIcon className="w-5 h-5 md:w-6 md:h-6" />
+    <button
+      onClick={handleOpenAuth}
+      className="px-3 py-1 rounded-md bg-[#CBE600] text-black text-xs sm:text-sm font-semibold hover:bg-[#b8d200] transition"
+    >
+      Login / Register
+    </button>
+  </div>
+)}
+
                 </button>
 
                 {/* Profile dropdown */}
