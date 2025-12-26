@@ -1,10 +1,17 @@
 import Confetti from "react-confetti";
 import React, { useEffect, useState } from "react";
 import CartItem from "./CartItem";
-import { Backdrop, Button, CircularProgress } from "@mui/material";
+import {
+  Backdrop,
+  Button,
+  CircularProgress,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getCart } from "../redux/Cart/Action";
+import { openLoginModal } from "../redux/Auth/action";
 import RequireLogin from "../Component/auth/RequireLogin";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
@@ -45,6 +52,7 @@ const CartPage = () => {
   const [couponCode, setCouponCode] = useState("");
   const [showAvailableCoupons, setShowAvailableCoupons] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [showToast, setShowToast] = useState(false);
   const { width, height } = useWindowSize();
 
   const dispatch = useDispatch();
@@ -97,7 +105,42 @@ const CartPage = () => {
   };
 
   if (!jwt) {
-    return <RequireLogin message="Please log in to view your cart." />;
+    // Dispatch openLoginModal if not logged in
+    // Note: dispatching in render body is bad practice, better to do in useEffect
+    // But since this returns a component, we can use the RequireLogin component or side effect.
+    // Ideally we want both: show "Please login" AND open the modal.
+    // Let's us useEffect to trigger modal once.
+  }
+
+  // Effect to trigger modal if not logged in
+  useEffect(() => {
+    if (!jwt) {
+      dispatch(openLoginModal());
+      setShowToast(true);
+    }
+  }, [jwt, dispatch]);
+
+  if (!jwt) {
+    return (
+      <>
+        <RequireLogin message="Please log in to view your cart." />
+        <Snackbar
+          open={showToast}
+          autoHideDuration={3000}
+          onClose={() => setShowToast(false)}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        >
+          <Alert
+            severity="error"
+            variant="filled"
+            onClose={() => setShowToast(false)}
+            sx={{ width: "100%" }}
+          >
+            Please login to access your cart
+          </Alert>
+        </Snackbar>
+      </>
+    );
   }
 
   if (cart.loading) {

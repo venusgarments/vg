@@ -4,13 +4,18 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import navigation from "../Config/navigation";
 import AuthModal from "../Component/auth/AuthModal";
-import { getUser, logout } from "../redux/Auth/action";
+import {
+  getUser,
+  logout,
+  closeLoginModal,
+  openLoginModal,
+} from "../redux/Auth/action";
 import { getCart } from "../redux/Cart/Action";
 
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import { Button } from "@mui/material";
 import AddsBar from "../AddsBar";
- import SearchBar  from '../SearchBar'
+import SearchBar from "../SearchBar";
 const iconButtonClass =
   "p-2.5 rounded-full hover:bg-white/10 focus:bg-white/10 transition-all duration-300 flex items-center justify-center outline-none relative group";
 const UserIcon = (props) => (
@@ -81,14 +86,11 @@ export default function Header() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // single source of truth for auth modal
-  const [openAuthModal, setOpenAuthModal] = useState(false);
-
   // Redux state (defensive)
   const auth = useSelector((store) => store.auth);
   const cart = useSelector((store) => store.cart);
   const jwt = localStorage.getItem("jwt");
-  const { user, isAuthenticated } = auth;
+  const { user, isAuthenticated, openModal } = auth; // Use openModal from Redux
 
   const headerRef = useRef(null);
   const [openMenu, setOpenMenu] = useState(null);
@@ -100,9 +102,9 @@ export default function Header() {
   const [profileOpen, setProfileOpen] = useState(false);
   const profileRef = useRef(null);
 
-  // Helpers for auth modal
-  const handleOpenAuth = () => setOpenAuthModal(true);
-  const handleCloseAuth = () => setOpenAuthModal(false);
+  // Helpers for auth modal - Now dispatch Redux actions
+  const handleOpenAuth = () => dispatch(openLoginModal());
+  const handleCloseAuth = () => dispatch(closeLoginModal());
 
   useLayoutEffect(() => {
     const setHeaderHeightVar = () => {
@@ -195,8 +197,8 @@ export default function Header() {
   useEffect(() => {
     const params = new URLSearchParams(location.search);
     const otpId = params.get("otp_id");
-    if (otpId) setOpenAuthModal(true);
-  }, [location]);
+    if (otpId) dispatch(openLoginModal());
+  }, [location, dispatch]);
 
   // close auth modal when user logs in / prevent direct login/register route for non-admin
   useEffect(() => {
@@ -292,7 +294,6 @@ export default function Header() {
           <SearchBar />
 
           <div className="flex items-center justify-between h-16 md:h-20 lg:h-24">
-                
             {/* Mobile Menu Button */}
             <button
               className="lg:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -312,7 +313,7 @@ export default function Header() {
                 <div className="relative">
                   <div className="bg-[#CBE600] blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300" />
                   <img
-                    src="/logo/logo.jpeg"
+                    src="/logo/logo.png"
                     alt="Venus Garments Logo"
                     className="h-12 rounded-full object-contain transition-transform duration-300 group-hover:scale-105"
                   />
@@ -322,8 +323,6 @@ export default function Header() {
 
             {/* Desktop Navigation */}
             <nav className="hidden lg:flex flex-1 justify-center px-8 relative">
-
-           
               <ul className="flex items-center gap-1 font-semibold uppercase tracking-wider text-sm lg:text-base">
                 {navigation.map((nav) => {
                   const isMega =
@@ -430,12 +429,8 @@ export default function Header() {
               </ul>
             </nav>
 
-            
-
             {/* Action Icons */}
             <div className="flex items-center gap-1 mg:gap-2">
-
-
               {/* Account / Avatar */}
               <div className="relative" ref={profileRef}>
                 <button
@@ -451,50 +446,69 @@ export default function Header() {
                     setProfileOpen((p) => !p);
                   }}
                 >
-{loggedIn && firstChar ? (
-  <div className="w-8 h-8 bg-[#CBE600] text-[#111111] font-bold rounded-full flex items-center justify-center text-sm shadow-md select-none">
-    {firstChar}
-  </div>
-) : (
-  <div className="flex items-center gap-2">
-    <UserIcon className="w-5 h-5 md:w-6 md:h-6" />
-    <button
-      onClick={handleOpenAuth}
-      className="px-3 py-1 rounded-md bg-[#CBE600] text-black text-xs sm:text-sm font-semibold hover:bg-[#b8d200] transition"
-    >
-      Login / Register
-    </button>
-  </div>
-)}
-
+                  {loggedIn && firstChar ? (
+                    <div className="w-8 h-8 bg-[#CBE600] text-[#111111] font-bold rounded-full flex items-center justify-center text-sm shadow-md select-none">
+                      {firstChar}
+                    </div>
+                  ) : (
+                    <div className="flex items-center gap-2">
+                      <UserIcon className="w-5 h-5 md:w-6 md:h-6" />
+                      <button
+                        onClick={handleOpenAuth}
+                        className="px-3 py-1 rounded-md bg-[#CBE600] text-black text-xs sm:text-sm font-semibold hover:bg-[#b8d200] transition"
+                      >
+                        Login / Register
+                      </button>
+                    </div>
+                  )}
                 </button>
 
                 {/* Profile dropdown */}
                 {loggedIn && (
                   <div
-                    className={`absolute right-0 mt-2 w-44 rounded-md shadow-lg bg-white border z-50 transition-transform origin-top-right ${
+                    className={`absolute right-0 mt-3 w-64 rounded-xl shadow-2xl bg-[#FFFDF6] border-2 border-[#DFF200] z-50 transition-all duration-300 origin-top-right overflow-hidden ${
                       profileOpen
-                        ? "scale-100 opacity-100"
-                        : "scale-95 opacity-0 pointer-events-none"
+                        ? "scale-100 opacity-100 translate-y-0"
+                        : "scale-95 opacity-0 -translate-y-2 pointer-events-none"
                     }`}
                     role="menu"
                     aria-hidden={!profileOpen}
                   >
-                    <div className="p-2">
-                      <div className="px-3 py-2 text-sm text-gray-700 font-medium">
-                        Hello, {displayName}
-                      </div>
-                      <div className="border-t my-1" />
+                    {/* Dropdown Header */}
+                    <div className="bg-[#DFF200] px-5 py-4 border-b-2 border-[#CBE600]">
+                      <p className="text-xs font-bold text-[#111111]/70 uppercase tracking-wider mb-1">
+                        Signed in as
+                      </p>
+                      <p className="text-[#111111] font-bold text-lg truncate">
+                        {displayName}
+                      </p>
+                    </div>
 
+                    <div className="p-2 space-y-1">
                       {/* My Orders */}
                       <button
                         onClick={() => {
                           setProfileOpen(false);
                           navigate("/account/order");
                         }}
-                        className="w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#DFF200]/30 text-[#111111] transition-colors group"
                       >
-                        My Orders
+                        <div className="bg-[#DFF200] p-2 rounded-md group-hover:bg-[#CBE600] transition-colors">
+                          <svg
+                            className="w-4 h-4 text-[#111111]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="font-semibold text-sm">My Orders</span>
                       </button>
 
                       {/* Profile */}
@@ -503,16 +517,50 @@ export default function Header() {
                           setProfileOpen(false);
                           navigate("/profile");
                         }}
-                        className="w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-[#DFF200]/30 text-[#111111] transition-colors group"
                       >
-                        Profile
+                        <div className="bg-[#DFF200] p-2 rounded-md group-hover:bg-[#CBE600] transition-colors">
+                          <svg
+                            className="w-4 h-4 text-[#111111]"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                            />
+                          </svg>
+                        </div>
+                        <span className="font-semibold text-sm">
+                          My Profile
+                        </span>
                       </button>
+
+                      <div className="h-px bg-[#DFF200] my-1 mx-2"></div>
 
                       <button
                         onClick={handleLogout}
-                        className="w-full text-left px-3 py-2 rounded hover:bg-gray-100 text-sm text-red-600 font-medium"
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-50 text-red-600 transition-colors group"
                       >
-                        Logout
+                        <div className="bg-red-100 p-2 rounded-md group-hover:bg-red-200 transition-colors">
+                          <svg
+                            className="w-4 h-4 text-red-600"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                            />
+                          </svg>
+                        </div>
+                        <span className="font-bold text-sm">Logout</span>
                       </button>
                     </div>
                   </div>
@@ -535,8 +583,6 @@ export default function Header() {
             </div>
           </div>
         </div>
-
-       
       </header>
 
       {/* Mobile Menu Overlay */}
@@ -686,7 +732,7 @@ export default function Header() {
       </div>
 
       {/* Auth Modal */}
-      <AuthModal handleClose={handleCloseAuth} open={openAuthModal} />
+      <AuthModal handleClose={handleCloseAuth} open={openModal} />
     </>
   );
 }

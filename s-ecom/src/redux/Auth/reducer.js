@@ -20,6 +20,7 @@ const initialState = {
   userList: [],
   isLoading: false,
   error: null,
+  openModal: false, // Added modal state
 };
 
 const authReducer = (state = initialState, action) => {
@@ -39,6 +40,7 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
+        openModal: false, // Close modal on success
       };
 
     case REGISTER_FAILURE:
@@ -55,14 +57,14 @@ const authReducer = (state = initialState, action) => {
       return {
         ...state,
         isLoading: false,
-        user: action.payload, // ✅ Only updates user
+        user: action.payload,
       };
 
     case GET_ALL_USERS_SUCCESS:
       return {
         ...state,
         isLoading: false,
-        userList: action.payload, // ✅ Only updates userList
+        userList: action.payload,
       };
 
     case LOGOUT:
@@ -76,6 +78,12 @@ const authReducer = (state = initialState, action) => {
         ...state,
         error: null,
       };
+
+    case "OPEN_LOGIN_MODAL":
+      return { ...state, openModal: true };
+
+    case "CLOSE_LOGIN_MODAL":
+      return { ...state, openModal: false };
 
     default:
       return state;
