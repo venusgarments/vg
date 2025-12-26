@@ -59,7 +59,7 @@ const Profile = () => {
             <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-20 rounded-full blur-3xl transform translate-x-1/2 -translate-y-1/2"></div>
           </div>
 
-          <div className="px-8 pb-8 flex flex-col md:flex-row items-end -mt-12 gap-6 relative z-10">
+          <div className="px-8 pb-8 flex flex-col md:flex-row items-start md:items-end -mt-12 gap-6 relative z-10">
             <Avatar
               sx={{
                 width: 128,
@@ -75,7 +75,7 @@ const Profile = () => {
               {user.firstName ? user.firstName.charAt(0).toUpperCase() : "U"}
             </Avatar>
 
-            <div className="flex-1 pb-2 text-center md:text-left">
+            <div className="flex-1 pb-2 text-left">
               <Typography
                 variant="h4"
                 component="h1"
@@ -90,7 +90,7 @@ const Profile = () => {
                   display: "flex",
                   alignItems: "center",
                   gap: 1,
-                  justifyContent: { xs: "center", md: "start" },
+                  justifyContent: "flex-start",
                 }}
               >
                 <EmailIcon sx={{ fontSize: 18, color: "#CBE600" }} />{" "}
