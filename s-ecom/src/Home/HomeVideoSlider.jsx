@@ -7,7 +7,7 @@ const BASE_URL = import.meta.env.VITE_React_BASE_API_URL;
 const HomeVideoSlider = () => {
   const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
-  const [playVideo, setPlayVideo] = useState(null);
+  const [playVideo, setPlayVideo] = useState(null); // Stores the full video object now
   const [recommendedProducts, setRecommendedProducts] = useState([]);
   const playerRef = useRef(null);
 
@@ -251,7 +251,7 @@ const HomeVideoSlider = () => {
             >
               <div
                 className="bg-white rounded-lg overflow-hidden shadow-lg border-2 border-[#DFF200] group-hover:border-[#CBE600] transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
-                onClick={() => setPlayVideo(video.url)}
+                onClick={() => setPlayVideo(video)}
               >
                 <div className="relative h-56 sm:h-72 md:h-80 lg:h-96 w-full overflow-hidden">
                   {/* Thumbnail video: autoplay when visible (muted + loop) */}
@@ -304,7 +304,7 @@ const HomeVideoSlider = () => {
             <div className="relative bg-black shrink-0 w-full lg:w-auto">
               <video
                 ref={playerRef}
-                src={playVideo}
+                src={playVideo.url} // Accessing url property
                 controls
                 autoPlay
                 playsInline
@@ -316,7 +316,7 @@ const HomeVideoSlider = () => {
             <div className="flex flex-col w-full lg:w-[380px] bg-white">
               <div className="flex items-center justify-between px-4 sm:px-6 py-4 sm:py-5 border-b border-gray-100">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br from-[#DFF200] to-[#CBE600] flex items-center justify-center shadow-sm">
+                  <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-linear-to-br from-[#DFF200] to-[#CBE600] flex items-center justify-center shadow-sm">
                     <span className="text-[#111111] font-bold text-xs sm:text-sm">
                       VG
                     </span>
@@ -325,9 +325,33 @@ const HomeVideoSlider = () => {
                     <span className="font-semibold text-gray-900 block text-sm sm:text-base">
                       venusgarments
                     </span>
-                    <span className="text-xs text-gray-500">
-                      Venus Garments
-                    </span>
+                    {playVideo.socialUrl && (
+                      <a
+                        href={
+                          playVideo.socialUrl.startsWith("http")
+                            ? playVideo.socialUrl
+                            : `https://${playVideo.socialUrl}`
+                        }
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-0.5 font-medium"
+                      >
+                        <svg
+                          className="w-3 h-3"
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"
+                          />
+                        </svg>
+                        Visit Link
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -341,13 +365,10 @@ const HomeVideoSlider = () => {
               </div>
 
               <div className="px-6 py-4 border-b border-gray-100">
-                <p className="text-sm text-gray-700 leading-relaxed">
-                  Discover our latest collection! Premium quality, trendy
-                  designs at best prices 🛍️✨
+                <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">
+                  {playVideo.description ||
+                    "Check out this video! Premium quality, trendy designs at best prices 🛍️✨"}
                 </p>
-                <button className="text-sm text-gray-400 mt-2 hover:text-gray-600 transition-colors">
-                  See more
-                </button>
               </div>
 
               <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-5 pb-2 sm:pb-3">

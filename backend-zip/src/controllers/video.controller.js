@@ -9,7 +9,9 @@ const streamifier = require("streamifier");
 exports.uploadVideoController = async (req, res) => {
   try {
     if (!req.file) {
-      return res.status(400).json({ success: false, message: "No video provided" });
+      return res
+        .status(400)
+        .json({ success: false, message: "No video provided" });
     }
 
     const uploadToCloudinary = () => {
@@ -28,23 +30,25 @@ exports.uploadVideoController = async (req, res) => {
 
     const result = await uploadToCloudinary();
 
+    const { socialUrl, description } = req.body;
+
     const savedVideo = await Video.create({
       url: result.secure_url,
-      public_id: result.public_id
+      public_id: result.public_id,
+      socialUrl,
+      description,
     });
 
     res.status(201).json({
       success: true,
       message: "Video uploaded successfully",
-      video: savedVideo
+      video: savedVideo,
     });
-
   } catch (error) {
     console.error("Video Upload Error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
-
 
 /* ============================
    ✅ GET ALL VIDEOS
@@ -56,7 +60,7 @@ exports.getAllVideosController = async (req, res) => {
     res.status(200).json({
       success: true,
       count: videos.length,
-      videos
+      videos,
     });
   } catch (error) {
     console.error("Fetch Video Error:", error);
@@ -64,6 +68,37 @@ exports.getAllVideosController = async (req, res) => {
   }
 };
 
+/* ============================
+   ✅ UPDATE VIDEO DETAILS
+============================ */
+exports.updateVideoController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { description, socialUrl } = req.body;
+
+    const video = await Video.findById(id);
+    if (!video) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Video not found" });
+    }
+
+    // Update only allowed fields
+    if (description !== undefined) video.description = description;
+    if (socialUrl !== undefined) video.socialUrl = socialUrl;
+
+    await video.save();
+
+    res.status(200).json({
+      success: true,
+      message: "Video updated successfully",
+      video,
+    });
+  } catch (error) {
+    console.error("Update Video Error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
 
 /* ============================
    ✅ DELETE VIDEO (Cloudinary + DB)
@@ -74,12 +109,14 @@ exports.deleteVideoController = async (req, res) => {
 
     const video = await Video.findById(id);
     if (!video) {
-      return res.status(404).json({ success: false, message: "Video not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Video not found" });
     }
 
     // ✅ Delete from Cloudinary
     await cloudinary.uploader.destroy(video.public_id, {
-      resource_type: "video"
+      resource_type: "video",
     });
 
     // ✅ Delete from MongoDB
@@ -87,7 +124,7 @@ exports.deleteVideoController = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      message: "Video deleted successfully"
+      message: "Video deleted successfully",
     });
   } catch (error) {
     console.error("Delete Video Error:", error);
