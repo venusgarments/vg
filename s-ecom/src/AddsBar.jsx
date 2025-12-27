@@ -36,7 +36,7 @@ function AddsBar() {
           d="M13 10V3L4 14h7v7l9-11h-7z"
         />
       </svg>
-      Free delivery for above Rs-2000
+      Free delivery for above Rs-1999
     </span>
   );
 

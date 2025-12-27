@@ -295,9 +295,9 @@ const Home = () => {
                     {item.title}
                   </h1>
 
-                  <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto font-light px-4">
+                  {/* <p className="text-sm sm:text-base md:text-lg text-white/80 max-w-2xl mx-auto font-light px-4">
                     Discover elegance in every stitch
-                  </p>
+                  </p> */}
 
                   <div className="flex flex-wrap justify-center gap-2 sm:gap-3 md:gap-4 pt-3 sm:pt-4 px-2">
                     {item.buttons.map((btn, i) => (
