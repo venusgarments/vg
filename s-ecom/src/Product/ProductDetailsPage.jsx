@@ -581,17 +581,17 @@ const ProductDetailsPage = () => {
                   On orders above ₹1999
                 </p>
               </div>
-              <div className="text-center">
+              {/* <div className="text-center">
                 <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-1.5 sm:mb-2 bg-[#CBE600]/10 rounded-full flex items-center justify-center">
                   <RefreshCw className="w-5 h-5 md:w-6 md:h-6 text-[#8A6F4F]" />
                 </div>
-                {/* <p className="text-xs font-semibold text-gray-700">
+                <p className="text-xs font-semibold text-gray-700">
                   Easy Returns
-                </p> */}
-                {/* <p className="text-xs text-gray-500 hidden lg:block">
+                </p>
+                <p className="text-xs text-gray-500 hidden lg:block">
                   30-day return policy
-                </p> */}
-              </div>
+                </p>
+              </div> */}
               <div className="text-center">
                 <div className="w-10 h-10 md:w-12 md:h-12 mx-auto mb-1.5 sm:mb-2 bg-[#CBE600]/10 rounded-full flex items-center justify-center">
                   <Shield className="w-5 h-5 md:w-6 md:h-6 text-[#8A6F4F]" />
