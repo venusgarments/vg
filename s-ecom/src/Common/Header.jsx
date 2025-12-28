@@ -96,6 +96,7 @@ export default function Header() {
   const [openMenu, setOpenMenu] = useState(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [activeImage, setActiveImage] = useState(null);
   const hoverTimeout = useRef(null);
 
   // profile dropdown state
@@ -156,7 +157,10 @@ export default function Header() {
 
   const handleMouseLeave = () => {
     window.clearTimeout(hoverTimeout.current);
-    hoverTimeout.current = window.setTimeout(() => setOpenMenu(null), 120);
+    hoverTimeout.current = window.setTimeout(() => {
+      setOpenMenu(null);
+      setActiveImage(null);
+    }, 120);
   };
 
   const handleClickToggle = (e, id) => {
@@ -381,7 +385,13 @@ export default function Header() {
                                         <li key={item.id}>
                                           <Link
                                             to={item.path || item.href || "#"}
-                                            className="block text-[#666] hover:text-[#CBE600] transition-colors text-sm leading-relaxed"
+                                            className="block text-[#666] hover:text-[#CBE600] transition-colors text-sm leading-relaxed w-fit"
+                                            onMouseEnter={() =>
+                                              setActiveImage(item.image)
+                                            }
+                                            onMouseLeave={() =>
+                                              setActiveImage(null)
+                                            }
                                           >
                                             {item.name}
                                           </Link>
@@ -393,11 +403,22 @@ export default function Header() {
                               </div>
 
                               <div className="col-span-3 flex items-center justify-center">
-                                {Array.isArray(nav.featured) &&
-                                nav.featured.length > 0 ? (
+                                {activeImage ? (
+                                  <Link
+                                    to={nav.path || "#"}
+                                    className="block rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full h-[400px]"
+                                  >
+                                    <img
+                                      src={activeImage}
+                                      alt="Featured"
+                                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                                    />
+                                  </Link>
+                                ) : Array.isArray(nav.featured) &&
+                                  nav.featured.length > 0 ? (
                                   <Link
                                     to={nav.featured[0].href || nav.path || "#"}
-                                    className="block rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full"
+                                    className="block rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full h-[400px]"
                                   >
                                     <img
                                       src={nav.featured[0].imageSrc}
@@ -409,7 +430,7 @@ export default function Header() {
                                   nav.images.length > 0 ? (
                                   <Link
                                     to={nav.path || "#"}
-                                    className="block rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full"
+                                    className="block rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 w-full h-[400px]"
                                   >
                                     <img
                                       src={nav.images[0]}
@@ -446,14 +467,13 @@ export default function Header() {
                     setProfileOpen((p) => !p);
                   }}
                 >
-{loggedIn && firstChar ? (
-  <div className="w-8 h-8 bg-[#CBE600] text-[#111111] font-bold rounded-full flex items-center justify-center text-sm shadow-md select-none">
-    {firstChar}
-  </div>
-) : (
-  <UserIcon className="w-6 h-6" />
-)}
-
+                  {loggedIn && firstChar ? (
+                    <div className="w-8 h-8 bg-[#CBE600] text-[#111111] font-bold rounded-full flex items-center justify-center text-sm shadow-md select-none">
+                      {firstChar}
+                    </div>
+                  ) : (
+                    <UserIcon className="w-6 h-6" />
+                  )}
                 </button>
 
                 {/* Profile dropdown */}
