@@ -112,7 +112,9 @@ useEffect(() => {
     }
 
     // CATEGORY MODE
-    const categoryFromRoute = param.lavelThree || param.lavelTwo || null;
+let categoryFromRoute =
+  param.lavelThree || param.lavelTwo || param.lavelOne || null;
+
 
     dispatch(
       findProducts({

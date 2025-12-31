@@ -47,8 +47,8 @@ const HomeCarouselData = [
     image: "https://res.cloudinary.com/dsr0bbmfk/image/upload/v1764508015/first_slide_fvp6ag.png", // place your uploaded image here
     title: "Luxury That Moves With You",
     buttons: [
-      { text: "Explore Western Wear", link: "/western" },
-      { text: "Shop Kurtis", link: "/kurtis" },
+      { text: "Explore Western Wear", link: "/women/western" },
+      { text: "Shop Kurtis", link: "/women/kurti" },
     ],
   },
   {
