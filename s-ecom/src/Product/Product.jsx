@@ -8,7 +8,7 @@ import {
   X,
   Info,
 } from "lucide-react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { findProducts, searchProducts } from "../redux/product/action";
 import {
@@ -16,12 +16,23 @@ import {
   singleFilter,
   sortOptions as SORT_OPTIONS,
 } from "./FilterData"; // adjust path if needed
+import { useLocation } from "react-router-dom";
 
 const ProductPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
   const param = useParams();
+
+  const { pathname } = useLocation();
+
+useEffect(() => {
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth",
+  });
+}, [pathname]);
+
   const [hoveredProduct, setHoveredProduct] = useState(null);
   // Redux state
   const { customersProduct } = useSelector((store) => store);

@@ -67,6 +67,7 @@ const ProductDetailsPage = () => {
   const [sizeError, setSizeError] = useState(false);
   const [showAll, setShowAll] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
+const [shakeSizeBox, setShakeSizeBox] = useState(false);
 
   const jwt =
     typeof window !== "undefined" ? localStorage.getItem("jwt") : null;
@@ -156,10 +157,17 @@ const ProductDetailsPage = () => {
     }
 
     // validate size
-    if (!selectedSize || !selectedSize.name) {
-      setSizeError(true);
-      return;
-    }
+if (!selectedSize || !selectedSize.name) {
+  setSizeError(true);
+  setShakeSizeBox(true);
+
+  setTimeout(() => {
+    setShakeSizeBox(false);
+  }, 600);
+
+  return;
+}
+
 
     setSizeError(false);
     setIsAdding(true);
@@ -488,15 +496,13 @@ const ProductDetailsPage = () => {
                   Choose Size:
                 </h3>
 
-                <h3 className="text-sm font-medium text-gray-900">
-                  Choose Size:
-                </h3>
+<div
+  role="radiogroup"
+  aria-label="Choose size"
+  className={`mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 
+    ${shakeSizeBox ? "animate-[wiggle_0.15s_ease-in-out_4]" : ""}`}
+>
 
-                <div
-                  role="radiogroup"
-                  aria-label="Choose size"
-                  className="mt-4 grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3"
-                >
                   {customersProduct.product?.sizes?.map((size) => {
                     const outOfStock = size.quantity === 0;
                     const checked = selectedSize?.name === size.name;

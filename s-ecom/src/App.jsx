@@ -28,6 +28,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import ScrollToTop from "./ScrollTop";
 import FloatingIcons from "./FloatinIcons";
+import FloatingShareButton from "./FloatingShareButton";
 
 function App() {
   const dispatch = useDispatch();
@@ -82,6 +83,7 @@ function App() {
       </Routes>
       <ChatWidget />
       <FloatingIcons />
+      <FloatingShareButton />
       <Footer />
     </>
   );
