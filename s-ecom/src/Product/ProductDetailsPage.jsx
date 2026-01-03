@@ -213,7 +213,7 @@ if (!selectedSize || !selectedSize.name) {
   const handleShare = async () => {
     const shareData = {
       title: product?.title || product?.name || "Product",
-      text: `Check out ${product?.title || ""} on Fluteon`,
+      text: `Check out ${product?.title || ""} on Venus Garments`,
       url: window.location.href,
     };
     try {
@@ -515,7 +515,14 @@ if (!selectedSize || !selectedSize.name) {
                         aria-checked={checked}
                         aria-disabled={outOfStock}
                         tabIndex={outOfStock ? -1 : checked ? 0 : -1}
-                        onClick={() => !outOfStock && setSelectedSize(size)}
+                        onClick={() => {
+  if (outOfStock) return;
+
+  setSelectedSize((prev) =>
+    prev?.name === size.name ? null : size
+  );
+}}
+
                         onKeyDown={(e) => {
                           if (outOfStock) return;
                           if (e.key === " " || e.key === "Enter") {
@@ -523,28 +530,34 @@ if (!selectedSize || !selectedSize.name) {
                             setSelectedSize(size);
                           }
                         }}
-                        className={`relative flex items-center justify-center border rounded-md py-2 px-4 text-sm font-medium uppercase transition-all duration-200 focus:outline-none
-          ${
-            outOfStock
-              ? "cursor-not-allowed bg-gray-100 text-gray-400 line-through"
-              : "cursor-pointer bg-white text-gray-900 shadow-sm hover:bg-gray-50"
-          }
-          ${
-            checked && !outOfStock
-              ? "ring-2 ring-indigo-500 border-indigo-500"
-              : "border-gray-300"
-          }`}
+               className={`relative flex items-center justify-center rounded-md py-2.5 px-4 
+text-sm font-semibold uppercase tracking-wide transition-all duration-200 
+focus:outline-none focus-visible:ring-2 focus-visible:ring-[#CBE600]/60
+${
+  outOfStock
+    ? "cursor-not-allowed bg-gray-100 text-gray-400 line-through border border-gray-200"
+    : "cursor-pointer bg-[#FFFDF6] text-[#222426] border border-gray-300 hover:border-[#CBE600] hover:bg-[#CBE600]/10"
+}
+${
+  checked && !outOfStock
+    ? "border-[#CBE600] bg-[#CBE600]/20 text-[#222426] shadow-md"
+    : ""
+}`}
+
                         disabled={outOfStock}
                       >
                         <span>{size.name}</span>
 
                         {/* selected ring visual */}
-                        {checked && !outOfStock && (
-                          <span
-                            className="absolute -inset-px rounded-md pointer-events-none"
-                            aria-hidden="true"
-                          />
-                        )}
+{checked && !outOfStock && (
+  <span
+    className="absolute -top-1 -right-1 w-5 h-5 bg-[#CBE600] rounded-full 
+    flex items-center justify-center text-black text-xs shadow"
+  >
+    ✓
+  </span>
+)}
+
                       </button>
                     );
                   })}
@@ -901,8 +914,7 @@ if (!selectedSize || !selectedSize.name) {
                           navigate(`/product/${item._id || item.id}`);
                         }
                       }}
-                      className="w-full py-2 sm:py-3 px-3 sm:px-4 bg-black text-white text-xs sm:text-sm font-semibold rounded-lg hover:bg-[#CBE600] hover:text-black transition-all duration-300 uppercase tracking-wide"
-                    >
+className="mt-auto w-full py-2 sm:py-2.5 md:py-3 px-2 sm:px-3 md:px-4 bg-[#CBE600] text-black text-[10px] sm:text-xs md:text-sm font-semibold rounded-lg hover:bg-[#99B300] transition-all duration-300 uppercase tracking-wide"                    >
                       Buy Now
                     </button>
                   </div>
