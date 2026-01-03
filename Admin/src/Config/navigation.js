@@ -37,7 +37,7 @@ const navigation = [
 
       {
         id: "kurti",
-        title: "Kurti",
+        title: "Kurti-Set",
         subHeadings: [
           { id: "party_wear", name: "Party Wear", path: "/women/kurti/party_wear" },
           { id: "casual", name: "Casual", path: "/women/kurti/casual" },
@@ -48,7 +48,7 @@ const navigation = [
         id: "cord_set",
         title: "Cord Set",
         subHeadings: [
-          { id: "ethentic", name: "Ethntic", path: "/women/cord_set/ethentic" },
+          { id: "ethentic", name: "Ethnic", path: "/women/cord_set/ethentic" },
           { id: "western", name: "Western", path: "/women/cord_set/western" },
         ],
       },
