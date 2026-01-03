@@ -34,7 +34,7 @@ const dummySizeCharts = [
   { category: "sleep_wear", sizes: [{ label: "Free" }] },
 
   // women.bottom_wear
-  { category: "jeans", sizes: [{ label: "26" }, { label: "28" }, { label: "30" }, { label: "32" }, { label: "34" }, { label: "Free" }] },
+  { category: "jeans", sizes: [{ label: "26" }, { label: "28" }, { label: "30" }, { label: "32" }, { label: "34" }, { label: "36" }, { label: "38" }, { label: "40" },{ label: "Free" }] },
   { category: "pants", sizes: [{ label: "28" }, { label: "30" }, { label: "32" }, { label: "34" }, { label: "Free" }] },
   { category: "jeggings", sizes: [{ label: "XS" }, { label: "S" }, { label: "M" }, { label: "L" }, { label: "Free" }] },
   { category: "lower", sizes: [{ label: "S" }, { label: "M" }, { label: "L" }, { label: "Free" }] },

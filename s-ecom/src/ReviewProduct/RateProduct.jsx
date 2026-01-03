@@ -125,9 +125,18 @@ const RateProduct = () => {
                 onChange={handleChange}
                 name="description"
               />
-              <Button type="submit" variant="contained" color="primary">
-                Submit Review
-              </Button>
+<Button
+  type="submit"
+  disableElevation
+  disableRipple
+  className="!mt-auto !w-full !py-2 sm:!py-2.5 md:!py-3 !px-2 sm:!px-3 md:!px-4 
+             !bg-[#CBE600] !text-black !text-[10px] sm:!text-xs md:!text-sm 
+             !font-semibold !rounded-lg hover:!bg-[#99B300] 
+             transition-all duration-300 uppercase tracking-wide"
+>
+  Submit Review
+</Button>
+
             </form>
           </div>
         </Grid>

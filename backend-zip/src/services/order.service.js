@@ -30,6 +30,7 @@ async function createOrder(user, shippAddress, usedSuperCoins = 0) {
     const orderItem = new OrderItem({
       price: item.price,
       product: item.product,
+      productId: item.product._id,
       quantity: item.quantity,
       size: item.size,
       userId: item.userId,

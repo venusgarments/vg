@@ -871,9 +871,7 @@ ${
             <h2 className="text-2xl sm:text-3xl md:text-4xl font-serif font-semibold text-[#8A6F4F] mb-2 sm:mb-4">
               You May Also Like
             </h2>
-            <p className="text-sm sm:text-base text-gray-600">
-              Complete your beauty collection with these essentials
-            </p>
+
           </div>
 
           <div className="grid grid-cols-2 xl:grid-cols-4 gap-3 sm:gap-4 xl:gap-6">

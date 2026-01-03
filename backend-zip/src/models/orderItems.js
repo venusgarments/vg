@@ -8,6 +8,10 @@ const orderItemSchema = new Schema({
     ref: 'products',
     required: true,
   },
+  productId: {
+  type: mongoose.Schema.Types.ObjectId,
+  ref: "products",
+},
   size: {
     type: String,
   },
