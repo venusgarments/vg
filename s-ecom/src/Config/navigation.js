@@ -92,7 +92,7 @@ const navigation = [
 
       {
         id: "kurti",
-        title: "Kurti",
+        title: "Kurti-Set",
         subHeadings: [
           {
             id: "party_wear",
@@ -117,7 +117,7 @@ const navigation = [
         subHeadings: [
           {
             id: "ethentic",
-            name: "Ethntic",
+            name: "Ethnic",
             path: "/women/cord_set/ethentic",
             image:
               "https://images.unsplash.com/photo-1496747611176-843222e1e57c?q=80&w=1000",

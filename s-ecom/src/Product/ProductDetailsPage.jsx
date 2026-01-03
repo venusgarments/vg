@@ -286,7 +286,7 @@ if (!selectedSize || !selectedSize.name) {
   return (
     <div className="min-h-screen bg-[#FFFDF6]">
       {/* Floating share on md+ */}
-      <Tooltip title="Share Product" arrow>
+      {/* <Tooltip title="Share Product" arrow>
         <IconButton
           onClick={handleShare}
           sx={{
@@ -303,7 +303,7 @@ if (!selectedSize || !selectedSize.name) {
         >
           <Share2 />
         </IconButton>
-      </Tooltip>
+      </Tooltip> */}
 
       {/* Breadcrumb */}
       <div className="bg-white border-b border-gray-200 py-3 sm:py-4 px-4 sm:px-6">
