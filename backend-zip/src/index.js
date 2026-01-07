@@ -1,6 +1,6 @@
 const express = require("express");
 const cors = require("cors");
-
+const axios = require("axios")
 const app = express();
 
 app.use("/api/webhook", require("./routes/razorpayWebhook.js"));
@@ -34,43 +34,52 @@ app.get("/", (req, res) => {
 
 app.post("/api/whatsapp/webhook", async (req, res) => {
   try {
-    const message = req.body.entry?.[0]?.changes?.[0]?.value?.messages?.[0];
-    const from = message?.from;
-    const text = message?.text?.body?.toLowerCase() || "";
+    console.log("📩 WhatsApp POST webhook received");
+    console.log(JSON.stringify(req.body, null, 2));
 
-    if (!message || !from) return res.sendStatus(200);
+    const value = req.body.entry?.[0]?.changes?.[0]?.value;
+    const message = value?.messages?.[0];
 
-    // Auto Reply Message
-    await axios.post(
-      `https://graph.facebook.com/v19.0/${process.env.WHATSAPP_PHONE_ID}/messages`,
-      {
-        messaging_product: "whatsapp",
-        to: from,
-        type: "text",
-        text: {
-          body: `Thanks for contacting us! 😊
+    if (!message || message.type !== "text") {
+      return res.sendStatus(200);
+    }
+
+    const from = message.from;
+    const text = message.text?.body?.toLowerCase();
+
+    if (text === "hi") {
+      await axios.post(
+        `https://graph.facebook.com/v24.0/${process.env.WHATSAPP_PHONE_ID}/messages`,
+        {
+          messaging_product: "whatsapp",
+          to: from,
+          type: "text",
+          text: {
+            body: `Thanks for contacting us! 😊
 We will get back to you shortly.
 
 Follow us here:
 Instagram 👉 https://instagram.com/yourpage
 YouTube 👉 https://youtube.com/yourchannel
 Website 👉 https://yourwebsite.com`
+          },
         },
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
-          "Content-Type": "application/json",
-        },
-      }
-    );
+        {
+          headers: {
+            Authorization: `Bearer ${process.env.WHATSAPP_TOKEN}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
+    }
 
     return res.sendStatus(200);
   } catch (err) {
-    console.log("WhatsApp Auto Reply Error:", err?.response?.data || err.message);
+    console.error("❌ WhatsApp Auto Reply Error:", err.response?.data || err.message);
     return res.sendStatus(500);
   }
 });
+
 
 // Auth & User Routes
 const authRouter = require("./routes/auth.routes.js");
