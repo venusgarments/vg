@@ -4,6 +4,23 @@ const cors = require("cors");
 const app = express();
 
 app.use("/api/webhook", require("./routes/razorpayWebhook.js"));
+app.get("/api/whatsapp/webhook", (req, res) => {
+  console.log("✅ WhatsApp verification request received");
+  console.log(req.query);
+
+  const VERIFY_TOKEN = process.env.WHATSAPP_VERIFY_TOKEN;
+
+  const mode = req.query["hub.mode"];
+  const token = req.query["hub.verify_token"];
+  const challenge = req.query["hub.challenge"];
+
+  if (mode === "subscribe" && token === VERIFY_TOKEN) {
+    return res.status(200).send(challenge);
+  }
+
+  return res.sendStatus(403);
+});
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
